@@ -1,0 +1,24 @@
+# use glob syntax.
+syntax: glob
+
+node_modules/*
+public/hot/*
+public/storage/*
+resources/lang/*
+storage/*
+
+vendor/*
+*/cache/*
+*.idea
+*.vagrant
+Homestead.json
+Homestead.yaml
+npm-debug.log
+yarn-error.log
+*.env
+*.gitignore
+*.gitattributes
+
+# metronic
+public/themes/*
+*/demo/*

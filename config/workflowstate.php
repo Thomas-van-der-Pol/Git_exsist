@@ -1,0 +1,16 @@
+<?php
+
+return [
+    'INVOICE_CONCEPT' => 1,
+    'INVOICE_FINAL' => 2,
+
+    'PROJECT_NEW' => 3,
+    'PROJECT_REGISTRATION_PROCESSED' => 4,
+    'PROJECT_TREATMENT' => 5,
+    'PROJECT_QUOTE_SENT' => 6,
+    'PROJECT_QUOTE_AGREED' => 7,
+    'PROJECT_STARTED' => 8,
+    'PROJECT_BILLED' => 10,
+    'PROJECT_EVALUATED' => 11,
+    'PROJECT_DONE' => 12,
+];

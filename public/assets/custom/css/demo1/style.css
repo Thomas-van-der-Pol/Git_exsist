@@ -1,0 +1,560 @@
+.kt-svg-icon g [fill] {
+    fill: var(--kj-fris-blauw);
+}
+
+/***********************************************************************************************************************
+    MOBILE HEADER FIX
+***********************************************************************************************************************/
+.kt-header-mobile__toolbar .kt-header__topbar-item .kt-header__topbar-wrapper .kt-header__topbar-icon.kt-header__topbar-icon--brand {
+    background: rgba(60,181,229,.2);
+}
+
+.kt-header-mobile__toolbar .kt-header__topbar-item .kt-header__topbar-wrapper .kt-header__topbar-icon.kt-header__topbar-icon--brand:hover {
+    -webkit-transition: all .3s;
+    transition: all .3s;
+    background: #3d94fb;
+}
+
+.kt-header-mobile__toolbar .kt-header__topbar-item .kt-header__topbar-wrapper .kt-header__topbar-icon.kt-header__topbar-icon--brand:hover g [fill] {
+    -webkit-transition: fill .3s ease;
+    transition: fill .3s ease;
+    fill: #fff !important;
+}
+
+.kt-header-mobile__toolbar .kt-header__topbar-item .kt-header__topbar-wrapper .kt-header__topbar-icon {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -ms-flex-item-align: center;
+    align-self: center;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    height: 37px;
+    width: 37px;
+    border-radius: 4px;
+    cursor: pointer;
+    -webkit-transition: all .3s;
+    transition: all .3s;
+}
+
+.kt-header-mobile__toolbar .kt-header__topbar-item {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: stretch;
+    -ms-flex-align: stretch;
+    align-items: stretch;
+    margin: 0 .36rem;
+}
+
+.kt-header-mobile__toolbar .kt-header__topbar-item .kt-header__topbar-wrapper {
+    cursor: pointer;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: stretch;
+    -ms-flex-align: stretch;
+    align-items: stretch;
+}
+
+.kt-header-mobile__toolbar .kt-header__topbar-item.kt-header__topbar-item--user .kt-header__topbar-username {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-item-align: center;
+    align-self: center;
+    padding: 0 .55rem 0 0;
+    font-weight: 500;
+    font-size: 1rem;
+}
+
+@media (max-width: 1024px) {
+    .kt-header-mobile__toolbar .kt-header__topbar-username {
+        display: none !important;
+    }
+
+    .kt-header-mobile {
+        background-color: var(--kj-zakelijk-blauw) !important;
+    }
+}
+
+.kt-widget__info .kt-header__topbar-item {
+    margin-right: 0.5rem !important;
+}
+
+.kt-widget__info .kt-header__topbar-icon svg {
+    background: rgba(60,181,229,.2);
+    border-radius: 4px;
+}
+
+/***********************************************************************************************************************
+    FULLSCREEN MODAL
+***********************************************************************************************************************/
+.modal-full-screen {
+    width: 100%;
+    height: 80vh;
+    max-width: 1659px;
+}
+
+.modal-full-screen .modal-content{
+    height: 100%;
+}
+
+.modal-full-screen .modal-content .modal-body div#previewArea{
+    height: 100%;
+}
+
+/***********************************************************************************************************************
+    DATATABLE ROW CALLBACK
+***********************************************************************************************************************/
+.table-subheader-dark-blue,
+.table-subheader-dark-blue > td,
+.table-subheader-dark-blue > td > span,
+.table-subheader-dark-blue > th {
+    background-color: var(--kj-zakelijk-blauw) !important;
+    color: #FFFFFF !important;
+}
+
+/***********************************************************************************************************************
+    SORTABLE PORTLETS + CARDS
+***********************************************************************************************************************/
+.kt-portlet.kt-portlet--sortable .kt-portlet__head {
+    cursor: default;
+}
+
+.kt-portlet.kt-portlet--sortable .portlet--sortable-handle,
+.portlet--sortable-group-handle,
+.kt-portlet.kt-portlet--follow-up-question .portlet--follow-up-question-handle,
+.card--sortable-handle {
+    cursor: move;
+}
+
+.kt-portlet--solid-header .kt-portlet__head {
+    background: var(--kj-serieus-grijs) !important;
+}
+
+.kt-portlet--solid-header .kt-portlet__head-title {
+    color: #FFF !important;
+}
+
+.kt-portlet.kt-portlet--sortable .kt-portlet__head .kt-portlet__head-label .kt-portlet__head-title,
+.kt-portlet.kt-portlet--group .kt-portlet__head .kt-portlet__head-label .kt-portlet__head-title,
+.kt-portlet.kt-portlet--follow-up-question .kt-portlet__head .kt-portlet__head-label .kt-portlet__head-title{
+    font-size: 1rem;
+}
+
+.kt-portlet.kt-portlet--sortable .kt-portlet__head,
+.kt-portlet.kt-portlet--group .kt-portlet__head,
+.kt-portlet.kt-portlet--follow-up-question .kt-portlet__head {
+    min-height: 50px;
+    padding: 0 15px;
+}
+
+.kt-portlet.kt-portlet--sortable .kt-portlet__head .kt-portlet__head-toolbar,
+.kt-portlet.kt-portlet--group .kt-portlet__head  .kt-portlet__head-toolbar,
+.kt-portlet.kt-portlet--follow-up-question .kt-portlet__head  .kt-portlet__head-toolbar{
+    min-width: 70px;
+}
+
+.accordion.accordion-toggle-plus .card .card-header .card-title,
+.accordion.accordion-toggle-plus .card .card-header .card-title:after {
+    color: var(--kj-fris-blauw);
+}
+
+.kt-separator--kj-dark {
+    border-color: #B5B5B5;
+}
+
+/***********************************************************************************************************************
+    STRECHABLE ROW
+***********************************************************************************************************************/
+.stretchCol div.col-lg-12 {
+    height: 100%;
+}
+
+/***********************************************************************************************************************
+    TABBED PORTLETS
+***********************************************************************************************************************/
+.nav-tabs.nav-tabs-line a.nav-link, .nav-tabs.nav-tabs-line.nav.nav-tabs .nav-link {
+    color: #6c7293 !important;
+}
+
+.nav-tabs.nav-tabs-line a.nav-link, .nav-tabs.nav-tabs-line.nav.nav-tabs .nav-link:hover,
+.nav-tabs.nav-tabs-line a.nav-link, .nav-tabs.nav-tabs-line.nav.nav-tabs .nav-link.active {
+    color: var(--kj-fris-blauw) !important;
+}
+
+.nav-tabs.nav-tabs-line.nav-tabs-line-brand a.nav-link:hover>i,
+.nav-tabs.nav-tabs-line.nav-tabs-line-brand a.nav-link.active>i {
+    color: var(--kj-fris-blauw) !important;
+}
+
+.nav-tabs.nav-tabs-line.nav-tabs-line-brand a.nav-link:hover,
+.nav-tabs.nav-tabs-line.nav-tabs-line-brand a.nav-link.active {
+    border-bottom-color: var(--kj-fris-blauw) !important;
+}
+
+/***********************************************************************************************************************
+    TRANSLATION TABS
+***********************************************************************************************************************/
+.nav-tabs {
+    border-bottom: none;
+}
+
+/***********************************************************************************************************************
+    BIG SVG ICON
+***********************************************************************************************************************/
+.kt-svg-icon--big {
+    height: 46px;
+    width: 46px;
+}
+
+.kt-svg-icon--big g [fill] {
+    fill: var(--kj-fris-blauw);
+}
+
+/***********************************************************************************************************************
+    QUESTIONNAIRE REVIEW
+***********************************************************************************************************************/
+.questionnaire_review_group_title {
+    font-weight: 600;
+    font-size: 1.1rem;
+    margin-bottom: .7rem;
+}
+
+/***********************************************************************************************************************
+    TASKS VIEW
+***********************************************************************************************************************/
+.tab-pane .kt-todo {
+    -webkit-box-shadow: unset !important;
+    box-shadow: unset !important;
+}
+
+@media (max-width: 1024px) {
+    .kt-inbox__search {
+
+    }
+    .kt-todo .kt-todo__list .kt-todo__body .kt-todo__items .kt-todo__item {
+        min-width: unset !important;
+    }
+    .filter {
+        min-width: unset !important;
+    }
+
+    .filter-icon::before {
+         margin-right: unset !important;
+    }
+}
+
+/***********************************************************************************************************************
+    PLANNING TABLE
+***********************************************************************************************************************/
+.table-planning {
+    border: none !important;
+}
+
+.table-planning thead td {
+    padding-top: 0.3rem;
+    padding-bottom: 0.3rem;
+}
+
+.table-planning thead td:first-child {
+    border: none !important;
+}
+
+.table-planning thead tr:not(:nth-child(n+3)) td {
+    background-color: #FFFFFF !important;
+}
+
+.table-planning thead tr:not(:first-child) td:not(:first-child) {
+    text-align: center;
+}
+
+.table-planning thead tr:not(:first-child) td:nth-child(n+2) {
+    text-align: center;
+}
+
+.table-planning tbody td:nth-child(n+4),
+.hide_total_planned tbody td:nth-child(n+3) {
+    text-align: center;
+    padding: 0;
+}
+
+.table-planning col.bg-weekend {
+    background-color: #3cb5e50d;
+}
+
+.table-planning td div.plannable,
+.table-planning td div.planned-negative,
+.table-planning td div.draggable {
+    cursor: pointer;
+    height: 25px;
+    padding: 0.3rem;
+}
+
+.table-planning td div.plannable {
+    background-color: #0abb87;
+    color: #ffffff;
+}
+
+.table-planning td div.planned-negative {
+    cursor: default;
+    background-color: var(--danger);
+    color: #ffffff;
+}
+
+.table-planning td div.bg-success {
+    color: #ffffff;
+}
+
+.table-planning td div.draggable.selected {
+    background-color: var(--kj-fris-blauw) !important;
+}
+
+.table-planning td div.plannable.ui-draggable-dragging {
+    min-width: 30px;
+}
+
+.table-planning td.bg-blocked,
+.table-planning col.bg-blocked {
+    background-color: #f5f5f5;
+    cursor: not-allowed;
+}
+
+.table-planning tr.bg-group td {
+    background-color: var(--kj-zakelijk-blauw);
+    color: #FFF;
+    border: none;
+    border-top: 1px solid #ebedf2;
+}
+
+.table-planning tr.changeResourceGroup {
+    cursor: pointer;
+}
+
+.table-planning tr.selected td {
+    background-color: var(--kj-fris-blauw);
+}
+
+.kt-pagination__links button:disabled {
+    cursor: not-allowed;
+}
+
+/* INDEXATION TABLE */
+customTableHeader,
+.customTableHeader > td,
+.customTableHeader > td > span,
+.customTableHeader > th {
+    background-color: var(--kj-zakelijk-blauw) !important;
+    color: white !important;
+    font-weight: bold;
+}
+
+customTableSubHeader,
+.customTableSubHeader > td,
+.customTableSubHeader > td > span,
+.customTableSubHeader > th {
+    background-color: var(--kj-fris-blauw) !important;
+    color: white !important;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+customTableTotals,
+.customTableTotals > td,
+.customTableTotals > td > span,
+.customTableTotals > th {
+    background-color: var(--kj-actief-rood) !important;
+    color: white !important;
+    font-weight: bold;
+}
+
+@media (min-width: 768px) {
+    .dropdown-menu.dropdown-menu-lg {
+        width: 500px;
+    }
+}
+
+.kt-notification .kt-notification__item .kt-notification__item-details .kt-notification__item-content,
+.kt-notification .kt-notification__item .kt-notification__item-details .kt-notification__item-time {
+    font-size: 0.8rem;
+    font-weight: 300;
+    color: #a7abc3;
+}
+
+.kt-notification .kt-notification__item {
+    padding: 0.8rem 1rem;
+}
+
+
+/***********************************************************************************************************************
+    INVOICE PREPARE
+***********************************************************************************************************************/
+.kt-datatable.kt-datatable--default > .kt-datatable__table > .kt-datatable__body .kt-datatable__row.font-danger > .kt-datatable__cell > span {
+    color: var(--kj-actief-rood) !important;
+}
+
+.kt-datatable.kt-datatable--default > .kt-datatable__table > .kt-datatable__body .kt-datatable__row.font-danger > .kt-datatable__cell--check > span {
+    width: 5px !important;
+}
+
+.kt-datatable.kt-datatable--default > .kt-datatable__table > .kt-datatable__body .kt-datatable__row.block-selection.kt-datatable__row--active > .kt-datatable__cell {
+    background: unset;
+}
+
+
+/*
+    ---------------- KJ TAGS BEGIN ----------------
+ */
+
+
+.tagify__input {
+    margin: 0;
+    /*padding: 0.3em 0em;*/
+    font-weight: normal !important;
+}
+
+.tagify__tag {
+    margin: 0px 0 5px 5px;
+    font-weight: normal !important;
+}
+
+.tagify--focus {
+    border-color: var(--primary) !important;
+}
+
+.tagify {
+    --tags-border-color: #ebedf2;
+}
+
+.tagify.tagify--focus {
+    border: unset;
+}
+
+tag div span {
+    color: white !important;
+}
+
+/*.filter div span {*/
+/*color: black !important;*/
+/*}*/
+
+.kjtag {
+    /*padding-bottom: 5px;*/
+    float: left
+}
+
+.kjtag span, .kjtag div {
+    /*margin: 0px 0 5px 5px;*/
+    margin: 0px 5px 5px 0px;
+    font-weight: normal !important;
+    /*white-space: nowrap;*/
+    overflow: hidden;
+    text-overflow: ellipsis;
+    /*display: inline-block;*/
+    vertical-align: top;
+    box-sizing: border-box;
+    padding: .3em .5em;
+    line-height: inherit;
+    border-radius: 3px;
+}
+
+.participantkjtag {
+    float: left;
+}
+
+.participantkjtag span {
+    margin: 0 5px 0 0;
+}
+
+.tagify.form-control.filter.modalfilter {
+    padding-top:0px !important;
+    padding-bottom: 0px !important;
+}
+
+.tagify__tag[type="2"] {
+    background-color: red !important;
+}
+.tagify__tag[type="3"] {
+    background-color: blue !important;
+}
+.tagify__tag[type="4"] {
+    background-color: orange !important;
+}
+.tagify__tag[type="5"] {
+    background-color: #d689e8 !important;
+}
+.tagify__tag[type="6"] {
+    background-color: #451f20 !important;
+}
+.tagify__tag[type="7"] {
+    background-color: #a4867e !important;
+}
+.tagify__tag[type="8"] {
+    background-color: #9a0fee !important;
+}
+.tagify__tag[type="9"] {
+    background-color: #c63485 !important;
+}
+.tagify__tag[type="10"] {
+    background-color: #ec1676 !important;
+}
+.tagify__tag[type="11"] {
+    background-color: #296a25 !important;
+}
+.tagify__tag[type="12"] {
+    background-color: #54cc40 !important;
+}
+.tagify__tag[type="13"] {
+    background-color: #73ea3d !important;
+}
+.tagify__tag[type="14"] {
+    background-color: #c63485 !important;
+}
+.tagify__tag[type="15"] {
+    background-color: #3988fe !important;
+}
+.tagify__tag[type="16"] {
+    background-color: #8e8466 !important;
+}
+.tagify__tag[type="17"] {
+    background-color: #1b90e8 !important;
+}
+.tagify__tag[type="18"] {
+    background-color: lightgreen !important;
+}
+.tagify__tag[type="19"] {
+    background-color: darkslategray !important;
+}
+.tagify__tag[type="20"] {
+    background-color: green !important;
+}
+
+.tagify--outside{
+    border: 0;
+    padding: 0;
+    margin: 0;
+}
+.tagify__input--outside{
+    display: block;
+    max-width: 600px;
+    border: 1px solid #DDD;
+    margin-top: 1.5em;
+    margin-bottom: 1em;
+}
+/*.tagify.form-control.m-input.kjtagify{*/
+/*    border-top: none;*/
+/*    border-left: none;*/
+/*    border-right: none;*/
+/*}*/
+/*.tagify__tag.tagify--noAnim {*/
+/*    background-color: #17a2b8;*/
+/*}*/
+
+/*
+    ---------------- KJ TAGS EINDE ----------------
+ */

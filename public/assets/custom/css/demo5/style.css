@@ -1,0 +1,73 @@
+.kt-font-brand {
+    color: var(--kj-fris-blauw);
+}
+
+/***********************************************************************************************************************
+    MOBILE HEADER FIX
+***********************************************************************************************************************/
+.kt-header-mobile__toolbar .kt-header__topbar-item .kt-header__topbar-wrapper .kt-header__topbar-icon.kt-header__topbar-icon--brand {
+    background: rgba(61,148,251,.1);
+}
+
+.kt-header-mobile__toolbar .kt-header__topbar-item .kt-header__topbar-wrapper .kt-header__topbar-icon.kt-header__topbar-icon--brand:hover {
+    -webkit-transition: all .3s;
+    transition: all .3s;
+    background: #3d94fb;
+}
+
+.kt-header-mobile__toolbar .kt-header__topbar-item .kt-header__topbar-wrapper .kt-header__topbar-icon.kt-header__topbar-icon--brand:hover g [fill] {
+    -webkit-transition: fill .3s ease;
+    transition: fill .3s ease;
+    fill: #fff;
+}
+
+.kt-header-mobile__toolbar .kt-header__topbar-item .kt-header__topbar-wrapper .kt-header__topbar-icon {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -ms-flex-item-align: center;
+    align-self: center;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    height: 37px;
+    width: 37px;
+    border-radius: 4px;
+    cursor: pointer;
+    -webkit-transition: all .3s;
+    transition: all .3s;
+}
+
+.kt-header-mobile__toolbar .kt-header__topbar-item {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: stretch;
+    -ms-flex-align: stretch;
+    align-items: stretch;
+    margin: 0 .36rem;
+}
+
+.kt-header-mobile__toolbar .kt-header__topbar-item .kt-header__topbar-wrapper {
+    cursor: pointer;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: stretch;
+    -ms-flex-align: stretch;
+    align-items: stretch;
+}
+
+.kt-header-mobile__toolbar .kt-header__topbar-item.kt-header__topbar-item--user .kt-header__topbar-username {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-item-align: center;
+    align-self: center;
+    padding: 0 .55rem 0 0;
+    font-weight: 500;
+    font-size: 1rem;
+}

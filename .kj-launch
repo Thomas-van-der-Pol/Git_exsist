@@ -1,0 +1,23 @@
+## .kj-launch instructies
+## Gebruik dit bestand om specifieke ssh-commando's voor jouw project uit te voeren
+## De volgende variabelen zijn beschikbaar, je hoeft ze niet te quoten, tenzij je ze los gebruikt;
+## - $BUILD_NUMBER (en alle andere default Jenkins env-vars https://jenkins.kjsoftware.nl/env-vars.html/
+## - $KJ_AFKORTING
+## - $KJ_ISSUEKEY
+## - $KJ_ISPUBLIC
+## - $KJ_DB_DEST
+## - $KJ_DB_SOURCE
+## - $KJ_DB_PREFIX
+## - $KJ_PATH_SOURCE
+## - $KJ_PATH_DEST
+##
+## Definieer een variable om later elders in het script te gebruiken:
+## export VARNAAM='VARVALUE'
+##
+
+chmod 774 .kj-themeversion
+. ./.kj-themeversion
+
+## Aanpassen vanaf hier:
+
+ln -s /data/www/themes/$KJ_THEMEVERSION/publish/exsist/ public/assets/themes
