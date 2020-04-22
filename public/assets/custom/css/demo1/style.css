@@ -344,35 +344,6 @@
     cursor: not-allowed;
 }
 
-/* INDEXATION TABLE */
-customTableHeader,
-.customTableHeader > td,
-.customTableHeader > td > span,
-.customTableHeader > th {
-    background-color: var(--kj-zakelijk-blauw) !important;
-    color: white !important;
-    font-weight: bold;
-}
-
-customTableSubHeader,
-.customTableSubHeader > td,
-.customTableSubHeader > td > span,
-.customTableSubHeader > th {
-    background-color: var(--kj-fris-blauw) !important;
-    color: white !important;
-    font-weight: bold;
-    white-space: nowrap;
-}
-
-customTableTotals,
-.customTableTotals > td,
-.customTableTotals > td > span,
-.customTableTotals > th {
-    background-color: var(--kj-actief-rood) !important;
-    color: white !important;
-    font-weight: bold;
-}
-
 @media (min-width: 768px) {
     .dropdown-menu.dropdown-menu-lg {
         width: 500px;

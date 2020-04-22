@@ -5,7 +5,7 @@ $(document).ready(function() {
         {'Wachtwoord succesvol verzonden': 'Wachtwoord succesvol verzonden'}
     ]);
 
-    kjlocalization.create('Admin - Producten & diensten', [
+    kjlocalization.create('Admin - Dossiers', [
         {'Selecteer product': 'Selecteer product'},
         {'Selecteer dienst': 'Selecteer dienst'}
     ]);
@@ -221,9 +221,6 @@ $(document).on('ADM_PRODUCT_MODAL_TABLEAfterSelect', function(e, selectedId, lin
 
             $('select[name=FK_FINANCE_VAT]').val(data.FK_FINANCE_VAT);
             $('select[name=FK_FINANCE_VAT]').selectpicker('refresh');
-
-            $('select[name=FK_FINANCE_INDEXATION]').val(data.FK_FINANCE_INDEXATION);
-            $('select[name=FK_FINANCE_INDEXATION]').selectpicker('refresh');
 
             setMaterialActiveLabels(LastButton.closest('div.kt-portlet__body'));
         }

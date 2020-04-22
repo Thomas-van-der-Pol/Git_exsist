@@ -64,7 +64,7 @@
                 </svg>
             </span>
             <span class="kt-menu__link-text">
-                {{ KJLocalization::translate('Admin - Menu', 'Producten & diensten', 'Producten & diensten') }}
+                {{ KJLocalization::translate('Admin - Menu', 'Interventies', 'Interventies') }}
             </span>
         </a>
     </li>

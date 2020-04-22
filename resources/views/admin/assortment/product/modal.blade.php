@@ -15,12 +15,11 @@
                         ) }}
                     </div>
                 </div>
-
                 @if((request('type') ?? 0) == 0)
                     <div class="col-auto">
                         <div class="kt-form__group kt-form__group--inline">
                             <div class="kt-form__label">
-                                {{ Form::label('ADM_FILTER_PRODUCT_PRODUCTTYPE', KJLocalization::translate('Admin - Producten & diensten', 'Producttype', 'Producttype'). ':') }}
+                                {{ Form::label('ADM_FILTER_PRODUCT_PRODUCTTYPE', KJLocalization::translate('Admin - Dossiers', 'Producttype', 'Producttype'). ':') }}
                             </div>
                             <div class="kt-form__control">
                                 {{ Form::select(
@@ -40,6 +39,9 @@
     </div>
 </div>
 
+
+
+
 {{ KJDatatable::create(
     'ADM_PRODUCT_MODAL_TABLE',
     [
@@ -52,11 +54,11 @@
         'columns' => [
             [
                 'field' => 'TYPE_PRODUCT',
-                'title' => KJLocalization::translate('Admin - Producten & diensten', 'Type product', 'Type product')
+                'title' => KJLocalization::translate('Admin - Dossiers', 'Type product', 'Type product')
             ],
             [
                 'field' => 'DESCRIPTION_INT',
-                'title' => KJLocalization::translate('Admin - Producten & diensten', 'Omschrijving intern', 'Omschrijving intern')
+                'title' => KJLocalization::translate('Admin - Dossiers', 'Omschrijving intern', 'Omschrijving intern')
             ],
         ],
         'filters' => [
@@ -68,3 +70,7 @@
         ]
     ]
 ) }}
+
+@if((request('type') ?? 0) == 1)
+    {{ KJField::date('STARTDATE', KJLocalization::translate('Admin - Taken', 'Start datum', 'Start datum'), (date(KJ\Localization\libraries\LanguageUtils::getDateFormat(), strtotime(date("D M d")))), ['required', 'data-date-start-date' => '-0d', 'data-locale-format' => \KJ\Localization\libraries\LanguageUtils::getJSDatePickerFormat()]) }}
+@endif

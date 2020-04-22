@@ -28,7 +28,7 @@
                                     <a class="dropdown-item shiftDeadline" data-type = 'shiftDeadline' href="#">{{KJLocalization::translate('Admin - Taken', 'Deadline verschuiven', 'Deadline verschuiven')}}</a>
                                     <a class="dropdown-item connectEmployee" data-type = 'connectEmployee' href="#">{{KJLocalization::translate('Admin - Taken', 'Koppelen aan medewerker', 'Koppelen aan medewerker')}}</a>
                                     <a class="dropdown-item setDone" data-status = 'setdone' href="#">{{ KJLocalization::translate('Admin - Taken', 'Markeren als gereed', 'Markeren als gereed') }}</a>
-                                    <a class="dropdown-item copyToMap" data-status = 'copyToMap' href="#">{{ KJLocalization::translate('Admin - Taken', 'Toevoegen aan map', 'Toevoegen aan map') }}</a>
+                                    <a class="dropdown-item copyToMap" data-type = 'copyToMap' href="#">{{ KJLocalization::translate('Admin - Taken', 'Toevoegen aan map', 'Toevoegen aan map') }}</a>
                                 </div>
                             </div>
                             @else

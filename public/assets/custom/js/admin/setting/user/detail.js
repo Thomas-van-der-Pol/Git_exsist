@@ -2,7 +2,7 @@ var logo_user_select;
 
 $(document).ready(function() {
 
-    kjlocalization.create('Admin - Producten & diensten', [
+    kjlocalization.create('Admin - Dossiers', [
         {'Selecteer dienst': 'Selecteer dienst'}
     ]);
 

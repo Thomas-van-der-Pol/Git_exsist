@@ -90,6 +90,7 @@ class InvoiceUtils
                     'Identifier' => "TEXT",
                     'Query' => "SELECT " .
                         " '" . $title . "' AS TITLE, " .
+                        " CAST(1 AS BIT) AS IS_ANONYMIZED, " .
                         " '" . KJLocalization::translate('Admin - Facturen', 'Prijs', 'Prijs', [], $locale) . "' AS PRIJS, " .
                         " '" . KJLocalization::translate('Admin - Facturen', 'Aantal', 'Aantal', [], $locale) . "' AS AANTAL, " .
                         " '" . KJLocalization::translate('Admin - Facturen', 'Totaal', 'Totaal', [], $locale) . "' AS TOTAAL, " .

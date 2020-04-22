@@ -33,26 +33,14 @@ class InvoiceLine extends Model
         parent::boot();
 
         static::deleting(function(InvoiceLine $invoiceLine) {
-            // Unlink from hourlog
-            if ($invoiceLine->FK_CORE_HOURLOG) {
-                $item = HourLog::find($invoiceLine->FK_CORE_HOURLOG);
+
+            // Unlink from invoice scheme
+            if ($invoiceLine->FK_FINANCE_INVOICE_SCHEME) {
+                $item = InvoiceScheme::find($invoiceLine->FK_FINANCE_INVOICE_SCHEME);
                 $item->FK_FINANCE_INVOICE_LINE = null;
                 $item->save();
             }
 
-            // Unlink from project product
-            if ($invoiceLine->FK_PROJECT_ASSORTMENT_PRODUCT) {
-                $item = Product::find($invoiceLine->FK_PROJECT_ASSORTMENT_PRODUCT);
-                $item->FK_FINANCE_INVOICE_LINE = null;
-                $item->save();
-            }
-
-            // Unlink from project
-            if ($invoiceLine->FK_PROJECT) {
-                $item = Project::find($invoiceLine->FK_PROJECT);
-                $item->FK_FINANCE_INVOICE_LINE = null;
-                $item->save();
-            }
         });
     }
 

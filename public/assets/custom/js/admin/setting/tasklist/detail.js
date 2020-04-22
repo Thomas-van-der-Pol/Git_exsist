@@ -1,9 +1,4 @@
 $(document).ready(function() {
-
-    // kjlocalization.create('Admin - Producten & diensten', [
-    //     {'Selecteer product': 'Selecteer product'}
-    // ]);
-
     // Load screen
     loadScreen($('#default'), {
         url: '/admin/settings/tasklist/detailScreen',

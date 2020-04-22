@@ -192,6 +192,7 @@ $(document).ready(function() {
         else{
             subject = kjlocalization.get('admin_-_taken', 'toevoegen_aan_map');
         }
+
         loadTaskFunctionModal(type, taskIds, subject, container);
     });
 

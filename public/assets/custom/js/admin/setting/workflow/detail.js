@@ -1,6 +1,6 @@
 $(document).ready(function() {
 
-    kjlocalization.create('Admin - Producten & diensten', [
+    kjlocalization.create('Admin - Dossiers', [
         {'Selecteer product': 'Selecteer product'}
     ]);
 
@@ -126,7 +126,7 @@ $(document).ready(function() {
             success: function (data) {
                 // Load detail form
                 $('.kj_field_modal').find('.modal-footer').find('.kjclosemodal').text(kjlocalization.get('algemeen', 'toevoegen'));
-                $('.kj_field_modal .modal-title').text(kjlocalization.get('admin_-_producten_&_diensten', 'selecteer_dienst'));
+                $('.kj_field_modal .modal-title').text(kjlocalization.get('admin_-_dossiers', 'selecteer_dienst'));
                 $('.kj_field_modal .modal-body').html(data.viewDetail);
                 loadDatatable($('#ADM_PRODUCT_MODAL_TABLE'));
                 loadDropdowns();

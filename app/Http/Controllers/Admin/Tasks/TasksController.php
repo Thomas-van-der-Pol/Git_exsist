@@ -138,9 +138,11 @@ class TasksController extends AdminBaseController {
 
         $contactsOri = Contact::all()->pluck('FIRSTNAME', 'ID');
         $contacts = $none + $contactsOri->toArray();
-
+        $customMapsOri = CustomMap::all()->where('FK_CORE_USER', Auth::guard()->user()->ID)->pluck('NAME', 'ID');
+        $customMaps = $none + $customMapsOri->toArray();
         $view = $this->index()
             ->with('contacts', $contacts)
+            ->with('customMaps', $customMaps)
             ->with('type', $type);
 
         return response()->json([
@@ -571,7 +573,6 @@ class TasksController extends AdminBaseController {
     public function setDone(Request $request) {
         $status = ( $request->get('status') ?? 0 );
         $tasks = json_decode(( $request->get('task') ?? 0 ), true);
-
         foreach ($tasks as $task_id) {
             $task = Task::where([
                 'ID' => $task_id
@@ -632,14 +633,18 @@ class TasksController extends AdminBaseController {
     {
         $tasks = json_decode(($request->get('task') ?? 0), true);
         $customMapID = $request->get('FK_USER_CUSTOM_MAP');
+        $customMap = CustomMap::find($customMapID);
 
         if ($tasks && $customMapID) {
             foreach ($tasks as $taskID) {
-                $taskCustomMap = new TaskCustomMap([
-                   'FK_TASK' => $taskID,
-                   'FK_USER_CUSTOM_MAP' => $customMapID;
-                ]);
-                $taskCustomMap->save();
+                $task = Task::find($taskID);
+                if(!$customMap->tasks->contains($task)){
+                    $taskCustomMap = new TaskCustomMap([
+                        'FK_TASK' => $taskID,
+                        'FK_USER_CUSTOM_MAP' => $customMapID
+                    ]);
+                    $taskCustomMap->save();
+                }
             }
         }
         return response()->json([

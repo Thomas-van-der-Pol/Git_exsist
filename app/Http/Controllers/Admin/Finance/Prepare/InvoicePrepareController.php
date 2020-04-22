@@ -82,6 +82,9 @@ class InvoicePrepareController extends AdminBaseController {
             })
             ->addColumn('PRICE_TOTAL_INCVAT_FORMATTED', function($item) {
                 return '€ ' . number_format(($item->PRICE_TOTAL_INCVAT), 2, LanguageUtils::getDecimalPoint(), LanguageUtils::getThousandsSeparator());
+            })
+            ->addColumn('WORKFLOWSTATE', function($item) {
+                return ($item->project->workflowstate->DESCRIPTION ?? '');
             });
     }
 
@@ -147,7 +150,7 @@ class InvoicePrepareController extends AdminBaseController {
         $date = $date->modify('midnight');
 
         try{
-            DB::update('EXEC [FINANCE_BILLCHECK_FILL] ?',[$date]);
+            DB::update('EXEC [FINANCE_BILLCHECK_FILL] ?, ?',[$date, config('dropdown_type.TYPE_ADDRESSTYPE_VALUE.INVOICE')]);
 
             return response()->json([
                 'success' => true

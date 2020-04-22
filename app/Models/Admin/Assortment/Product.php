@@ -2,6 +2,7 @@
 
 namespace App\Models\Admin\Assortment;
 
+use App\Models\Admin\Finance\InvoiceScheme;
 use App\Models\Core\Document;
 use App\Models\Core\DropdownValue;
 use Illuminate\Database\Eloquent\Model;
@@ -36,6 +37,33 @@ class Product extends Model {
         }
 
         return $name;
+    }
+
+    public function invoiceSchemes()
+    {
+        return $this->hasMany(InvoiceScheme::class, 'FK_ASSORTMENT_PRODUCT', 'ID');
+    }
+
+    public function checkRemnant()
+    {
+        $total = $this->invoiceSchemes->where('FK_PROJECT_ASSORTMENT_PRODUCT',null)->where('AUTOMATIC_REMNANT', false)->sum('PERCENTAGE');
+        $remnant = (100 - $total);
+
+        $invoiceScheme = InvoiceScheme::firstOrCreate([
+            'FK_ASSORTMENT_PRODUCT' => $this->ID,
+            'FK_PROJECT_ASSORTMENT_PRODUCT' => null,
+            'ACTIVE' => true,
+            'AUTOMATIC_REMNANT' => true
+        ], [
+            'DAYS' => 14
+        ]);
+        $invoiceScheme->PERCENTAGE = $remnant;
+        $invoiceScheme->save();
+
+        // Delete if remnant = 0
+        if ($invoiceScheme->PERCENTAGE <= 0) {
+            $invoiceScheme->delete();
+        }
     }
 
     public function producttype()

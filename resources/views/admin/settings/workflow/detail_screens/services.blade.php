@@ -4,7 +4,7 @@
             <div class="col order-2 order-xl-2">
                 <a href="javascript:;" id="addProducts" class="btn btn-success btn-sm btn-upper pull-right" data-id="{{ $item->ID }}" data-type="{{ config('product_type.TYPE_SERVICE') }}">
                     <i class="fa fa-plus-square"></i>
-                    {{ KJLocalization::translate('Admin - Producten & diensten', 'Dienst', 'Dienst')}}
+                    {{ KJLocalization::translate('Admin - Dossiers', 'Dienst', 'Dienst')}}
                 </a>
             </div>
         </div>
@@ -22,11 +22,11 @@
         'columns' => array(
             array(
                 'field' => 'FULL_PRODUCT',
-                'title' => KJLocalization::translate('Admin - Producten & diensten', 'Omschrijving intern', 'Omschrijving intern')
+                'title' => KJLocalization::translate('Admin - Dossiers', 'Omschrijving intern', 'Omschrijving intern')
             ),
             array(
                 'field' => 'PRICE',
-                'title' => KJLocalization::translate('Admin - Producten & diensten', 'Prijs', 'Prijs')
+                'title' => KJLocalization::translate('Admin - Dossiers', 'Prijs', 'Prijs')
             )
         ),
         'customEditButtons' => array(

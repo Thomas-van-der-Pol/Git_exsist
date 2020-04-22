@@ -1,16 +1,16 @@
-@extends('theme.demo1.main', ['title' => KJLocalization::translate('Admin - Menu', 'Producten & diensten', 'Producten & diensten')])
+@extends('theme.demo1.main', ['title' => KJLocalization::translate('Admin - Menu', 'Interventies', 'Interventies')])
 
 @section('subheader')
     @component('breadcrums::main', [
         'rootURL'       => \KJ\Localization\libraries\LanguageUtils::getUrl('admin'),
-        'parentTitle' => KJLocalization::translate('Admin - Menu', 'Producten & diensten', 'Producten & diensten'),
+        'parentTitle' => KJLocalization::translate('Admin - Menu', 'Interventies', 'Interventies'),
         'items' => [
             [
                 'title' => KJLocalization::translate('Algemeen', 'Home', 'Home'),
                 'URL' => ltrim(\KJ\Localization\libraries\LanguageUtils::getUrl('admin'), '/')
             ],
             [
-                'title' => KJLocalization::translate('Admin - Menu', 'Producten & diensten', 'Producten & diensten'),
+                'title' => KJLocalization::translate('Admin - Menu', 'Interventies', 'Interventies'),
                 'URL' => ltrim(\KJ\Localization\libraries\LanguageUtils::getUrl('admin/product'), '/')
             ]
         ]
@@ -20,7 +20,7 @@
 
 @section('content')
     <div class="row">
-        @component('portlet::main', ['title' => KJLocalization::translate('Admin - Producten & diensten', 'Producten & diensten', 'Producten & diensten'), 'colsize' => 12])
+        @component('portlet::main', ['title' => KJLocalization::translate('Admin - Dossiers', 'Interventies', 'Interventies'), 'colsize' => 12])
             @slot('headicon')
                 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="kt-svg-icon">
                     <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -35,7 +35,7 @@
                 <div class="kt-portlet__head-wrapper">
                     <a href="{{ \KJ\Localization\libraries\LanguageUtils::getUrl('admin/product/detail/-1') }}" id="newProduct" class="btn btn-success btn-sm btn-upper">
                         <i class="fa fa-plus-square"></i>
-                        {{ KJLocalization::translate('Admin - Producten & diensten', 'Toevoegen', 'Toevoegen')}}
+                        {{ KJLocalization::translate('Admin - Dossiers', 'Toevoegen', 'Toevoegen')}}
                     </a>
                 </div>
             @endslot
@@ -63,7 +63,7 @@
                             <div class="col-2">
                                 <div class="kt-form__group kt-form__group--inline">
                                     <div class="kt-form__label">
-                                        {{ Form::label('ADM_FILTER_PRODUCT_PRODUCTTYPE', KJLocalization::translate('Admin - Producten & diensten', 'Producttype', 'Producttype'). ':') }}
+                                        {{ Form::label('ADM_FILTER_PRODUCT_PRODUCTTYPE', KJLocalization::translate('Admin - Dossiers', 'Producttype', 'Producttype'). ':') }}
                                     </div>
                                     <div class="kt-form__control">
                                         {{ Form::select(
@@ -122,19 +122,19 @@
                         'columns' => array(
                             array(
                                 'field' => 'TYPE_PRODUCT',
-                                'title' => KJLocalization::translate('Admin - Producten & diensten', 'Type product', 'Type product')
+                                'title' => KJLocalization::translate('Admin - Dossiers', 'Type product', 'Type product')
                             ),
                             array(
                                 'field' => 'DESCRIPTION_INT',
-                                'title' => KJLocalization::translate('Admin - Producten & diensten', 'Omschrijving intern', 'Omschrijving intern')
+                                'title' => KJLocalization::translate('Admin - Dossiers', 'Omschrijving intern', 'Omschrijving intern')
                             ),
                             array(
                                 'field' => 'PRICE_FORMATTED',
-                                'title' => KJLocalization::translate('Admin - Producten & diensten', 'Prijs excl', 'Prijs excl'),
+                                'title' => KJLocalization::translate('Admin - Dossiers', 'Prijs excl', 'Prijs excl'),
                             ),
                             array(
                                 'field' => 'PRICE_INCVAT_FORMATTED',
-                                'title' => KJLocalization::translate('Admin - Producten & diensten', 'Prijs incl', 'Prijs incl'),
+                                'title' => KJLocalization::translate('Admin - Dossiers', 'Prijs incl', 'Prijs incl'),
                             )
                         ),
                         'filters' => array(

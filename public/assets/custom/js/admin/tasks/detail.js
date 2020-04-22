@@ -92,7 +92,7 @@ $(document).ready(function() {
 
             success: function (data) {
                 // Load detail form
-                $('.kj_field_modal .modal-title').text(kjlocalization.get('admin_-_producten_&_diensten', 'selecteer_product'));
+                $('.kj_field_modal .modal-title').text(kjlocalization.get('admin_-_dossiers', 'selecteer_product'));
                 $('.kj_field_modal .modal-body').html(data.viewDetail);
                 loadDatatable($('#ADM_PRODUCT_MODAL_TABLE'));
                 loadDropdowns();

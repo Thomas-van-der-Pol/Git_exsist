@@ -44,10 +44,6 @@
             array(
                 'field' => 'DAYS_FORMATTED',
                 'title' => KJLocalization::translate("Admin - Facturen", "Dgn", "Dgn")
-            ),
-            array(
-                'field' => 'ADVANCE_FORMATTED',
-                'title' => KJLocalization::translate("Admin - Facturen", "Voorschot", "Voorschot")
             )
         )
     )

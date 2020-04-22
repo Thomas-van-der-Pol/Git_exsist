@@ -41,6 +41,10 @@ class ProductProjectController extends AdminBaseController
             ->addColumn('RELATION', function($item) {
                 return ( $item->relation ? $item->relation->title : '' );
             })
+            ->addColumn('BLOCKED', function($item) {
+                $allInvoiceSchemes = $item->invoiceSchemes->whereNotNull('FK_FINANCE_INVOICE_LINE')->count();
+                return ($allInvoiceSchemes > 0) ? true : false;
+            })
             ->addColumn('PRICE', function($item) {
                 return $item->getPriceFormattedAttribute();
             })
@@ -101,11 +105,12 @@ class ProductProjectController extends AdminBaseController
 
     protected function addProduct(Request $request)
     {
+        $startDate = $request->get('date');
         $id = ( $request->get('id') ?? 0 );
         $product = json_decode(( $request->get('product') ?? 0 ), true);
-
         $project = Project::find($id);
-        $createProduct = $project->createProduct($product);
+
+        $createProduct = $project->createProduct($product, $startDate);
 
         return response()->json([
             'success' => ($createProduct != null)
@@ -118,7 +123,11 @@ class ProductProjectController extends AdminBaseController
 
         if ($item) {
 
-            // Delete
+            // Delete all invoice moments of this intervention-dossier
+            foreach ($item->invoiceSchemes as $invoiceScheme){
+                $invoiceScheme->delete();
+            }
+            //delete intervention-dossier.
             $item->delete();
 
             return response()->json([

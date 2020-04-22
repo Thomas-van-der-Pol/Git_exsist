@@ -23,7 +23,7 @@
                 <div class="col order-2 order-xl-2">
                     <a href="javascript:;" id="addProducts" class="btn btn-success btn-sm btn-upper pull-right" data-id="{{ $item->ID }}" data-type="{{ config('product_type.TYPE_PRODUCT') }}">
                         <i class="fa fa-plus-square"></i>
-                        {{ KJLocalization::translate('Admin - CRM', 'Producten', 'Producten')}}
+                        {{ KJLocalization::translate('Admin - CRM', 'Interventies', 'Interventies')}}
                     </a>
                 </div>
             @endif
@@ -57,6 +57,7 @@
         'saveURL' => '/admin/project/product/save',
         'searchinput' => '#ADM_PROJECT_PRODUCT_FILTER_SEARCH',
         'parentid' => $item->ID,
+        'blockEditColumn' => 'BLOCKED',
         'pagination' => false,
         'pagesize' => 99999,
         'columns' => array(

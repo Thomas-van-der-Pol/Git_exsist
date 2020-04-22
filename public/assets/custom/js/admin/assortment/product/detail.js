@@ -6,6 +6,22 @@ $(document).ready(function() {
         afterLoad: afterLoadScreen
     });
 
+    // Load active sub screen
+    $('.kt-widget__item--active').each(function() {
+        loadScreen($(this), {
+            url: '/admin/product/detailScreen',
+            afterLoad: afterLoadScreen
+        });
+    });
+
+    // Switch tab action
+    $('a[data-toggle="tab"]').on('show.bs.tab', function (e) {
+        loadScreen($(e.target), {
+            url: '/admin/product/detailScreen',
+            afterLoad: afterLoadScreen
+        });
+    });
+
     // Edit action
     $('body').on('click', '.setEditMode', function(e) {
         e.preventDefault();
@@ -44,30 +60,6 @@ $(document).ready(function() {
         window.location = '/admin/product';
     });
 
-    // Summernote init
-    $('.summernote').summernote({
-        dialogsInBody: true,
-        popover: {
-            image: [],
-            link: [],
-            air: []
-        },
-        height: 250,
-        toolbar: [
-            ['style', ['bold', 'italic', 'underline', 'clear']],
-            ['insert', ['link', 'unlink']],
-            ['misc',['codeview']]
-        ]
-    });
-
-    //Change
-    $('body').on('change', '#FK_ASSORTMENT_PRODUCT_TYPE', function(e) {
-        var typeSelected = $(this).val();
-
-        $('.assortment_producttype_service').addClass('kt-hide');
-        $('.assortment_producttype_service[data-id="'+typeSelected+'"]').removeClass('kt-hide');
-    });
-
     $('body').on('click', '.activateItem', function(e) {
         e.preventDefault();
 
@@ -84,10 +76,25 @@ $(document).ready(function() {
             }
         );
     });
+
+    $('body').on('click', '.deleteInvoiceMoment', function(e) {
+        e.preventDefault();
+
+        var id = $(this).data('id');
+        kjrequest('DELETE', '/admin/invoice/scheme/' + id, null, false,
+            function(result) {
+                if (result.success) {
+                    ADM_PRODUCT_INVOICE_SCHEME_TABLE_configuration.datatableSelector.reload(null, false);
+                }
+            }
+        );
+    });
 });
 
 function afterLoadScreen(id, screen, data) {
     if (screen === 'default') {
-        loadUppyFileUpload($('#'+screen), ['.pdf', '.docx'], '/admin/product/upload', '/admin/product/deleteFile/', '/document/request');
+
+    } else if (screen === 'invoice_scheme') {
+        loadDatatable($('#ADM_PRODUCT_INVOICE_SCHEME_TABLE'));
     }
 }

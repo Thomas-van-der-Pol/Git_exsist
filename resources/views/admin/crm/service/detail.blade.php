@@ -40,7 +40,7 @@
                     <div class="kt-uppy__status" id="uppy_status"></div>
                     <div class="kt-uppy__informer kt-uppy__informer--min" id="uppy_informer"></div>
                 </div>
-                <span class="form-text text-muted">{{ KJLocalization::translate('Admin - Producten & diensten', 'PDF & Word bestanden', 'PDF & Word bestanden') }} : *.pdf *.docx (max 2MB.)</span>
+                <span class="form-text text-muted">{{ KJLocalization::translate('Admin - Dossiers', 'PDF & Word bestanden', 'PDF & Word bestanden') }} : *.pdf *.docx (max 2MB.)</span>
             </div>
         </div>
     </div>

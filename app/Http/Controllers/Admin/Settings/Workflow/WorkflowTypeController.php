@@ -44,11 +44,6 @@ class WorkflowTypeController extends AdminBaseController
     protected $detailScreenFolder = 'admin.settings.workflow.detail_screens';
     protected $detailViewName = 'admin.settings.workflow.detail';
 
-//    protected function authorizeRequest($method, $parameters)
-//    {
-//        return Auth::guard()->user()->hasPermission(config('permission.SETTINGS_ROLE_PERMISSION'));
-//    }
-
     protected function beforeDatatable($datatable)
     {
         $datatable->addColumn('PROJECT_TYPE', function(WorkflowStateType $workflowStateType) {

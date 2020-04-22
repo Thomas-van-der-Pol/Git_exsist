@@ -2,9 +2,9 @@
 
 namespace App\Models\Admin\Project;
 
+
 use App\Models\Admin\CRM\Contact;
 use App\Models\Admin\CRM\Relation;
-use App\Models\Admin\Finance\InvoiceLine;
 use App\Models\Admin\User;
 use App\Models\Core\DropdownValue;
 use App\Models\Core\WorkflowState;
@@ -90,12 +90,7 @@ class Project extends Model
 
     public function products()
     {
-        return $this->hasMany(Product::class, 'FK_PROJECT', 'ID');
-    }
-
-    public function invoiceLine()
-    {
-        return $this->hasOne(InvoiceLine::class, 'ID', 'FK_FINANCE_INVOICE_LINE');
+        return $this->hasMany(\App\Models\Admin\Project\Product::class, 'FK_PROJECT', 'ID');
     }
 
     public function progress()
@@ -207,7 +202,7 @@ class Project extends Model
         }
     }
 
-    public function createProduct($product)
+    public function createProduct($product, $startDate)
     {
         $productProject = null;
 
@@ -215,7 +210,7 @@ class Project extends Model
 
             $product = \App\Models\Admin\Assortment\Product::find($product_id);
 
-            $productProject = Product::firstOrCreate([
+            $productProject = \App\Models\Admin\Project\Product::firstOrCreate([
                 'ACTIVE' => true,
                 'FK_PROJECT' => $this->ID,
                 'FK_ASSORTMENT_PRODUCT' => $product_id,
@@ -223,6 +218,20 @@ class Project extends Model
             $productProject->PRICE = $product->PRICE;
             $productProject->QUANTITY = ($productProject->QUANTITY ?? 0) + 1;
             $productProject->save();
+
+            if($productProject) {
+                //find intervention
+                if($product) {
+                    //find standard invoice schemes of intervention
+                    //copy standard invoice schemes and change some values.
+                    foreach ($product->invoiceSchemes->where('FK_PROJECT_ASSORTMENT_PRODUCT', null) as $invoiceScheme) {
+                        $newInvoiceScheme = $invoiceScheme->replicate();
+                        $newInvoiceScheme->FK_PROJECT_ASSORTMENT_PRODUCT = $productProject->ID;
+                        $newInvoiceScheme->DATE = date('Y-m-d', strtotime($startDate . ' + ' . $invoiceScheme->DAYS . ' days'));
+                        $newInvoiceScheme->save();
+                    }
+                }
+            }
         }
 
         return $productProject;

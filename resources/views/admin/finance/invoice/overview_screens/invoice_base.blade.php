@@ -48,11 +48,6 @@
         );
     }
 
-    $columns[] = array(
-        'field' => 'ADVANCE_FORMATTED',
-        'title' => KJLocalization::translate("Admin - Facturen", "Voorschot", "Voorschot")
-    );
-    
     // Alle facturen, dan kolom status erbij
     if ($type == config('invoice_state_type.TYPE_ALL')) {
         $columns = array_merge($columns, array(array(

@@ -1,6 +1,6 @@
 $(document).ready(function() {
 
-    kjlocalization.create('Admin - Producten & diensten', [
+    kjlocalization.create('Admin - Dossiers', [
         {'Selecteer product': 'Selecteer product'}
     ]);
 
@@ -204,7 +204,7 @@ $(document).ready(function() {
 
         var id = $(this).data('id');
         var type = $(this).data('type');
-        var text = kjlocalization.get('admin_-_producten_&_diensten', 'selecteer_product');
+        var text = kjlocalization.get('admin_-_dossiers', 'selecteer_product');
 
         $.ajax({
             url: '/admin/product/modal?checkable=1&type=' + type,
@@ -221,6 +221,8 @@ $(document).ready(function() {
 
                 $('.kj_field_modal').modal('show');
 
+                setMaterialActiveLabels($('.form-group'));
+
                 $('.kj_field_modal').off('shown.bs.modal').on('shown.bs.modal', function() {
                     ADM_PRODUCT_MODAL_TABLE_configuration.datatableSelector.redraw();
                 });
@@ -230,7 +232,7 @@ $(document).ready(function() {
                     e.preventDefault();
 
                     var productIds = getCheckedRows('ADM_PRODUCT_MODAL_TABLE');
-
+                    var date = $('#STARTDATE').val();
                     if (productIds.length === 0) {
                         swal.fire({
                             text: kjlocalization.get('algemeen', 'selecteer_minimaal_een_regel'),
@@ -243,6 +245,7 @@ $(document).ready(function() {
                     var formData = new FormData();
                     formData.append('id', id);
                     formData.append('product', JSON.stringify(productIds));
+                    formData.append('date', date);
 
                     $.ajaxSetup({
                         headers: {
@@ -285,53 +288,16 @@ $(document).ready(function() {
         );
     });
 
-    // Invoices
-    $('body').on('click', '#addAdvanceInvoice', function(e) {
+    //delete invoice moment of dossier
+    $('body').on('click', '.deleteInvoiceMomentProject', function(e) {
         e.preventDefault();
 
-        // Set edit mode
-        setScreenMode($('#advance_invoice_modal'), 'edit');
-
-        // Show modal
-        $('.advance_error').hide();
-        $('#advance_invoice_modal').modal('show');
-    });
-
-    $('body').on('change', '#ADVANCE_TYPE', function(e) {
-        e.preventDefault();
-
-        $('.advance_show_at_type').hide();
-        $('.advance_show_at_type[data-type="'+$(this).val()+'"]').show();
-
-        countAdvanceAmount();
-    });
-
-    $('body').on('change', 'input[name=ADVANCE_PERCENTAGE], input[name=ADVANCE_AMOUNT]', function(e) {
-        e.preventDefault();
-
-        countAdvanceAmount();
-    });
-
-    $('body').on('click', '#createAdvanceInvoice', function(e) {
-        e.preventDefault();
-
-        var form = $('#advance_invoice');
-
-        var formData = new FormData();
-        formData.append('ID', form.find('input[name=ID]').val());
-        formData.append('TYPE', form.find('#ADVANCE_TYPE').val());
-        formData.append('PERCENTAGE', form.find('input[name=ADVANCE_PERCENTAGE]').val() || 0);
-        formData.append('AMOUNT', form.find('input[name=ADVANCE_AMOUNT]').val() || 0);
-
-        kjrequest('POST', '/admin/invoice/createAdvance', formData, true,
-            function (data) {
-                if (data.success === true) {
-                    window.location = '/admin/invoice/detail/' + data.id;
-                } else {
-                    $.notify({message: data.message},{type: 'danger', z_index: 99999});
+        var id = $(this).data('id');
+        kjrequest('DELETE', '/admin/invoice/scheme/project/' + id, null, false,
+            function(result) {
+                if (result.success) {
+                    ADM_PROJECT_INVOICE_SCHEME_TABLE_configuration.datatableSelector.reload(null, false);
                 }
-
-                $('#advance_invoice_modal').modal('hide');
             }
         );
     });
@@ -356,6 +322,84 @@ function afterLoadScreen(id, screen, data) {
     }
     else if (screen === 'invoices') {
         loadDatatable($('#ADM_PROJECT_INVOICE_TABLE'));
+    }
+    else if (screen === 'invoice_scheme') {
+        loadDatatable($('#ADM_PROJECT_INVOICE_SCHEME_TABLE'));
+
+        $('#addInvoiceMomentProject').off().on('click', function(e) {
+            e.preventDefault();
+
+            var pid = $(this).data('pid');
+
+            // Get configuration
+            var datatableName = 'ADM_PROJECT_INVOICE_SCHEME_TABLE';
+            var name = datatableName + '_configuration';
+            var configuration = window[name];
+
+            var selectorName = datatableName + '-new';
+            if (configuration.targetElement !== null) {
+                selectorName = configuration.targetElement;
+            }
+
+            var targetElement = $('#' + selectorName);
+            // Load view
+            $.ajax({
+                url: configuration.editURL + configuration.newrecordid + '?pid=' + pid,
+                type: 'GET',
+                dataType: 'JSON',
+
+                success: function (data) {
+                    // Close open rows
+                    $('#'+datatableName).find('.closeRow').click();
+
+                    // Load detail form
+                    targetElement.html(data.viewDetail);
+
+                    // Bind save events
+                    if (configuration.saveUrl > '') {
+                        $('#' + selectorName + ' .kj_save').on('click', function (e) {
+                            e.preventDefault();
+                            save($(this), configuration.saveUrl, configuration.parentid, (configuration.inlineEdit === true), targetElement, function(data) {
+                                $(document).trigger(datatableName + 'AfterSave',[data]);
+
+                                configuration.datatableSelector.reload(null, false)
+                            });
+                        });
+                    }
+
+                    // Bind cancel event
+                    if (configuration.addable) {
+                        $('#' + selectorName + ' .kj_cancel').on('click', function (e) {
+                            e.preventDefault();
+
+                            cancelNew(selectorName);
+                        });
+                    }
+
+                    // Load fields
+                    loadDropdowns();
+                    loadDatePickers();
+                    loadDateTimePickers();
+                    loadKJPostcodeLookups();
+
+                    setMaterialActiveLabels(targetElement);
+
+                    // Callback to rebind events
+                    $(document).trigger(datatableName + 'AfterLoad',[targetElement]);
+                    $(document).trigger(datatableName + 'AfterNew',[targetElement]);
+
+                    targetElement.slideDown(function() {
+                        var firstElementje = $('#' + selectorName + ' input:not(.datepicker):not(.datetimepicker):not(.kjdaterangepicker-picker):not(:hidden)').first();
+                        if (firstElementje !== undefined) {
+                            firstElementje.focus();
+                        }
+
+                        $(document).trigger(datatableName + 'AfterLoadAnimation', [targetElement]);
+                        $(document).trigger(datatableName + 'AfterNewAnimation', [targetElement]);
+                    });
+                }
+            });
+        });
     }
     else if (screen === 'products') {
         loadDatatable($('#ADM_PROJECT_PRODUCTS_TABLE'));
@@ -446,37 +490,3 @@ $(document).on('ADM_CRM_CONTACT_MODAL_TABLEAfterSelect', function(e, selectedId,
     // Modal hidden
     $('.kj_field_modal').modal('hide');
 });
-
-function countAdvanceAmount()
-{
-    var type = $('#ADVANCE_TYPE').val();
-    var maxAmount = parseFloat($('input[name="MAX_AMOUNT"]').val());
-    var amount = 0;
-
-    // Percentage
-    if (type == 1) {
-        var percentage = parseFloat($('input[name=ADVANCE_PERCENTAGE]').val()) || 0;
-        if (percentage > 100) {
-            // Error
-            $('.advance_error').show();
-            amount = 0;
-        } else {
-            $('.advance_error').hide();
-            amount = maxAmount * (percentage / 100);
-        }
-    }
-    // Vast bedrag
-    else if (type == 2) {
-        var fixedAmount = parseFloat($('input[name=ADVANCE_AMOUNT]').val()) || 0;
-        if (fixedAmount > maxAmount) {
-            // Error
-            $('.advance_error').show();
-            amount = 0;
-        } else {
-            $('.advance_error').hide();
-            amount = fixedAmount;
-        }
-    }
-
-    $('#advance_summary_amount').text('€ ' + amount);
-}

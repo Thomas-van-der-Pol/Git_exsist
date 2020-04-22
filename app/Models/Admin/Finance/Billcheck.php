@@ -3,6 +3,7 @@
 namespace App\Models\Admin\Finance;
 
 use App\Models\Admin\CRM\Relation;
+use App\Models\Admin\Project\Project;
 use Illuminate\Database\Eloquent\Model;
 use KJ\Localization\libraries\LanguageUtils;
 use KJLocalization;
@@ -29,6 +30,11 @@ class Billcheck extends Model
     public function relation()
     {
         return $this->hasOne(Relation::class, 'ID', 'FK_CRM_RELATION');
+    }
+
+    public function project()
+    {
+        return $this->hasOne(Project::class, 'ID', 'FK_PROJECT');
     }
 
     public function getQuantityFormattedAttribute()

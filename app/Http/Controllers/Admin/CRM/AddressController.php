@@ -50,11 +50,6 @@ class AddressController extends AdminBaseController {
 
     protected $saveParentIDField = 'FK_CRM_RELATION';
 
-//    protected function authorizeRequest($method, $parameters)
-//    {
-//        return ( Auth::guard()->user()->hasPermission(config('permission.CRM_FAMILIES')) || Auth::guard()->user()->hasPermission(config('permission.CRM_CLIENTS')) );
-//    }
-
     public function allByRelationDatatable(Request $request, int $ID)
     {
         $this->whereClause = array(

@@ -230,6 +230,21 @@ foreach($alt_langs as $langCode) {
                     Route::post('/', 'Admin\Finance\InvoiceLineController@save');
                     Route::delete('/{ID}', 'Admin\Finance\InvoiceLineController@delete');
                 });
+
+                Route::prefix('scheme')->group(function () {
+                    Route::get('/allByProductDatatable/{ID}', 'Admin\Finance\InvoiceSchemeController@allByProductDatatable');
+//                    Route::get('/allByProjectDatatable/{ID}', 'Admin\Finance\InvoiceSchemeController@allByProjectDatatable');
+                    Route::get('/detailRendered/{ID}', 'Admin\Finance\InvoiceSchemeController@detailAsJSON');
+                    Route::post('/', 'Admin\Finance\InvoiceSchemeController@save');
+                    Route::delete('/{ID}', 'Admin\Finance\InvoiceSchemeController@delete');
+
+                    Route::prefix('project')->group(function () {
+                        Route::get('/allByProductDatatable/{ID}', 'Admin\Project\Product\InvoiceSchemeController@allByProjectProductDatatable');
+                        Route::get('/detailRendered/{ID}', 'Admin\Project\Product\InvoiceSchemeController@DetailAsJSON');
+                        Route::post('/', 'Admin\Project\Product\InvoiceSchemeController@save');
+                        Route::delete('/{ID}', 'Admin\Project\Product\InvoiceSchemeController@delete');
+                    });
+                });
             });
 
             // Profile
@@ -298,18 +313,6 @@ foreach($alt_langs as $langCode) {
                         Route::get('/detailRendered/{ID}', 'Admin\Settings\Finance\OverheadChargeController@detailAsJSON');
                         Route::post('/', 'Admin\Settings\Finance\OverheadChargeController@save');
                         Route::delete('/{ID}', 'Admin\Settings\Finance\OverheadChargeController@delete');
-                    });
-
-                    Route::prefix('indexation')->group(function () {
-                        Route::get('/allDatatable', 'Admin\Settings\Finance\Indexation\IndexationController@allDatatable');
-                        Route::get('/detailRendered/{ID}', 'Admin\Settings\Finance\Indexation\IndexationController@detailAsJSON');
-                        Route::post('/', 'Admin\Settings\Finance\Indexation\IndexationController@save');
-                        Route::delete('/{ID}', 'Admin\Settings\Finance\Indexation\IndexationController@delete');
-
-                        Route::prefix('configure')->group(function () {
-                            Route::get('/', 'Admin\Settings\Finance\Indexation\IndexationConfigureController@index');
-                            Route::post('/retrieveIndex', 'Admin\Settings\Finance\Indexation\IndexationConfigureController@retrieveIndex');
-                        });
                     });
                 });
 

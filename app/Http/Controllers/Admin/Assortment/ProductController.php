@@ -5,14 +5,13 @@ namespace App\Http\Controllers\Admin\Assortment;
 use App\Libraries\Core\DropdownvalueUtils;
 use App\Models\Admin\Assortment\Product;
 use App\Models\Admin\Assortment\ProductType;
-use App\Models\Admin\Finance\Indexation;
+use App\Models\Admin\Finance\InvoiceScheme;
 use App\Models\Admin\Finance\Ledger;
 use App\Models\Admin\Finance\VAT;
 use App\Models\Core\Document;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
 use KJ\Core\controllers\AdminBaseController;
 use KJ\Core\libraries\SessionUtils;
 use KJLocalization;
@@ -109,14 +108,10 @@ class ProductController extends AdminBaseController
                     ->pluck('DESCRIPTION', 'ID');
                 $vat = $none + $vatOri->toArray();
 
-                $indexationsOri = Indexation::where('ACTIVE', true)->pluck('DESCRIPTION', 'ID');
-                $indexations = $none + $indexationsOri->toArray();
-
                 $bindings = array_merge($bindings, [
                     ['producttypes', $producttypes],
                     ['ledgers', $ledgers],
                     ['vat', $vat],
-                    ['indexations', $indexations]
                 ]);
                 break;
         }
@@ -154,6 +149,21 @@ class ProductController extends AdminBaseController
         ];
 
         return parent::allDatatable($request);
+    }
+
+    protected function afterSave($item, $originalItem, Request $request, &$response)
+    {
+        $id = $request->get('ID');
+        if($id == -1){
+            $invoiceScheme = new InvoiceScheme([
+                'ACTIVE' => true,
+                'FK_ASSORTMENT_PRODUCT' => $item->ID,
+                'DAYS' => 14,
+                'PERCENTAGE' => 100,
+                'AUTOMATIC_REMNANT' => true
+            ]);
+            $invoiceScheme->save();
+        }
     }
 
     public function allByTypeDatatable(Request $request, int $ID)

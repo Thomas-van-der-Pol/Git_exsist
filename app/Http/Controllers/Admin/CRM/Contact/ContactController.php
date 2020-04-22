@@ -53,11 +53,6 @@ class ContactController extends AdminBaseController {
         'EMAILADDRESS' => 'nullable|email'
     ];
 
-//    protected function authorizeRequest($method, $parameters)
-//    {
-//        return ( Auth::guard()->user()->hasPermission(config('permission.CRM_FAMILIES')) || Auth::guard()->user()->hasPermission(config('permission.CRM_CLIENTS')) );
-//    }
-
     public function indexRendered()
     {
         $view = view('admin.crm.relation.contact.modal');
