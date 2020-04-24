@@ -26,6 +26,12 @@
                      ]
                 ]) }}
 
+                {{ KJField::number('NUMBER_CREDITOR', KJLocalization::translate('Admin - CRM', 'Crediteurnummer', 'Crediteurnummer'), $item ? $item->NUMBER_CREDITOR : '', true, ['data-screen-mode' => 'read, edit'], [
+                     'right' => [
+                          ['type' => 'button', 'caption' => '<i class="la la-refresh"></i>', 'class' => 'btn btn btn-label-brand btn-square btn-bold btn-upper btn-sm btn-icon generateCreditornumber', 'options' => ['data-id' => $item->ID]]
+                     ]
+                ]) }}
+
                 @if($item->VAT_LIABLE)
                     {{ KJField::text('VAT_NUMBER', KJLocalization::translate('Admin - CRM', 'Btw nummer', 'Btw nummer'), $item ? $item->VAT_NUMBER : '', true, ['data-screen-mode' => 'read, edit']) }}
                 @else

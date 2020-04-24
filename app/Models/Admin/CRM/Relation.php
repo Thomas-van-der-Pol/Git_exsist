@@ -62,6 +62,15 @@ class Relation extends Model
         }
     }
 
+    public function generateCreditornumber()
+    {
+        if ($this->NUMBER_CREDITOR == '')
+        {
+            $this->NUMBER_CREDITOR = $this->label->getNewCreditorNumber();
+            $this->save();
+        }
+    }
+
     public function createProduct($product)
     {
         foreach ($product as $product_id) {

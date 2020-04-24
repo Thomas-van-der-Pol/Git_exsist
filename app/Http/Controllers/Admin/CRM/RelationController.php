@@ -197,4 +197,17 @@ class RelationController extends AdminBaseController {
         ]);
     }
 
+    public function generateCreditornumber(int $ID)
+    {
+        $item = $this->find($ID);
+        $item->NUMBER_CREDITOR = null;
+        $item->save();
+
+        $item->generateCreditornumber();
+
+        return response()->json([
+            'success' => true
+        ]);
+    }
+
 }

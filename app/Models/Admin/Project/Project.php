@@ -175,24 +175,6 @@ class Project extends Model
         }
     }
 
-    public function getCompensationPriceDecimalAttribute()
-    {
-        if ($this->COMPENSATION_PRICE) {
-            return number_format($this->COMPENSATION_PRICE,2, '.', '.');
-        } else {
-            return '';
-        }
-    }
-
-    public function getCompensationPriceFormattedAttribute()
-    {
-        if ($this->COMPENSATION_PRICE) {
-            return '€ ' . number_format($this->COMPENSATION_PRICE,2, LanguageUtils::getDecimalPoint(), LanguageUtils::getThousandsSeparator());
-        } else {
-            return '';
-        }
-    }
-
     public function getLastModifiedStateFormattedAttribute()
     {
         if($this->TS_LASTMODIFIED_STATE) {

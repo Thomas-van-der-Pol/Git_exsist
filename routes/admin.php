@@ -57,6 +57,7 @@ foreach($alt_langs as $langCode) {
                     Route::post('/', 'Admin\CRM\RelationController@save');
                     Route::delete('/{ID}', 'Admin\CRM\RelationController@delete');
                     Route::post('/debtor/{ID}', 'Admin\CRM\RelationController@generateDebtornumber');
+                    Route::post('/creditor/{ID}', 'Admin\CRM\RelationController@generateCreditornumber');
 
                     Route::get('/modal', 'Admin\CRM\RelationController@indexModal');
 
@@ -244,6 +245,32 @@ foreach($alt_langs as $langCode) {
                         Route::post('/', 'Admin\Project\Product\InvoiceSchemeController@save');
                         Route::delete('/{ID}', 'Admin\Project\Product\InvoiceSchemeController@delete');
                     });
+                });
+            });
+
+            Route::prefix('accountancy')->group(function() {
+                Route::get('/', 'Admin\Finance\Exact\ExactResource@index');
+                Route::post('/detailScreenOverview', 'Admin\Finance\Exact\ExactResource@detailScreen');
+                Route::get('/redirect', 'Admin\Finance\Exact\ExactResource@exactRedirect');
+
+                Route::prefix('debtor')->group(function() {
+                    Route::get('/allDatatable', 'Admin\Finance\Exact\Models\DebtorResource@allDatatable');
+                    Route::post('/export', 'Admin\Finance\Exact\Models\DebtorResource@export');
+                });
+
+                Route::prefix('creditor')->group(function() {
+                    Route::get('/allDatatable', 'Admin\Finance\Exact\Models\CreditorResource@allDatatable');
+                    Route::post('/export', 'Admin\Finance\Exact\Models\CreditorResource@export');
+                });
+
+                Route::prefix('invoice')->group(function() {
+                    Route::get('/allDatatable', 'Admin\Finance\Exact\Models\InvoiceResource@allDatatable');
+                    Route::get('/detailRendered/{ID}', 'Admin\Finance\Exact\Models\InvoiceResource@detailAsJSON');
+                    Route::post('/export', 'Admin\Finance\Exact\Models\InvoiceResource@export');
+                });
+
+                Route::prefix('receivable')->group(function() {
+                    Route::post('/import', 'Admin\Finance\Exact\Models\ReceivablesResource@import');
                 });
             });
 

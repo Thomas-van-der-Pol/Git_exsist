@@ -34,4 +34,15 @@ class SettingValue extends Model {
         return ($obj ? ($obj->VALUE_UNCONSTRAINED ?? '') : '');
     }
 
+    public static function setValue($id, $value)
+    {
+        $obj = static::firstOrCreate([
+            'FK_CORE_SETTING' => $id
+        ]);
+        $obj->VALUE_UNCONSTRAINED = $value;
+        $obj->save();
+
+        return $obj;
+    }
+
 }

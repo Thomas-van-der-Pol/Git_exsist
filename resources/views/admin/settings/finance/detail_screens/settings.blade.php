@@ -22,6 +22,7 @@
             <div class="col-xl-4 col-lg-4">
                 {{ KJField::text('NEXT_INVOICE_NUMBER', KJLocalization::translate('Admin - Financieel', 'Volgende factuurnummer', 'Volgende factuurnummer'), $item ? $item->NEXT_INVOICE_NUMBER : '', true, ['data-screen-mode' => 'read, edit']) }}
                 {{ KJField::text('NEXT_DEBTOR_NUMBER', KJLocalization::translate('Admin - Financieel', 'Volgende debiteurnummer', 'Volgende debiteurnummer'), $item ? $item->NEXT_DEBTOR_NUMBER : '', true, ['data-screen-mode' => 'read, edit']) }}
+                {{ KJField::text('NEXT_CREDITOR_NUMBER', KJLocalization::translate('Admin - Financieel', 'Volgende crediteurnummer', 'Volgende crediteurnummer'), $item ? $item->NEXT_CREDITOR_NUMBER : '', true, ['data-screen-mode' => 'read, edit']) }}
             </div>
         </div>
 
@@ -38,8 +39,8 @@
 
         <div class="row">
             <div class="col-xl-4 col-lg-4">
-                {{ KJField::select('FK_FINANCE_LEDGER_DEFAULT_PROJECT', KJLocalization::translate('Admin - Financieel', 'Grootboekrekening tav aangenomen projecten', 'Grootboekrekening tav aangenomen projecten'), $ledgers, ( $item ? $item->FK_FINANCE_LEDGER_DEFAULT_PROJECT : '' ), true, 0, ['data-screen-mode' => 'read, edit']) }}
-                {{ KJField::select('FK_FINANCE_VAT_DEFAULT_PROJECT', KJLocalization::translate('Admin - Financieel', 'Btw tav aangenomen projecten', 'Btw tav aangenomen projecten'), $vat, ( $item ? $item->FK_FINANCE_VAT_DEFAULT_PROJECT : '' ), true, 0, ['data-screen-mode' => 'read, edit']) }}
+                {{ KJField::select('FK_FINANCE_LEDGER_DEFAULT_COMPENSATION', KJLocalization::translate('Admin - Financieel', 'Grootboekrekening tav vergoeding', 'Grootboekrekening tav vergoeding'), $ledgers, ( $item ? $item->FK_FINANCE_LEDGER_DEFAULT_COMPENSATION : '' ), true, 0, ['data-screen-mode' => 'read, edit']) }}
+                {{ KJField::select('FK_FINANCE_VAT_DEFAULT_COMPENSATION', KJLocalization::translate('Admin - Financieel', 'Btw tav vergoeding', 'Btw tav vergoeding'), $vat, ( $item ? $item->FK_FINANCE_VAT_DEFAULT_COMPENSATION : '' ), true, 0, ['data-screen-mode' => 'read, edit']) }}
                 {{ KJField::select('FK_FINANCE_VAT_SHIFTED', KJLocalization::translate('Admin - Financieel', 'Btw verlegd', 'Btw verlegd'), $vat, ( $item ? $item->FK_FINANCE_VAT_SHIFTED : '' ), true, 0, ['data-screen-mode' => 'read, edit']) }}
             </div>
 

@@ -56,6 +56,16 @@ class Label extends Model
         return $number;
     }
 
+    public function getNewCreditorNumber()
+    {
+        $number = (int)$this->NEXT_CREDITOR_NUMBER;
+
+        $this->NEXT_CREDITOR_NUMBER = $number + 1;
+        $this->save();
+
+        return $number;
+    }
+
     public function document()
     {
         return $this->hasOne(Document::class, 'ID', 'FK_DOCUMENT_PDF_PAPER');

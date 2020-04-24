@@ -71,6 +71,7 @@ return [
             'username' => env('FTP_USERNAME'),
             'password' => env('FTP_PASSWORD'),
             'passive'  => true,
+            'ssl'      => env('FTP_SSL'),
             'root'     => env('FTP_ROOT')
         ],
 

@@ -97,18 +97,15 @@
                         </div>
 
                         <div class="col-xl-4 col-lg-6">
+                            {{ KJField::checkbox('COMPENSATED', KJLocalization::translate('Admin - Dossiers', 'Wordt vergoed', 'Wordt vergoed'), true, ( $item ? $item->COMPENSATED : false ), true, ['data-screen-mode' => 'read, edit']) }}
+
                             {{ KJField::text('COMPENSATION_PERCENTAGE_READ', KJLocalization::translate('Admin - Dossiers', 'Vergoedingspercentage', 'Vergoedingspercentage'), $item ? $item->getCompensationPercentageFormattedAttribute() : '', true, ['data-screen-mode' => 'read']) }}
                             {{ KJField::number('COMPENSATION_PERCENTAGE', KJLocalization::translate('Admin - Dossiers', 'Vergoedingspercentage', 'Vergoedingspercentage'), $item ? $item->getCompensationPercentageDecimalAttribute() : '', true, ['data-screen-mode' => 'edit'], [
                                 'right' => [['type' => 'text', 'caption' => '%']]]
                             ) }}
 
-                            {{ KJField::text('COMPENSATION_PRICE_READ', KJLocalization::translate('Admin - Dossiers', 'Vergoedingsbedrag', 'Vergoedingsbedrag'), $item ? $item->getCompensationPriceFormattedAttribute() : '', true, ['data-screen-mode' => 'read']) }}
-                            {{ KJField::number('COMPENSATION_PRICE', KJLocalization::translate('Admin - Dossiers', 'Vergoedingsbedrag', 'Vergoedingsbedrag'), $item ? $item->getCompensationPriceDecimalAttribute() : '', true, ['data-screen-mode' => 'edit'], [
-                                'right' => [['type' => 'text', 'caption' => '&euro;']]]
-                            ) }}
-
-                            {{ KJField::date('START_DATE', KJLocalization::translate('Admin - Dossiers', 'Eerste ziektedag', 'Eerste ziektedag'), $item ? $item->getStartDateFormattedAttribute() : '', ['data-screen-mode' => 'read, edit', 'data-date-end-date' => '-0d', 'data-locale-format' => \KJ\Localization\libraries\LanguageUtils::getJSDatePickerFormat()]) }}
-                            {{ KJField::text('POLICY_NUMBER', KJLocalization::translate('Admin - Dossiers', 'Polisnummer', 'Polisnummer'), $item ? $item->POLICY_NUMBER : '', true, ['data-screen-mode' => 'read, edit']) }}
+                            {{--Required--}} {{ KJField::date('START_DATE', KJLocalization::translate('Admin - Dossiers', 'Eerste ziektedag', 'Eerste ziektedag'), $item ? $item->getStartDateFormattedAttribute() : '', ['required', 'data-screen-mode' => 'read, edit', 'data-date-end-date' => '-0d', 'data-locale-format' => \KJ\Localization\libraries\LanguageUtils::getJSDatePickerFormat()]) }}
+                            {{--Required--}} {{ KJField::text('POLICY_NUMBER', KJLocalization::translate('Admin - Dossiers', 'Polisnummer', 'Polisnummer'), $item ? $item->POLICY_NUMBER : '', true, ['required', 'data-screen-mode' => 'read, edit']) }}
                         </div>
                     </div>
 

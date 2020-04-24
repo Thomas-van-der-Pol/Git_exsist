@@ -134,7 +134,7 @@
 @endif
 
 @if(Auth::guard()->user()->hasPermission(config('permission.FACTURATIE')))
-    <li class="kt-menu__item  kt-menu__item--submenu {{ ((\App\Libraries\Shared\AppUtils::isUrlActive(['admin/invoice']) == true) ? 'kt-menu__item--open kt-menu__item--expanded' : '') }}" aria-haspopup="true" data-ktmenu-submenu-toggle="hover">
+    <li class="kt-menu__item  kt-menu__item--submenu {{ ((\App\Libraries\Shared\AppUtils::isUrlActive(['admin/invoice', 'admin/accountancy']) == true) ? 'kt-menu__item--open kt-menu__item--expanded' : '') }}" aria-haspopup="true" data-ktmenu-submenu-toggle="hover">
         <a href="javascript:;" class="kt-menu__link kt-menu__toggle">
             <span class="kt-menu__link-icon">
                 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="kt-svg-icon">
@@ -168,6 +168,15 @@
                         <i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i>
                         <span class="kt-menu__link-text">
                             {{ KJLocalization::translate('Admin - Menu', 'Facturen', 'Facturen') }}
+                        </span>
+                    </a>
+                </li>
+
+                <li class="kt-menu__item {{ ((\App\Libraries\Shared\AppUtils::isUrlActive(['admin/accountancy']) == true) ? 'kt-menu__item--active' : '') }}" aria-haspopup="true">
+                    <a href="{{ \KJ\Localization\libraries\LanguageUtils::getUrl('admin/accountancy') }}" class="kt-menu__link ">
+                        <i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i>
+                        <span class="kt-menu__link-text">
+                            {{ KJLocalization::translate('Admin - Menu', 'Boekhouding', 'Boekhouding') }}
                         </span>
                     </a>
                 </li>

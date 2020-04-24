@@ -60,7 +60,6 @@ class ProjectController extends AdminBaseController {
         'EMPLOYER_NAME',
         'EMPLOYEE_NAME',
         'COMPENSATION_PERCENTAGE_READ',
-        'COMPENSATION_PRICE_READ',
         'USER_CREATED',
         'DATE_CREATED',
     ];

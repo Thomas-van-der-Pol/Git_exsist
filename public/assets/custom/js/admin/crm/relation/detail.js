@@ -170,6 +170,28 @@ $(document).ready(function() {
             }
         );
     });
+
+    $('body').on('click', '.generateCreditornumber', function(e) {
+        e.preventDefault();
+
+        var container = $(this).closest('.tab-pane');
+        if (!container.length) {
+            container = $(this).closest('.kt-widget');
+        }
+
+        var id = $(this).data('id');
+        kjrequest('POST', '/admin/crm/relation/creditor/' + id, null, true,
+            function(result) {
+                if (result.success) {
+                    loadScreen(container, {
+                        url: '/admin/crm/relation/detailScreen',
+                        mode: 'read',
+                        afterLoad: afterLoadScreen
+                    });
+                }
+            }
+        );
+    });
 });
 
 function afterLoadScreen(id, screen, data) {
