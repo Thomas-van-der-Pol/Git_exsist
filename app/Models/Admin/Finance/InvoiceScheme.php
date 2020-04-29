@@ -67,5 +67,14 @@ class InvoiceScheme extends Model
             return '';
         }
     }
+    public function getPricePercentageFormattedAttributeFloat()
+    {
+
+        if ($this->PERCENTAGE && $this->project_product) {
+            return number_format($this->product->PRICE * ( $this->PERCENTAGE / 100),2, LanguageUtils::getDecimalPoint(), LanguageUtils::getThousandsSeparator());
+        } else {
+            return '';
+        }
+    }
 
 }

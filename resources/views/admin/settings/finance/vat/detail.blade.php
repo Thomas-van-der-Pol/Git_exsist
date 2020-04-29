@@ -15,7 +15,7 @@
                     ['type' => 'text', 'caption' => '&percnt;']
                 ]
             ]) }}
-            {{-- Required --}} {{ KJField::number('VATCODE',KJLocalization::translate('Admin - Financieel', 'Btw code', 'Btw code'), $item ? $item->VATCODE : 0, true, ['required', 'min' => 1, 'steps' => 1]) }}
+            {{-- Required --}} {{ KJField::number('VATCODE',KJLocalization::translate('Admin - Financieel', 'Btw code', 'Btw code'), $item ? $item->VATCODE : 0, true, ['required', 'min' => 0, 'steps' => 1]) }}
         </div>
     </div>
 

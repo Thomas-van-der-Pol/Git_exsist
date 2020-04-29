@@ -161,7 +161,7 @@ class InvoiceResource extends ExactBaseResource
                         $salesEntryLine = new \Picqer\Financials\Exact\SalesEntryLine($this->connection);
                         $salesEntryLine->Type = 20;
                         $salesEntryLine->Description = $invoiceItem->DESCRIPTION;
-                        $salesEntryLine->GLAccount = collect($glAccounts->filter("Code eq '$invoiceItem->GL_ACCOUNT_CODE'"))->first()->ID;
+                        $salesEntryLine->GLAccount = $ledger->ID;
                         $salesEntryLine->AmountFC = $invoiceItem->AMOUNT_DC; // Bedrag
                         $salesEntryLine->VATAmountFC = $invoiceItem->AMOUNT_VAT_DC; // BTW bedrag
                         $salesEntryLine->VATBaseAmountDC = $invoiceItem->AMOUNT_VAT_BASE_DC;

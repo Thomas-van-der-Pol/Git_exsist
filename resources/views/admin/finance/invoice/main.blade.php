@@ -58,14 +58,14 @@
                             </span>
                         </a>
 
-                        {{-- @TODO: TIJDELIJK UIT, BIJ BOEKHOUDKOPPELING AANZETTEN --}}
-                        {{--<a href="#paid_invoices" class="kt-widget__item {{ ($currentTab == config('invoice_state_type.TYPE_PAID')) ? 'kt-widget__item--active' : '' }}" data-toggle="tab" role="tab" aria-selected="false">--}}
-                            {{--<span class="kt-widget__section">--}}
-                                {{--<span class="kt-widget__desc">--}}
-                                    {{--{{ KJLocalization::translate('Admin - Facturen', 'Betaald', 'Betaald') }}--}}
-                                {{--</span>--}}
-                            {{--</span>--}}
-                        {{--</a>--}}
+
+                        <a href="#paid_invoices" class="kt-widget__item {{ ($currentTab == config('invoice_state_type.TYPE_PAID')) ? 'kt-widget__item--active' : '' }}" data-toggle="tab" role="tab" aria-selected="false">
+                            <span class="kt-widget__section">
+                                <span class="kt-widget__desc">
+                                    {{ KJLocalization::translate('Admin - Facturen', 'Betaald', 'Betaald') }}
+                                </span>
+                            </span>
+                        </a>
                     </div>
                 </div>
             </div>

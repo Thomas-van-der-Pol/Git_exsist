@@ -44,6 +44,10 @@ class InvoiceLine extends Model
         });
     }
 
+    public function invoiceScheme(){
+        return $this->hasOne(InvoiceScheme::class, 'FK_FINANCE_INVOICE_LINE', 'ID');
+    }
+
     public function invoice()
     {
         return $this->hasOne(Invoice::class, 'ID', 'FK_FINANCE_INVOICE');

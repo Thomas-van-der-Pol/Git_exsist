@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin\Finance;
 
+use App\Libraries\Admin\CompensationUtils;
 use App\Libraries\Admin\InvoiceUtils;
 use App\Models\Admin\Core\Label;
 use App\Models\Admin\CRM\Address;
@@ -104,6 +105,25 @@ class InvoiceController extends AdminBaseController {
     {
         // Opgevraagde factuur
         $invoice = Invoice::find($ID);
+        // vergoedingsbrief genereren wanneer dossier wordt vergoed
+
+        if($invoice->project->COMPENSATED){
+
+            //get facturschema's en genereer vor elk schema een vergoedingsbrief.
+            foreach ($invoice->lines as $line)
+            {
+                $id = $line->invoiceScheme->ID;
+
+                // vergoedingsbrief genereren
+                $document = CompensationUtils::generateReport($id);
+                if ($document['success']) {
+                    // response file
+                    ReportUtils::getFile($document['file']['filename']);
+                }
+            }
+        }
+
+
 
         if ($invoice->document && !$request->has('renew')) {
             return ReportUtils::getFile($invoice->document->FILEPATH);

@@ -351,6 +351,18 @@ class TasksController extends AdminBaseController {
                 $blockEdit = (($project->INVOICING_COMPLETE ?? false) == true);
                 break;
 
+            case config('task_type.TYPE_PRODUCT'):
+                $items = Task::where([
+                    'ACTIVE' => true,
+                    'DONE' => false,
+                    'FK_PRODUCT' => $pid
+                ])
+                    ->orderBy('DEADLINE', 'ASC');
+
+                $project = Project::find($pid);
+                $blockEdit = (($project->INVOICING_COMPLETE ?? false) == true);
+                break;
+
             case config('task_type.TYPE_TASKLIST'):
                 $items = Task::where([
                     'ACTIVE' => true,

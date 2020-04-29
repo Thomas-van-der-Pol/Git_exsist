@@ -3,8 +3,7 @@
 namespace App\Http\Controllers\Admin\Finance\Exact\Models;
 
 use App\Http\Controllers\Admin\Finance\Exact\ExactBaseResource;
-use App\Models\Finance\Invoice;
-use Illuminate\Support\Facades\DB;
+use App\Models\Admin\Finance\Invoice;
 use KJLocalization;
 
 class ReceivablesResource extends ExactBaseResource
@@ -18,23 +17,31 @@ class ReceivablesResource extends ExactBaseResource
 
     public function import()
     {
-        $receivables = new \Picqer\Financials\Exact\ReceivableList($this->connection);
-        $receivables = $receivables->get();
+        $journal = 70;
+
+        $receivables = new \Picqer\Financials\Exact\ReceivablesList($this->connection);
+        $receivables = $receivables->filter("JournalCode eq '$journal'");
 
         $entryNumbers = array_column($receivables, 'EntryNumber');
-        $entryNumberIDs = implode(",", $entryNumbers);
+        $chunks = array_chunk($entryNumbers, 1000);
 
         // Alles wat niet in de lijst receivables terugkomt, mag op volledig betaald komen te staan
         try
         {
-            DB::insert("EXEC [FINANCE_ACCOUNTANCY_UPDATE_RECEIVABLES] '".$entryNumberIDs."'");
+            // Update paid in chunks of 1000 ids
+            foreach ($chunks as $chunk) {
+                Invoice::whereNotNull('EXACT_INVOICE_ID')
+                    ->whereNotIn('NUMBER', $chunk)
+                    ->update(['PAID' => true]);
+            }
 
+            // Update each invoice which is still receivable
             foreach ($receivables as $receivable)
             {
                 $invoice = Invoice::where('NUMBER', (string)$receivable->EntryNumber)->first();
                 if ($invoice !== null) {
                     $invoice->PAID = false;
-                    $invoice->ALREADY_PAID = ($invoice->SALEPRICEINCVAT - $receivable->Amount);
+                    $invoice->PAID_DATE = null;
                     $invoice->save();
                 }
             }
@@ -51,4 +58,5 @@ class ReceivablesResource extends ExactBaseResource
             ], 200);
         }
     }
+
 }

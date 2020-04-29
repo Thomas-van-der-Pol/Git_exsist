@@ -97,4 +97,7 @@ function afterLoadScreen(id, screen, data) {
     } else if (screen === 'invoice_scheme') {
         loadDatatable($('#ADM_PRODUCT_INVOICE_SCHEME_TABLE'));
     }
+    else if (screen === 'tasks') {
+        loadTaskScreen($('#'+screen));
+    }
 }

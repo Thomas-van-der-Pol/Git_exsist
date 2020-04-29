@@ -14,5 +14,6 @@ return [
     'TYPE_RELATION' => 8,
     'TYPE_PROJECT' => 9,
     'TYPE_TASKLIST' => 10,
-    'TYPE_CUSTOM_MAP' => 11
+    'TYPE_CUSTOM_MAP' => 11,
+    'TYPE_PRODUCT' => 12
 ];

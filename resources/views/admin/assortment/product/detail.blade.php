@@ -53,7 +53,7 @@
                                     </span>
                                 </span>
                             </a>
-                            <a href="#tasks" data-id="{{ $item->ID }}" class="kt-widget__item kt-widget__item--active" data-toggle="tab" role="tab" aria-selected="true">
+                            <a href="#tasks" data-id="{{ $item->ID }}" class="kt-widget__item" data-toggle="tab" role="tab" aria-selected="true">
                                 <span class="kt-widget__section">
                                     <span class="kt-widget__icon">
                                         <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="kt-svg-icon">
@@ -80,7 +80,7 @@
                     <div class="kt-portlet__body kt-portlet__body--fit">
                         <div class="tab-content">
                             <div class="tab-pane active" id="invoice_scheme" data-id="{{ $item->ID }}" role="tabpanel"></div>
-                            <div class="tab-pane active" id="tasks" data-id="{{ $item->ID }}" role="tabpanel"></div>
+                            <div class="tab-pane" id="tasks" data-id="{{ $item->ID }}" role="tabpanel"></div>
                         </div>
                     </div>
                 </div>
@@ -91,4 +91,5 @@
 
 @section('page-resources')
     {!! Html::script('/assets/custom/js/admin/assortment/product/detail.js?v='.Cache::get('cache_version_number')) !!}
+    {!! Html::script('/assets/custom/js/admin/tasks/shared.js?v='.Cache::get('cache_version_number')) !!}
 @endsection
