@@ -3,6 +3,7 @@
 namespace App\Models\Admin\Assortment;
 
 use App\Models\Admin\Finance\InvoiceScheme;
+use App\Models\Admin\Task\Task;
 use App\Models\Core\Document;
 use App\Models\Core\DropdownValue;
 use Illuminate\Database\Eloquent\Model;
@@ -42,6 +43,10 @@ class Product extends Model {
     public function invoiceSchemes()
     {
         return $this->hasMany(InvoiceScheme::class, 'FK_ASSORTMENT_PRODUCT', 'ID');
+    }
+    public function tasks()
+    {
+        return $this->hasMany(Task::class, 'FK_ASSORTMENT_PRODUCT', 'ID');
     }
 
     public function checkRemnant()

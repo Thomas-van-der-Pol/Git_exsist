@@ -93,6 +93,17 @@ class InvoicePrepareController extends AdminBaseController {
         $view = view($this->detailViewName)
             ->with('ids', $ids);
 
+        $errors = array();
+
+        if (Billcheck::whereIn('ID', explode(',', $ids))->whereNull('FK_CRM_CONTACT')->count() > 0) {
+            array_push($errors, KJLocalization::translate('Admin - Facturen', 'Fout contactpersoon onbekend', 'Contactpersoon onbekend: voer contactpersoon in bij relatie en actualiseer facturen opnieuw'));
+        }
+        if (Billcheck::whereIn('ID', explode(',', $ids))->whereNull('FK_CRM_RELATION_ADDRESS')->count() > 0) {
+            array_push($errors, KJLocalization::translate('Admin - Facturen', 'Fout factuuradres onbekend', 'Factuuradres onbekend: voer factuuradres in bij relatie en actualiseer facturen opnieuw'));
+        }
+
+        $view->with('errors', $errors);
+
         return response()->json([
             'viewDetail' => $view->render()
         ]);

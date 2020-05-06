@@ -6,7 +6,6 @@ use App\Libraries\Admin\CompensationUtils;
 use App\Libraries\Admin\InvoiceUtils;
 use App\Models\Admin\Core\Label;
 use App\Models\Admin\CRM\Address;
-use App\Models\Admin\CRM\Relation;
 use App\Models\Admin\Finance\Invoice;
 use App\Models\Core\WorkflowState;
 use Illuminate\Http\Request;
@@ -105,50 +104,25 @@ class InvoiceController extends AdminBaseController {
     {
         // Opgevraagde factuur
         $invoice = Invoice::find($ID);
-        // vergoedingsbrief genereren wanneer dossier wordt vergoed
-
-        if($invoice->project->COMPENSATED){
-
-            //get facturschema's en genereer vor elk schema een vergoedingsbrief.
-            foreach ($invoice->lines as $line)
-            {
-                $id = $line->invoiceScheme->ID;
-
-                // vergoedingsbrief genereren
-                $document = CompensationUtils::generateReport($id);
-                if ($document['success']) {
-                    // response file
-                    ReportUtils::getFile($document['file']['filename']);
-                }
-            }
-        }
-
-
 
         if ($invoice->document && !$request->has('renew')) {
             return ReportUtils::getFile($invoice->document->FILEPATH);
         } else {
-            $document = InvoiceUtils::generateReport($ID, '');
+            $documents = InvoiceUtils::generateDocuments($ID, '');
 
             // Alleen als succes
-            if ($document['success']) {
+            if (isset($documents['invoice_report']) && $documents['invoice_report']['success']) {
                 // response file
-                return ReportUtils::getFile($document['file']['filename']);
+                return ReportUtils::getFile($documents['invoice_report']['file']['filename']);
             }
 
             // Anders error
             return response()->json([
                 'success' => false,
-                'Error' => $document['file']['resultText']
-            ], $document['file']['statusCode']);
+                'Error' => $documents['invoice_report']['file']['resultText']
+            ], $documents['invoice_report']['file']['statusCode']);
         }
     }
-
-//    public function setFinal(Request $request)
-//    {
-//        $id = $request->get('ID');
-//        return InvoiceUtils::sendInvoice($id);
-//    }
 
     public function sendInvoice(Request $request)
     {

@@ -52,16 +52,18 @@ $(document).ready(function() {
         }
 
         save($(this), '/admin/settings/tasklist', null, false, null, function(data) {
-            // When inserted then reload
-            if (data.new == true) {
-                window.location = '/admin/settings/tasklist/detail/' + data.id;
-            }
+            if (data.success === true) {
+                // When inserted then reload
+                if (data.new == true) {
+                    window.location = '/admin/settings/tasklist/detail/' + data.id;
+                }
 
-            loadScreen(container, {
-                url: '/admin/settings/tasklits/detailScreen',
-                mode: 'read',
-                afterLoad: afterLoadScreen
-            });
+                loadScreen(container, {
+                    url: '/admin/settings/tasklits/detailScreen',
+                    mode: 'read',
+                    afterLoad: afterLoadScreen
+                });
+            }
         });
     });
 

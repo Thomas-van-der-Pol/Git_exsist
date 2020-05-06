@@ -35,6 +35,8 @@ $(document).ready(function() {
      * Manage button (after select box)
      */
     $('body').on('click', '.kj_managebutton', function(e) {
+        e.preventDefault();
+
         var dropdownTypeID = $(this).data('id');
 
         // Callback on load trigger
@@ -322,11 +324,15 @@ function loadKJAddressLookup() {
             };
 
             if ((apiKey != '') ) {
-                jQuery.ajax({
-                    url: 'https://maps.googleapis.com/maps/api/js?key='+apiKey+'&libraries=places&callback=initAddresslookups',
-                    dataType: 'script',
-                    async: true
-                });
+                if (typeof google === 'object' && typeof google.maps === 'object') {
+                    initAddresslookups();
+                } else {
+                    jQuery.ajax({
+                        url: 'https://maps.googleapis.com/maps/api/js?key='+apiKey+'&libraries=places&callback=initAddresslookups',
+                        dataType: 'script',
+                        async: true
+                    });
+                }
             }
         }
     });
@@ -377,7 +383,6 @@ function loadDateRangePickers() {
         $(this).daterangepicker({
                 autoUpdateInput: autoUpdateInput,
                 showDropdowns: true,
-                linkedCalendars: false,
                 buttonClasses: 'btn',
                 applyClass: 'btn-brand',
                 cancelClass: 'btn-secondary',
@@ -429,6 +434,10 @@ function loadDateRangePickers() {
         $(this).closest('.input-group').on('click', '.daterangeselector', function(e){
             e.preventDefault();
             $(this).closest('.input-group').find('.kjdaterangepicker-picker').data('daterangepicker').toggle();
+        });
+
+        $(this).closest('.input-group').on('click', '.daterangeclear', function(e){
+            $(this).closest('.input-group').find('.kjdaterangepicker-picker').data('daterangepicker').clickCancel();
         });
     });
 }

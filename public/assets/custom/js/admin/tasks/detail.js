@@ -17,12 +17,14 @@ $(document).ready(function() {
         e.preventDefault();
 
         save($(this), '/admin/tasks', null, false, null, function(data) {
-            // When inserted then reload
-            loadScreen($('#default'), {
-                url: '/admin/tasks/detailScreen',
-                mode: 'edit',
-                afterLoad: afterLoadScreen
-            });
+            if (data.success === true) {
+                // When inserted then reload
+                loadScreen($('#default'), {
+                    url: '/admin/tasks/detailScreen',
+                    mode: 'edit',
+                    afterLoad: afterLoadScreen
+                });
+            }
         });
     });
 

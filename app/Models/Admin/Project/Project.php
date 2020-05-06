@@ -113,32 +113,6 @@ class Project extends Model
         }
     }
 
-    public function maxInvoiceAmount()
-    {
-        // @TODO: NOG MAKEN
-        return 0;
-
-        // Already invoiced or in concept
-//        $invoices = (float)Invoice::where([
-//            'ACTIVE' => true,
-//            'FK_PROJECT' => $this->ID,
-//            'IS_ADVANCE' => true,
-//            'FK_CORE_WORKFLOWSTATE' => config('workflowstate.INVOICE_FINAL')
-//        ])->sum('PRICE_TOTAL_EXCL');
-//
-//        return ($this->FIXED_PRICE - $invoices);
-    }
-
-    public function maxInvoiceAmountDecimal()
-    {
-        return number_format($this->maxInvoiceAmount(), 2, '.', '');
-    }
-
-    public function maxInvoiceAmountFormatted()
-    {
-        return '€ ' . number_format(($this->maxInvoiceAmount()), 2, LanguageUtils::getDecimalPoint(), LanguageUtils::getThousandsSeparator());
-    }
-
     public function getCreatedDateFormattedAttribute()
     {
         if ($this->TS_CREATED) {
@@ -184,7 +158,7 @@ class Project extends Model
         }
     }
 
-    public function createProduct($product, $startDate)
+    public function createProduct($product, $startDate,$assignee)
     {
         $productProject = null;
 
@@ -211,6 +185,20 @@ class Project extends Model
                         $newInvoiceScheme->FK_PROJECT_ASSORTMENT_PRODUCT = $productProject->ID;
                         $newInvoiceScheme->DATE = date('Y-m-d', strtotime($startDate . ' + ' . $invoiceScheme->DAYS . ' days'));
                         $newInvoiceScheme->save();
+                    }
+                    //find standard tasks of intervention
+                    //copy standard tasks and change some values.
+                    foreach ($product->tasks->where('FK_PROJECT_ASSORTMENT_PRODUCT', null) as $task) {
+//                        dd(date('Y-m-d', strtotime($startDate . ' + ' . $task->REMEMBER_DATES . ' days')), date('Y-m-d', strtotime($startDate . ' + ' . $task->EXPIRATION_DATES . ' days')));
+                        $task = $task->replicate();
+                        $task->FK_PROJECT_ASSORTMENT_PRODUCT = $productProject->ID;
+                        $task->FK_CORE_USER_ASSIGNEE = $assignee->ID;
+                        $task->FK_PROJECT = $this->ID;
+                        $task->REMINDER_DATE = date('Y-m-d', strtotime($startDate . ' + ' . $task->REMEMBER_DATES . ' days'));
+                        $task->DEADLINE = date('Y-m-d', strtotime($startDate . ' + ' . $task->EXPIRATION_DATES . ' days'));
+                        $task->REMEMBER_DATES = null;
+                        $task->EXPIRATION_DATES = null;
+                        $task->save();
                     }
                 }
             }

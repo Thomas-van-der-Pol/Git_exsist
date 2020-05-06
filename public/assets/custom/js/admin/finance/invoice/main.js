@@ -180,47 +180,4 @@ function afterLoadScreen(id, screen, data) {
 
     // Load datatable
     loadDatatable($('#ADM_INVOICE_TABLE_'+data.type));
-
-    // @TODO: LOAD DATATABLE MOET ONDERSTAANDE WORDEN!!!!
-
-    // var configName = 'ADM_INVOICE_TABLE_' + data.type;
-    // var configuration = window[configName + '_configuration'];
-    //
-    // if (configuration.datatableSelector === undefined) {
-    //     // Add filters
-    //     configuration.source.params = {
-    //         ADM_PROJECT_FILTER_SEARCH: $('#ADM_PROJECT_FILTER_SEARCH').val() || '',
-    //         ACTIVE: $('#ADM_FILTER_PROJECT_STATUS').val() || ''
-    //     };
-    //
-    //     // Remove empty filters from arrays
-    //     $.each(configuration.source.params, function (k, v) {
-    //         if (v === '' || $.isEmptyObject(v)) {
-    //             delete configuration.source.params[k];
-    //         }
-    //     });
-    //
-    //     // Load datatable
-    //     loadDatatable($('#'+configName));
-    // } else {
-    //     // Retrieve query
-    //     var query = configuration.datatableSelector.getDataSourceQuery();
-    //
-    //     // Set filters manually
-    //     query['ADM_PROJECT_FILTER_SEARCH'] = $('#ADM_PROJECT_FILTER_SEARCH').val() || '';
-    //     query['ACTIVE'] = $('#ADM_FILTER_PROJECT_STATUS').val() || '';
-    //
-    //     // remove empty element from arrays
-    //     $.each(query, function (k, v) {
-    //         if (v === '' || $.isEmptyObject(v)) {
-    //             delete query[k];
-    //         }
-    //     });
-    //
-    //     // Set filters on datatable
-    //     configuration.datatableSelector.setDataSourceQuery(query);
-    //
-    //     // Reload datatable
-    //     configuration.datatableSelector.dataRender();
-    // }
 }

@@ -107,7 +107,7 @@ class TasksController extends AdminBaseController {
             $project = Project::find(( $request->get('pid') ?? 0 ));
 
             $taskListsOri = TaskList::all()->pluck('NAME', 'ID');
-            $contactsOri = Contact::all()->pluck('FIRSTNAME', 'ID');
+            $contactsOri = User::all()->where('ACTIVE',true)->pluck('FULLNAME', 'ID');
             $contacts = $none + $contactsOri->toArray();
             $taskLists = $none + $taskListsOri->toArray();
 
@@ -355,7 +355,7 @@ class TasksController extends AdminBaseController {
                 $items = Task::where([
                     'ACTIVE' => true,
                     'DONE' => false,
-                    'FK_PRODUCT' => $pid
+                    'FK_ASSORTMENT_PRODUCT' => $pid
                 ])
                     ->orderBy('DEADLINE', 'ASC');
 
@@ -522,18 +522,20 @@ class TasksController extends AdminBaseController {
         }
         $item->save();
 
-        if(count($categoriesInput) > 0 ){
-            foreach($categoriesInput as $categoryInput){
-                $categories = DropdownvalueUtils::getDropdown(config('dropdown_type.TYPE_TASK_CATEGORY'));
-                $taskCategoryID = array_search($categoryInput->value, $categories);
-                foreach($item->categories as $category){
-                    $category->delete();
-                }
-                if($taskCategoryID != null && $taskCategoryID > 0){
+        if($categoriesInput) {
+            if (count($categoriesInput) > 0) {
+                foreach ($categoriesInput as $categoryInput) {
+                    $categories = DropdownvalueUtils::getDropdown(config('dropdown_type.TYPE_TASK_CATEGORY'));
+                    $taskCategoryID = array_search($categoryInput->value, $categories);
+                    foreach ($item->categories as $category) {
+                        $category->delete();
+                    }
+                    if ($taskCategoryID != null && $taskCategoryID > 0) {
                         $category = new Filter([
                             'FK_CORE_DROPDOWNVALUE' => $taskCategoryID
                         ]);
                         $item->categories()->save($category);
+                    }
                 }
             }
         }

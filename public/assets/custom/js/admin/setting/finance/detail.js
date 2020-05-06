@@ -55,16 +55,18 @@ $(document).ready(function() {
         }
 
         save($(this), '/admin/settings/finance', null, false, null, function(data) {
-            // When inserted then reload
-            if (data.new == true) {
-                window.location = '/admin/settings/finance/detail/' + data.id;
-            }
+            if (data.success === true) {
+                // When inserted then reload
+                if (data.new == true) {
+                    window.location = '/admin/settings/finance/detail/' + data.id;
+                }
 
-            loadScreen(container, {
-                url: '/admin/settings/finance/detailScreen',
-                mode: 'read',
-                afterLoad: afterLoadScreen
-            });
+                loadScreen(container, {
+                    url: '/admin/settings/finance/detailScreen',
+                    mode: 'read',
+                    afterLoad: afterLoadScreen
+                });
+            }
         });
     });
 

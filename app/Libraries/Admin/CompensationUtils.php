@@ -2,40 +2,27 @@
 
 namespace App\Libraries\Admin;
 
-use App\Mail\Admin\Invoice\NewInvoice;
-use App\Mail\Admin\Invoice\Reminder;
-use App\Mail\Consumer\Relocation\DocumentDeleted;
-use App\Models\Admin\Finance\Invoice;
-use App\Models\Admin\Finance\InvoiceScheme;
 use App\Models\Core\Document;
+use DateTime;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\URL;
 use KJ\Core\libraries\ReportUtils;
-use DateTime;
-use KJ\Core\models\FileRequest;
-use KJ\Localization\libraries\LanguageUtils;
 use KJLocalization;
 
 class CompensationUtils
 {
 
-    public static function generateReport(int $ID)
+    public static function generateReport($invoice, string $state)
     {
-        $invoiceScheme = InvoiceScheme::find($ID);
-        $invoice = $invoiceScheme->invoiceLine->invoice;
-        $today = "25-04-2020";
-        $price = $invoiceScheme->getPricePercentageFormattedAttribute();
-        $percentage = $invoiceScheme->getPercentageFormattedAttribute();
+        $today = date('d-m-Y');
 
         $pdfPaper = $invoice->label->document;
 
         $locale = App::getLocale();
 
         $data = array(
-            'OutputFolder' => config('documentservice.output_folder') . '\\' . $invoice->getTable() . '\\' . $invoice->ID,
+            'OutputFolder' => config('documentservice.output_folder') . '\\' . $invoice->getTable() . '\\' . $invoice->ID . '\\Vergoedingsbrieven',
             'Sjabloon' => 'CompensationLetter',
             'ReportName' => KJLocalization::translate('Admin - Facturen', 'Vergoedingsbrief', 'Vergoedingsbrief', [], $locale),
             'Statements' => array(
@@ -50,11 +37,16 @@ class CompensationUtils
                     'Parameters' => [(int)$invoice->FK_CRM_RELATION_ADDRESS]
                 ),
                 array(
+                    'Identifier' => "COMPENSATION",
+                    'Query' => "SELECT ".
+                        " '" . $invoice->project->getCompensationPercentageFormattedAttribute() . "' AS PERCENTAGE, " .
+                        " '" . $invoice->getCompensatedPriceFormattedAttribute() . "' AS PRICE ",
+                    'Parameters' => []
+                ),
+                array(
                     'Identifier' => "TEXT",
                     'Query' => "SELECT " .
                         " '" . $today . "' AS DATUM, " .
-                        " '" . $percentage . "' AS PERCENTAGE, " .
-                        " '" . $price . "' AS PRICE, " .
                         " '" . KJLocalization::translate('Admin - Compensatiebrief', 'Hoofdkantoor', 'Doetinchem', [], $locale) . "' AS HOOFDKANTOOR, " .
                         " '" . KJLocalization::translate('Admin - Compensatiebrief', 'Onderwerp', 'Onderwerp', [], $locale) . "' AS ONDERWERP, " .
                         " '" . KJLocalization::translate('Admin - Compensatiebrief', 'Financiële bijdrage interventie', 'Financiële bijdrage interventie', [], $locale) . "' AS FINANCIELE_INTERVENTIE, " .
@@ -73,7 +65,6 @@ class CompensationUtils
             'ExportAs' => 'PDF'
         );
 
-//        dd($data);
         if ($pdfPaper) {
             $data = array_merge($data, [
                 'PDFPaperFirst' => config('documentservice.output_folder') . '\\' . str_replace('/', '\\', $pdfPaper->FILEPATH),
@@ -103,6 +94,13 @@ class CompensationUtils
                 'FILETYPE' => ($documentInfo['extension'] ?? 'file')
             ]);
             $document->save();
+
+            // Link document on invoice
+            if ($state === 'final') {
+                $invoice->FK_DOCUMENT_COMPENSATION_LETTER = $document->ID;
+                $invoice->TS_GENERATE_COMPENSATION_LETTER = new DateTime();
+                $invoice->save();
+            }
 
             return [
                 'success' => true,

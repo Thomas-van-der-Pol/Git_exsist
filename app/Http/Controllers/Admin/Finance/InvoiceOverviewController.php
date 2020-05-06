@@ -84,7 +84,7 @@ class InvoiceOverviewController extends AdminBaseController {
                 return $invoice->AdvanceFormatted;
             })
             ->addColumn('DAYS_FORMATTED', function (Invoice $invoice) {
-                return $invoice->getDaysRemainingInt();
+                return $invoice->getDaysRemaining();
             });
     }
 

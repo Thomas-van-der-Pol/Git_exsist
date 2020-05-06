@@ -21,6 +21,9 @@
                 @case(config('task_type.TYPE_TASKLIST'))
                 {{ Form::hidden('FK_TASK_LIST', request('pid')) }}
                 @break
+                @case(config('task_type.TYPE_PRODUCT'))
+                {{ Form::hidden('FK_ASSORTMENT_PRODUCT', request('pid')) }}
+                @break
             @endswitch
         @endif
 
@@ -28,7 +31,7 @@
             <div class="col-xl-12 col-lg-6">
                 {{ KJField::text('SUBJECT', KJLocalization::translate('Admin - Taken', 'Onderwerp', 'Onderwerp'), ( $item ? $item->SUBJECT : '' ), true, ['required']) }}
                 {{ KJField::textarea('CONTENT', KJLocalization::translate('Admin - Taken', 'Inhoud taak', 'Inhoud taak'), ( $item ? $item->CONTENT : '' ), 3) }}
-                @if(request('pid') && (request('type') != config('task_type.TYPE_TASKLIST')))
+                @if(request('pid') && (request('type') != config('task_type.TYPE_TASKLIST') && (request('type') != config('task_type.TYPE_PRODUCT'))))
                     {{ KJField::date('DEADLINE', KJLocalization::translate('Admin - Taken', 'Deadline', 'Deadline'), ($item ? $item->getDeadlineDatePickerFormattedAttribute() : ''), ['required', 'data-date-start-date' => '-0d', 'data-locale-format' => \KJ\Localization\libraries\LanguageUtils::getJSDatePickerFormat()]) }}
                 @endif
                 @if(request('pid') && (request('type') == config('task_type.TYPE_RELATION')))
@@ -37,22 +40,24 @@
             </div>
         </div>
 
-        @if(request('pid') && (request('type') == config('task_type.TYPE_TASKLIST')))
+        @if(request('pid') && ((request('type') == config('task_type.TYPE_TASKLIST')) || (request('type') == config('task_type.TYPE_PRODUCT'))))
             {{-- Required --}} {{ KJField::number('REMEMBER_DATES',KJLocalization::translate('Admin - Taken', 'Herrinneringsdagen', 'Herrinneringsdagen'), $item ? $item->REMEMBER_DATES : 0, true, ['required', 'min' => 0, 'steps' => 1]) }}
             {{-- Required --}} {{ KJField::number('EXPIRATION_DATES',KJLocalization::translate('Admin - Taken', 'Vervaldagen', 'Vervaldagen'), $item ? $item->EXPIRATION_DATES : 0, true, ['required', 'min' => 0, 'steps' => 1]) }}
         @else
-            <div class="row mt-4">
-                <div class="col">
-                    <h5 class="mb-3">{{ KJLocalization::translate('Admin - Taken', 'Opvolging taak', 'Opvolging taak') }}</h5>
+            @if(!(request('type') == config('task_type.TYPE_PRODUCT')))
+                <div class="row mt-4">
+                    <div class="col">
+                        <h5 class="mb-3">{{ KJLocalization::translate('Admin - Taken', 'Opvolging taak', 'Opvolging taak') }}</h5>
+                    </div>
                 </div>
-            </div>
 
-            <div class="row">
-                <div class="col-xl-12 col-lg-6">
-                    {{ KJField::select('FK_CORE_USER_ASSIGNEE', KJLocalization::translate('Admin - Taken', 'Toegewezen aan', 'Toegewezen aan'), $users, ($item ? $item->FK_CORE_USER_ASSIGNEE : ''), true, 0, ['required']) }}
-                    {{ KJField::checkbox('DONE', KJLocalization::translate('Admin - Taken', 'Gereed', 'Gereed'), true, ( $item ? $item->DONE : false ), true) }}
+                <div class="row">
+                    <div class="col-xl-12 col-lg-6">
+                        {{ KJField::select('FK_CORE_USER_ASSIGNEE', KJLocalization::translate('Admin - Taken', 'Toegewezen aan', 'Toegewezen aan'), $users, ($item ? $item->FK_CORE_USER_ASSIGNEE : ''), true, 0, ['required']) }}
+                        {{ KJField::checkbox('DONE', KJLocalization::translate('Admin - Taken', 'Gereed', 'Gereed'), true, ( $item ? $item->DONE : false ), true) }}
+                    </div>
                 </div>
-            </div>
+            @endif
         @endif
 
         <div class="row mt-4">

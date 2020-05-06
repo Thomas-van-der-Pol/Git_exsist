@@ -19,9 +19,36 @@ use KJLocalization;
 class InvoiceUtils
 {
 
-    public static function generateReport(int $ID, string $state)
+    public static function generateDocuments(int $ID, string $state)
     {
         $invoice = Invoice::find($ID);
+
+        $anonymize_state = 'anonymize';
+        if ($state === 'final') {
+            $anonymize_state = 'anonymize_final';
+        }
+
+        // Generate invoice
+        $invoice_report = self::generateReport($invoice, $state);
+
+        // Generate extra documents when compensated
+        if ($invoice->project->COMPENSATED) {
+            // Generate compensation letter
+            $compensation_report = CompensationUtils::generateReport($invoice, $state);
+
+            // Generate anonymized invoice
+            $invoice_anonymized_report = self::generateReport($invoice, $anonymize_state);
+        }
+
+        return [
+            'invoice_report' => $invoice_report,
+            'compensation_report' => ($compensation_report ?? null),
+            'invoice_anonymized_report' => ($invoice_anonymized_report ?? null),
+        ];
+    }
+
+    public static function generateReport($invoice, string $state)
+    {
         $invoice->relation->generateDebtornumber();
 
         // Factuurnummer aanmaken
@@ -46,10 +73,15 @@ class InvoiceUtils
             $title = KJLocalization::translate('Admin - Facturen', 'Voorschotfactuur', 'Voorschotfactuur', [], $locale);
         }
 
+        $is_anonymized = 0;
+        if ($invoice->project->COMPENSATED && in_array($state, ['anonymize', 'anonymize_final'])) {
+            $is_anonymized = 1;
+        }
+
         $data = array(
-            'OutputFolder' => config('documentservice.output_folder') . '\\' . $invoice->getTable() . '\\' . $ID,
+            'OutputFolder' => config('documentservice.output_folder') . '\\' . $invoice->getTable() . '\\' . $invoice->ID . '\\Facturen',
             'Sjabloon' => 'Invoice',
-            'ReportName' => KJLocalization::translate('Admin - Facturen', 'Factuur', 'Factuur', [], $locale) . ' ' . ($invoice->NUMBER ?? KJLocalization::translate('Admin - Facturen', 'Concept', 'Concept', [], $locale)),
+            'ReportName' => KJLocalization::translate('Admin - Facturen', 'Factuur', 'Factuur', [], $locale) . ' ' . ($invoice->NUMBER ?? KJLocalization::translate('Admin - Facturen', 'Concept', 'Concept', [], $locale)) . (($is_anonymized === 1) ? ' - ' . KJLocalization::translate('Admin - Facturen', 'Geanonimiseerd', 'Geanonimiseerd', [], $locale) : ''),
             'Statements' => array(
                 array(
                     'Identifier' => "CRM_RELATION",
@@ -68,29 +100,44 @@ class InvoiceUtils
                 ),
                 array(
                     'Identifier' => "FINANCE_INVOICE",
-                    'Query' => "SELECT FI.ID, ISNULL(IS_CREDIT, 0) AS IS_CREDIT, ISNULL(HAS_SPECIFICATION, 0) AS HAS_SPECIFICATION, CASE WHEN FI.NUMBER IS NULL THEN '".KJLocalization::translate('Admin - Facturen', 'Concept', 'Concept', [], $locale)."' ELSE CAST(FI.NUMBER AS VARCHAR(100)) END AS NUMBER, FI.DATE, FI.EXPIRATION_DATE, ISNULL(FI.PRICE_TOTAL_EXCL,0) AS TOTALEXCL, ISNULL(FI.PRICE_TOTAL_INCL,0) AS TOTALINCL, ISNULL(FI.VAT_TOTAL,0) AS TOTALVAT, '".$paymentText."' AS PAYMENTTEXT FROM FINANCE_INVOICE FI WITH(NOLOCK) WHERE FI.ID = {1}",
-                    'Parameters' => [$ID]
+                    'Query' => "SELECT FI.ID, ISNULL(IS_CREDIT, 0) AS IS_CREDIT, 
+                    ISNULL(HAS_SPECIFICATION, 0) AS HAS_SPECIFICATION, 
+                    CASE WHEN FI.NUMBER IS NULL THEN '".KJLocalization::translate('Admin - Facturen', 'Concept', 'Concept', [], $locale)."' ELSE CAST(FI.NUMBER AS VARCHAR(100)) END AS NUMBER, 
+                    FI.DATE, 
+                    FI.EXPIRATION_DATE, 
+                    ISNULL(FI.PRICE_TOTAL_EXCL,0) AS TOTALEXCL, 
+                    ISNULL(FI.PRICE_TOTAL_INCL,0) AS TOTALINCL, 
+                    ISNULL(FI.VAT_TOTAL,0) AS TOTALVAT, 
+                    '".$paymentText."' AS PAYMENTTEXT,
+                    CC.FULLNAME AS EMPLOYEE,
+					P.START_DATE AS FIRST_SICKDAY,
+					P.POLICY_NUMBER AS POLICY_NUMBER
+                    FROM FINANCE_INVOICE FI WITH(NOLOCK) 
+					LEFT JOIN dbo.PROJECT P ON P.ID = FI.FK_PROJECT
+					LEFT JOIN dbo.CRM_CONTACT CC ON CC.ID = P.FK_CRM_CONTACT_EMPLOYEE
+					 WHERE FI.ID = {1}",
+                    'Parameters' => [$invoice->ID]
                 ),
                 array(
                     'Identifier' => "FINANCE_INVOICE_ITEM",
                     'Query' => "EXEC [REPORT_INVOICE_LINE] @FK_FINANCE_INVOICE = {1}",
-                    'Parameters' => [$ID]
+                    'Parameters' => [$invoice->ID]
                 ),
                 array(
                     'Identifier' => "FINANCE_INVOICE_ITEM_SPECIFICATION",
                     'Query' => "EXEC [REPORT_INVOICE_LINE_SPECIFICATION] @FK_FINANCE_INVOICE = {1}",
-                    'Parameters' => [$ID]
+                    'Parameters' => [$invoice->ID]
                 ),
                 array(
                     'Identifier' => "FINANCE_INVOICE_VAT",
                     'Query' => "EXEC [REPORT_INVOICE_VAT] @FK_FINANCE_INVOICE = {1}",
-                    'Parameters' => [$ID]
+                    'Parameters' => [$invoice->ID]
                 ),
                 array(
                     'Identifier' => "TEXT",
                     'Query' => "SELECT " .
                         " '" . $title . "' AS TITLE, " .
-                        " CAST(".$invoice->project->COMPENSATED." AS BIT) AS IS_ANONYMIZED, " .
+                        " CAST(".$is_anonymized." AS BIT) AS IS_ANONYMIZED, " .
                         " '" . KJLocalization::translate('Admin - Facturen', 'Prijs', 'Prijs', [], $locale) . "' AS PRIJS, " .
                         " '" . KJLocalization::translate('Admin - Facturen', 'Aantal', 'Aantal', [], $locale) . "' AS AANTAL, " .
                         " '" . KJLocalization::translate('Admin - Facturen', 'Totaal', 'Totaal', [], $locale) . "' AS TOTAAL, " .
@@ -103,6 +150,9 @@ class InvoiceUtils
                         " '" . KJLocalization::translate('Admin - Facturen', 'Factuurnummer', 'Factuurnummer', [], $locale) . "' AS FACTUURNUMMER, " .
                         " '" . KJLocalization::translate('Admin - Facturen', 'Factuurdatum', 'Factuurdatum', [], $locale) . "' AS FACTUURDATUM, " .
                         " '" . KJLocalization::translate('Admin - Facturen', 'Vervaldatum', 'Vervaldatum', [], $locale) . "' AS VERVALDATUM, " .
+                        " '" . KJLocalization::translate('Admin - Facturen', 'T.b.v. werknemer', 'T.b.v. werknemer', [], $locale) . "' AS TBV_WERKNEMER, " .
+                        " '" . KJLocalization::translate('Admin - Facturen', 'Polisnummer', 'Polisnummer', [], $locale) . "' AS POLISNUMMER, " .
+                        " '" . KJLocalization::translate('Admin - Facturen', 'Eerste ziektedag', 'Eerste ziektedag', [], $locale) . "' AS EERSTE_ZIEKTEDAG, " .
                         " '" . KJLocalization::translate('Admin - Facturen', 'Totaal inclusief btw', 'Totaal inclusief btw', [], $locale) . "' AS TOTAL_INCL, " .
                         " '" . KJLocalization::translate('Admin - Facturen', 'Totaal exclusief btw', 'Totaal exclusief btw', [], $locale) . "' AS TOTAL_EXCL, " .
                         " '" . KJLocalization::translate('Admin - Facturen', 'Btw bedrag', 'Btw bedrag', [], $locale) . "' AS TOTAL_VAT, " .
@@ -154,6 +204,12 @@ class InvoiceUtils
                 $invoice->save();
             }
 
+            if ($state === 'anonymize_final') {
+                $invoice->FK_DOCUMENT_ANONYMIZED = $document->ID;
+                $invoice->TS_GENERATE_ANONYMIZED = new DateTime();
+                $invoice->save();
+            }
+
             return [
                 'success' => true,
                 'file' => $resultArray,
@@ -184,7 +240,7 @@ class InvoiceUtils
 
         // Indien nog geen factuur gemaakt
         if (!$invoice->document) {
-            $report = self::generateReport($ID, 'final');
+            self::generateDocuments($ID, 'final');
             $invoice->refresh();
         }
 
@@ -264,7 +320,7 @@ class InvoiceUtils
 
         // Indien nog geen factuur gemaakt
         if (!$invoice->document) {
-            $report = self::generateReport($ID, 'final');
+            self::generateDocuments($ID, 'final');
             $invoice->refresh();
         }
 

@@ -237,7 +237,6 @@ class ProjectController extends AdminBaseController {
                     }
                 }
 
-                // @TODO: NOG MAKEN
                 $previousWorkflowstate = null;
                 $nextWorkflowstate = null;
                 if ($item && $item->workflowstate) {

@@ -231,4 +231,9 @@ class Invoice extends Model
         return '€ ' . number_format(($this->PRICE_TOTAL_INCL), 2, LanguageUtils::getDecimalPoint(), LanguageUtils::getThousandsSeparator());
     }
 
+    public function getCompensatedPriceFormattedAttribute()
+    {
+        return '€ ' . number_format($this->lines->where('IS_COMPENSATION', true)->sum('PRICE_TOTAL_INCVAT')*-1, 2, LanguageUtils::getDecimalPoint(), LanguageUtils::getThousandsSeparator());
+    }
+
 }

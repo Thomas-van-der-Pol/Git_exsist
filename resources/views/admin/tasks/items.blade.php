@@ -3,7 +3,7 @@
         <div class="kt-todo__head">
             <div class="kt-todo__toolbar">
                 <div class="kt-todo__actions kt-todo__actions--expanded">
-                    @if($type != config('task_type.TYPE_TASKLIST'))
+                    @if($type != config('task_type.TYPE_TASKLIST') && $type != config('task_type.TYPE_PRODUCT'))
                         <div class="kt-todo__check">
                             <label class="kt-checkbox kt-checkbox--single kt-checkbox--tick kt-checkbox--brand">
                                 <input type="checkbox" class="exclude-screen-mode">
@@ -12,7 +12,7 @@
                         </div>
                     @endif
                     <div class="kt-todo__panel">
-                        @if($type != config('task_type.TYPE_TASKLIST'))
+                        @if($type != config('task_type.TYPE_TASKLIST') && $type != config('task_type.TYPE_PRODUCT'))
                             @if($type != config('task_type.TYPE_DONE'))
                             <div class="dropdown">
                                 <button class=" kt-todo__icon ml-3" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
@@ -80,7 +80,7 @@
             <div class="kt-todo__items">
                 @foreach($items as $item)
                     <div class="kt-todo__item" data-title="{{ $item ? $item->SUBJECT : '' }}" data-type="task" id="searchItem">
-                        @if($type != config('task_type.TYPE_TASKLIST'))
+                        @if($type != config('task_type.TYPE_TASKLIST') && $type != config('task_type.TYPE_PRODUCT') )
                             <div class="kt-todo__info">
                                 <div class="kt-todo__actions">
                                     <label class="kt-checkbox kt-checkbox--single kt-checkbox--tick kt-checkbox--brand">
@@ -125,7 +125,7 @@
                                 </div>
                             </div>
                             <div class="kt-todo__labels">
-                                @if(!$item->FK_TASK_LIST)
+                                @if($type != config('task_type.TYPE_TASKLIST') && $type != config('task_type.TYPE_PRODUCT'))
                                     @if($item && $item->product)
                                         <span class="kt-todo__label kt-badge kt-badge--unified-warning kt-badge--bold kt-badge--inline">{{ $item->product->title }}</span>
                                     @endif

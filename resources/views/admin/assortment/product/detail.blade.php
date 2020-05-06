@@ -72,7 +72,6 @@
                         </div>
                     </div>
                 </div>
-
             @endcomponent
 
             <div class="col-lg-9">
@@ -80,7 +79,7 @@
                     <div class="kt-portlet__body kt-portlet__body--fit">
                         <div class="tab-content">
                             <div class="tab-pane active" id="invoice_scheme" data-id="{{ $item->ID }}" role="tabpanel"></div>
-                            <div class="tab-pane" id="tasks" data-id="{{ $item->ID }}" role="tabpanel"></div>
+                            <div class="tab-pane" id="tasks" data-id="{{ $item->ID }}" data-type="{{ config('task_type.TYPE_PRODUCT') }}" role="tabpanel"></div>
                         </div>
                     </div>
                 </div>

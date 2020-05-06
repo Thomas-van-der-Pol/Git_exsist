@@ -35,7 +35,6 @@ $(document).ready(function() {
 
 function afterLoadScreen(id, screen, data) {
     loadedType = data.type;
-    console.log(loadedType);
 
     // Screen switch tab
     $('#' + screen + ' a[data-toggle="tab"]').on('show.bs.tab', function (e) {

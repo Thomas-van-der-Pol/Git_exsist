@@ -8,6 +8,7 @@ use App\Models\Admin\Assortment\ProductType;
 use App\Models\Admin\Finance\InvoiceScheme;
 use App\Models\Admin\Finance\Ledger;
 use App\Models\Admin\Finance\VAT;
+use App\Models\Admin\User;
 use App\Models\Core\Document;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -60,12 +61,14 @@ class ProductController extends AdminBaseController
 
         $producttypesOri = ProductType::all()->where('ACTIVE', true)->sortBy('title')->pluck('title', 'ID');
         $producttypes = $none + $producttypesOri->toArray();
-
+        $contactsOri = User::all()->where('ACTIVE',true)->pluck('FULLNAME', 'ID');
+        $contacts = $none + $contactsOri->toArray();
         $status = DropdownvalueUtils::getStatusDropdown(false);
 
         $bindings = array(
             ['producttypes', $producttypes],
-            ['status', $status]
+            ['status', $status],
+            ['contacts', $contacts]
         );
 
         return $bindings;

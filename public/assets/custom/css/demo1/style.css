@@ -404,128 +404,16 @@
 
 .tagify.tagify--focus {
     border: unset;
+    border-bottom: 1px solid var(--primary);
 }
 
 tag div span {
     color: white !important;
 }
 
-/*.filter div span {*/
-/*color: black !important;*/
-/*}*/
-
-.kjtag {
-    /*padding-bottom: 5px;*/
-    float: left
+.tagify__tag {
+    background-color: #2c3e50 !important;
 }
-
-.kjtag span, .kjtag div {
-    /*margin: 0px 0 5px 5px;*/
-    margin: 0px 5px 5px 0px;
-    font-weight: normal !important;
-    /*white-space: nowrap;*/
-    overflow: hidden;
-    text-overflow: ellipsis;
-    /*display: inline-block;*/
-    vertical-align: top;
-    box-sizing: border-box;
-    padding: .3em .5em;
-    line-height: inherit;
-    border-radius: 3px;
-}
-
-.participantkjtag {
-    float: left;
-}
-
-.participantkjtag span {
-    margin: 0 5px 0 0;
-}
-
-.tagify.form-control.filter.modalfilter {
-    padding-top:0px !important;
-    padding-bottom: 0px !important;
-}
-
-.tagify__tag[type="2"] {
-    background-color: red !important;
-}
-.tagify__tag[type="3"] {
-    background-color: blue !important;
-}
-.tagify__tag[type="4"] {
-    background-color: orange !important;
-}
-.tagify__tag[type="5"] {
-    background-color: #d689e8 !important;
-}
-.tagify__tag[type="6"] {
-    background-color: #451f20 !important;
-}
-.tagify__tag[type="7"] {
-    background-color: #a4867e !important;
-}
-.tagify__tag[type="8"] {
-    background-color: #9a0fee !important;
-}
-.tagify__tag[type="9"] {
-    background-color: #c63485 !important;
-}
-.tagify__tag[type="10"] {
-    background-color: #ec1676 !important;
-}
-.tagify__tag[type="11"] {
-    background-color: #296a25 !important;
-}
-.tagify__tag[type="12"] {
-    background-color: #54cc40 !important;
-}
-.tagify__tag[type="13"] {
-    background-color: #73ea3d !important;
-}
-.tagify__tag[type="14"] {
-    background-color: #c63485 !important;
-}
-.tagify__tag[type="15"] {
-    background-color: #3988fe !important;
-}
-.tagify__tag[type="16"] {
-    background-color: #8e8466 !important;
-}
-.tagify__tag[type="17"] {
-    background-color: #1b90e8 !important;
-}
-.tagify__tag[type="18"] {
-    background-color: lightgreen !important;
-}
-.tagify__tag[type="19"] {
-    background-color: darkslategray !important;
-}
-.tagify__tag[type="20"] {
-    background-color: green !important;
-}
-
-.tagify--outside{
-    border: 0;
-    padding: 0;
-    margin: 0;
-}
-.tagify__input--outside{
-    display: block;
-    max-width: 600px;
-    border: 1px solid #DDD;
-    margin-top: 1.5em;
-    margin-bottom: 1em;
-}
-/*.tagify.form-control.m-input.kjtagify{*/
-/*    border-top: none;*/
-/*    border-left: none;*/
-/*    border-right: none;*/
-/*}*/
-/*.tagify__tag.tagify--noAnim {*/
-/*    background-color: #17a2b8;*/
-/*}*/
-
 /*
     ---------------- KJ TAGS EINDE ----------------
  */

@@ -62,16 +62,18 @@ $(document).ready(function() {
         }
 
         save($(this), '/admin/project', null, false, null, function(data) {
-            // When inserted then reload
-            if (data.new == true) {
-                window.location = '/admin/project/detail/' + data.id;
-            }
+            if (data.success === true) {
+                // When inserted then reload
+                if (data.new == true) {
+                    window.location = '/admin/project/detail/' + data.id;
+                }
 
-            loadScreen(container, {
-                url: '/admin/project/detailScreen',
-                mode: 'read',
-                afterLoad: afterLoadScreen
-            });
+                loadScreen(container, {
+                    url: '/admin/project/detailScreen',
+                    mode: 'read',
+                    afterLoad: afterLoadScreen
+                });
+            }
         });
     });
 
@@ -233,9 +235,18 @@ $(document).ready(function() {
 
                     var productIds = getCheckedRows('ADM_PRODUCT_MODAL_TABLE');
                     var date = $('#STARTDATE').val();
+                    var assignee = $('#FK_CORE_USER_ASSIGNEE').val();
                     if (productIds.length === 0) {
                         swal.fire({
                             text: kjlocalization.get('algemeen', 'selecteer_minimaal_een_regel'),
+                            type: 'error'
+                        });
+
+                        return false;
+                    }
+                    if (!assignee) {
+                        swal.fire({
+                            text: kjlocalization.get('admin_-_taken', 'selecteer_een_werknemer'),
                             type: 'error'
                         });
 
@@ -246,6 +257,7 @@ $(document).ready(function() {
                     formData.append('id', id);
                     formData.append('product', JSON.stringify(productIds));
                     formData.append('date', date);
+                    formData.append('assignee', assignee);
 
                     $.ajaxSetup({
                         headers: {
@@ -360,9 +372,11 @@ function afterLoadScreen(id, screen, data) {
                         $('#' + selectorName + ' .kj_save').on('click', function (e) {
                             e.preventDefault();
                             save($(this), configuration.saveUrl, configuration.parentid, (configuration.inlineEdit === true), targetElement, function(data) {
-                                $(document).trigger(datatableName + 'AfterSave',[data]);
+                                if (data.success === true) {
+                                    $(document).trigger(datatableName + 'AfterSave', [data]);
 
-                                configuration.datatableSelector.reload(null, false)
+                                    configuration.datatableSelector.reload(null, false)
+                                }
                             });
                         });
                     }
@@ -418,18 +432,16 @@ function determineDefaultDescription()
     var employer_id = $('input[name="FK_CRM_RELATION_EMPLOYER"]').val();
     var employer = $('input[name="EMPLOYER_NAME"]').val();
 
-    var employer_contact_id = $('select[name="FK_CRM_CONTACT_EMPLOYER"]').val();
-    var employer_contact = $('select[name="FK_CRM_CONTACT_EMPLOYER"] option:selected').text() || '';
-
+    var employee_id = $('input[name="FK_CRM_CONTACT_EMPLOYEE"]').val();
     var employee = $('input[name="EMPLOYEE_NAME"]').val();
 
     var result = '';
     if (employer_id > 0) {
         result = employer;
-        if (employer_contact_id > 0) {
-            result += ', ' + employer_contact;
+        if (employee_id > 0) {
+            result += ', ' + employee;
         }
-    } else {
+    } else if (employee_id > 0) {
         result = employee;
     }
 

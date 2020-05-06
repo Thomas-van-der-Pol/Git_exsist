@@ -1,4 +1,16 @@
-<div class="kt-portlet__body kt-portlet__body--fit-x">
+@if(count($errors) > 0)
+    <div class="kt-portlet__body kt-portlet__body--fit-inline-datatable">
+        @foreach($errors as $error)
+            <div class="alert alert-solid-danger alert-bold mb-2 mr-4" role="alert">
+                <div class="alert-text">
+                    {{ $error }}
+                </div>
+            </div>
+        @endforeach
+    </div>
+@endif
+
+<div class="kt-portlet__body kt-portlet__body--fit">
     {{ KJDatatable::create(
         'ADM_BILLCHECK_DETAIL_TABLE',
         array (

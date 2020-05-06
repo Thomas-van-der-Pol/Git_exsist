@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\Project\Product;
 
 use App\Models\Admin\Project\Project;
+use App\Models\Admin\User;
 use Illuminate\Http\Request;
 use KJ\Core\controllers\AdminBaseController;
 use KJ\Localization\libraries\LanguageUtils;
@@ -105,12 +106,14 @@ class ProductProjectController extends AdminBaseController
 
     protected function addProduct(Request $request)
     {
+        $assignee = User::find($request->get('assignee'));
+
         $startDate = $request->get('date');
         $id = ( $request->get('id') ?? 0 );
         $product = json_decode(( $request->get('product') ?? 0 ), true);
         $project = Project::find($id);
 
-        $createProduct = $project->createProduct($product, $startDate);
+        $createProduct = $project->createProduct($product, $startDate, $assignee);
 
         return response()->json([
             'success' => ($createProduct != null)
@@ -126,6 +129,11 @@ class ProductProjectController extends AdminBaseController
             // Delete all invoice moments of this intervention-dossier
             foreach ($item->invoiceSchemes as $invoiceScheme){
                 $invoiceScheme->delete();
+            }
+
+            // Delete all task of this intervention-dossier
+            foreach ($item->tasks as $task){
+                $task->delete();
             }
             //delete intervention-dossier.
             $item->delete();

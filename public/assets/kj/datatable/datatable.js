@@ -137,6 +137,7 @@ function loadDatatable(div) {
                 sortable: false,
                 overflow: 'visible',
                 autoHide: false,
+
                 template: function (row) {
                     // if ((configuration.blockEditColumn !== null) && (Boolean(JSON.parse(row[configuration.blockEditColumn])))) {
                     //     return '';
@@ -478,6 +479,12 @@ function loadDatatable(div) {
                         datatable.search($(this).val(), queryParam);
                     }
                 }).val(typeof query.queryParam !== 'undefined' ? query.queryParam : defaultVal);
+            } else {
+                $(input).on('keypress', function(e) {
+                    if (e.which == 13) {
+                        $(this).data('daterangepicker').clickApply();
+                    }
+                });
             }
 
             // Toepassen van daterangefiler
@@ -575,7 +582,7 @@ function loadDetails(linkObj) {
         parentTR.after('<div id="'+detailDIVname+'" class="kjinlinedtbldetail ui-state-disabled" style="display:none;"></div>'); //Standaard hidden beginnen
 
         // Calculate position
-        detail_paddingLeft = parentTR.find('td[data-field!="Actions"][data-field!="ID"]').first().position().left;
+        detail_paddingLeft = parentTR.find('td[data-field][data-field!="Actions"][data-field!="'+configuration.customid+'"]').first().position().left;
     } else {
         detailDIVname = configuration.targetElement;
     }
@@ -610,9 +617,11 @@ function loadDetails(linkObj) {
                     e.preventDefault();
 
                     save($(this), configuration.saveUrl, configuration.parentid, (configuration.inlineEdit === true), detailDiv, function(data) {
-                        $(document).trigger(datatableName + 'AfterSave',[data]);
+                        if (data.success === true) {
+                            $(document).trigger(datatableName + 'AfterSave', [data]);
 
-                        configuration.datatableSelector.reload(null, false);
+                            configuration.datatableSelector.reload(null, false);
+                        }
                     });
                 });
             }
@@ -677,9 +686,11 @@ function addNew(datatableName) {
                 $('#' + selectorName + ' .kj_save').on('click', function (e) {
                     e.preventDefault();
                     save($(this), configuration.saveUrl, configuration.parentid, (configuration.inlineEdit === true), targetElement, function(data) {
-                        $(document).trigger(datatableName + 'AfterSave',[data]);
+                        if (data.success === true) {
+                            $(document).trigger(datatableName + 'AfterSave', [data]);
 
-                        configuration.datatableSelector.reload(null, false)
+                            configuration.datatableSelector.reload(null, false)
+                        }
                     });
                 });
             }
@@ -776,6 +787,13 @@ function save(saveBtn, saveUrl, parentId, closeAfterSave, targetElement, callbac
     });
 
     if (!form.valid()) {
+        if (callback != null) {
+            callback({
+                success: false,
+                form_invalid: true
+            });
+        }
+
         return;
     }
 
@@ -924,18 +942,22 @@ function resetFilters(datatableName)
                 var defaultVal = value.default;
                 var format = value.format ? value.format : 'YYYY-MM-DD';
                 var isDateRangePicker = false;
+                var setDateRange = false;
 
                 // If daterange picker, get start- and enddate as default value
                 if (input.hasClass('kjdaterangepicker-picker')) {
                     isDateRangePicker = true;
-                    var startDate = input.data('start-date');
-                    var endDate = input.data('end-date');
+                    var startDate = input.data('start-date') || null;
+                    var endDate = input.data('end-date') || null;
 
-                    if ((startDate !== undefined) && (endDate !== undefined)) {
+                    if ((startDate !== null) && (endDate !== null)) {
+                        setDateRange = true;
                         defaultVal = startDate + ' / ' + endDate;
 
                         input.data('daterangepicker').setStartDate(startDate);
                         input.data('daterangepicker').setEndDate(endDate);
+                    } else {
+                        setDateRange = false;
                     }
                 }
 
@@ -953,10 +975,14 @@ function resetFilters(datatableName)
 
                 // Reset in query
                 if (isDateRangePicker) {
-                    query[queryParam] = {
-                        start: input.data('daterangepicker').startDate.format(format),
-                        end: input.data('daterangepicker').endDate.format(format)
-                    };
+                    if (setDateRange) {
+                        query[queryParam] = {
+                            start: input.data('daterangepicker').startDate.format(format),
+                            end: input.data('daterangepicker').endDate.format(format)
+                        };
+                    } else {
+                        query[queryParam] = null;
+                    }
                 } else {
                     query[queryParam] = defaultVal;
                 }

@@ -66,16 +66,18 @@ $(document).ready(function() {
         }
 
         save($(this), '/admin/invoice', null, false, null, function(data) {
-            // When inserted then reload
-            if (data.new == true) {
-                window.location = '/admin/invoice/detail/' + data.id;
-            }
+            if (data.success === true) {
+                // When inserted then reload
+                if (data.new == true) {
+                    window.location = '/admin/invoice/detail/' + data.id;
+                }
 
-            loadScreen(container, {
-                url: '/admin/invoice/detailScreen',
-                mode: 'read',
-                afterLoad: afterLoadScreen
-            });
+                loadScreen(container, {
+                    url: '/admin/invoice/detailScreen',
+                    mode: 'read',
+                    afterLoad: afterLoadScreen
+                });
+            }
         });
     });
 
@@ -542,14 +544,16 @@ $(document).on('ADM_INVOICE_LINES_TABLEAfterLoad', function(e, detailDiv) {
     detailDiv.find('.kj_save').off('click').on('click', function(e) {
         e.preventDefault();
 
-        save($(this), ADM_INVOICE_LINES_TABLE_configuration.saveUrl, ADM_INVOICE_LINES_TABLE_configuration.parentid, (ADM_INVOICE_LINES_TABLE_configuration.inlineEdit === true), detailDiv, function() {
-            ADM_INVOICE_LINES_TABLE_configuration.datatableSelector.reload(null, false);
+        save($(this), ADM_INVOICE_LINES_TABLE_configuration.saveUrl, ADM_INVOICE_LINES_TABLE_configuration.parentid, (ADM_INVOICE_LINES_TABLE_configuration.inlineEdit === true), detailDiv, function(data) {
+            if (data.success === true) {
+                ADM_INVOICE_LINES_TABLE_configuration.datatableSelector.reload(null, false);
 
-            loadScreen($('#default'), {
-                url: '/admin/invoice/detailScreen',
-                mode: 'read',
-                afterLoad: afterLoadScreen
-            });
+                loadScreen($('#default'), {
+                    url: '/admin/invoice/detailScreen',
+                    mode: 'read',
+                    afterLoad: afterLoadScreen
+                });
+            }
         });
 
         return false;

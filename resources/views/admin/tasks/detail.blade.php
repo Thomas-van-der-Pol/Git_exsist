@@ -40,6 +40,20 @@
                 'URL' => ltrim(\KJ\Localization\libraries\LanguageUtils::getUrl('admin/project/detail/' . ($item->project->ID)), '/')
             ];
         }
+         else if ($item->FK_ASSORTMENT_PRODUCT) {
+            $breadCrumsTaskList[] = [
+                'title' => KJLocalization::translate('Admin - Menu', 'Interventies', 'Interventies'),
+                'URL' => ltrim(\KJ\Localization\libraries\LanguageUtils::getUrl('admin/product'), '/')
+            ];
+            $breadCrumsTaskList[] = [
+                'title' => $item ? $item->product->getTitleAttribute() : KJLocalization::translate('Admin - Interventies', 'Nieuwe interventie', 'Nieuwe interventie'),
+                'URL' => ltrim(\KJ\Localization\libraries\LanguageUtils::getUrl('admin/product/detail/' . ($item->product->ID)), '/')
+            ];
+            $breadCrumsTaskList[] = [
+                'title' => KJLocalization::translate('Admin - Menu', 'Taken', 'Taken'),
+                'URL' => ltrim(\KJ\Localization\libraries\LanguageUtils::getUrl('admin/product/detail/' . ($item->product->ID)), '/')
+            ];
+        }
         else if ($item->FK_CRM_RELATION) {
             $breadCrumsTaskList[] = [
                 'title' => KJLocalization::translate('Admin - Menu', 'CRM Relaties', 'CRM Relaties'),

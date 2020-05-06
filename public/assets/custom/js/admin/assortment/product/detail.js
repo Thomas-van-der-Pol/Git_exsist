@@ -41,16 +41,18 @@ $(document).ready(function() {
         e.preventDefault();
 
         save($(this), '/admin/product', null, false, null, function(data) {
-            // When inserted then reload
-            if (data.new == true) {
-                window.location = '/admin/product/detail/' + data.id;
-            }
+            if (data.success === true) {
+                // When inserted then reload
+                if (data.new == true) {
+                    window.location = '/admin/product/detail/' + data.id;
+                }
 
-            loadScreen($('#default'), {
-                url: '/admin/product/detailScreen',
-                mode: 'read',
-                afterLoad: afterLoadScreen
-            });
+                loadScreen($('#default'), {
+                    url: '/admin/product/detailScreen',
+                    mode: 'read',
+                    afterLoad: afterLoadScreen
+                });
+            }
         });
     });
 

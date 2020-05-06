@@ -93,7 +93,7 @@
                             ]) }}
                             {{ Form::hidden('FK_CRM_CONTACT_EMPLOYEE', $item ? $item->FK_CRM_CONTACT_EMPLOYEE : null, ['required']) }}
 
-                            {{ KJField::text('DESCRIPTION', KJLocalization::translate('Admin - Dossiers', 'Omschrijving', 'Omschrijving'), $item ? $item->DESCRIPTION : '-', true, ['required', 'data-screen-mode' => 'edit'] ) }}
+                            {{ KJField::text('DESCRIPTION', KJLocalization::translate('Admin - Dossiers', 'Dossiernaam', 'Dossiernaam'), $item ? $item->DESCRIPTION : '-', true, ['required', 'data-screen-mode' => 'edit'] ) }}
                         </div>
 
                         <div class="col-xl-4 col-lg-6">

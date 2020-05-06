@@ -73,4 +73,5 @@
 
 @if((request('type') ?? 0) == 1)
     {{ KJField::date('STARTDATE', KJLocalization::translate('Admin - Taken', 'Start datum', 'Start datum'), (date(KJ\Localization\libraries\LanguageUtils::getDateFormat(), strtotime(date("D M d")))), ['required', 'data-date-start-date' => '-0d', 'data-locale-format' => \KJ\Localization\libraries\LanguageUtils::getJSDatePickerFormat()]) }}
+    {{ KJField::select('FK_CORE_USER_ASSIGNEE', KJLocalization::translate('Admin - Taken', 'Standaard taken interventie toewijzen aan', 'Standaard taken interventie toewijzen aan'), $contacts, '', true, 0, ['required']) }}
 @endif

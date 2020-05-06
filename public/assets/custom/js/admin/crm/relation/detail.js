@@ -63,16 +63,18 @@ $(document).ready(function() {
         }
 
         save($(this), '/admin/crm/relation', null, false, null, function(data) {
-            // When inserted then reload
-            if (data.new == true) {
-                window.location = '/admin/crm/relation/detail/' + data.id;
-            }
+            if (data.success === true) {
+                // When inserted then reload
+                if (data.new == true) {
+                    window.location = '/admin/crm/relation/detail/' + data.id;
+                }
 
-            loadScreen(container, {
-                url: '/admin/crm/relation/detailScreen',
-                mode: 'read',
-                afterLoad: afterLoadScreen
-            });
+                loadScreen(container, {
+                    url: '/admin/crm/relation/detailScreen',
+                    mode: 'read',
+                    afterLoad: afterLoadScreen
+                });
+            }
         });
     });
 

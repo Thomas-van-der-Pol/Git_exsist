@@ -44,7 +44,7 @@
     if (in_array($type, [config('invoice_state_type.TYPE_OPEN'), config('invoice_state_type.TYPE_EXPIRED')])) {
         $columns[] = array(
             'field' => 'DAYS_FORMATTED',
-            'title' => KJLocalization::translate("Admin - Facturen", "Dgn", "Dgn")
+            'title' => KJLocalization::translate("Admin - Facturen", "Dagen", "Dagen")
         );
     }
 
