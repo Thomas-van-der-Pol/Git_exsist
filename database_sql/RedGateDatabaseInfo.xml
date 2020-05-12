@@ -57,6 +57,16 @@
     <DataWriteAllFilesInOneDirectory>True</DataWriteAllFilesInOneDirectory>
   </WriteToFileOptions>
   <DataFileSet>
-    <Count>0</Count>
+    <Count>10</Count>
+    <DataFile>dbo.CORE_COUNTRY_Data.sql</DataFile>
+    <DataFile>dbo.CORE_DROPDOWNTYPE_Data.sql</DataFile>
+    <DataFile>dbo.CORE_PERMISSION_Data.sql</DataFile>
+    <DataFile>dbo.CORE_SETTING_GROUP_Data.sql</DataFile>
+    <DataFile>dbo.CORE_SETTING_TYPE_Data.sql</DataFile>
+    <DataFile>dbo.DOCUMENT_FILETYPE_Data.sql</DataFile>
+    <DataFile>dbo.CORE_SETTING_Data.sql</DataFile>
+    <DataFile>dbo.CORE_SETTING_ALLOWED_VALUE_Data.sql</DataFile>
+    <DataFile>dbo.CORE_WORKFLOWSTATE_Data.sql</DataFile>
+    <DataFile>dbo.CORE_WORKFLOWSTATETYPE_Data.sql</DataFile>
   </DataFileSet>
 </DatabaseInformation>
