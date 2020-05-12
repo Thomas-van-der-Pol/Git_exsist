@@ -3,16 +3,17 @@
         <div class="kt-widget__head">
             @php
             $backURL = null;
-            if($item->FK_TASK_LIST){
-                $backURL = 'admin/settings/tasklist/detail/'.$item->taskList->ID;
-            }
-            else if($item->FK_PROJECT){
+
+            if($item->FK_PROJECT){
                 $backURL = 'admin/project/detail/'.$item->project->ID;
             }
             else if($item->FK_CRM_RELATION){
                 $backURL = 'admin/crm/relation/detail/'.$item->relation->ID;
             }
-             else if($item->FK_ASSORTMENT_PRODUCT){
+            else if($item->FK_TASK_LIST){
+                $backURL = 'admin/settings/tasklist/detail/'.$item->taskList->ID;
+            }
+            else if($item->FK_ASSORTMENT_PRODUCT){
                 $backURL = 'admin/product/detail/'.$item->product->ID;
             }
             else {
@@ -58,7 +59,7 @@
                         </div>
 
                         <div class="col-xl-4 col-lg-6">
-                            @if(!$item->FK_TASK_LIST && ($item->FK_ASSORTMENT_PRODUCT && $item->FK_PROJECT_ASSORTMENT_PRODUCT))
+                            @if($item->canFollowUp())
                                 <h5 class="mb-3">{{ KJLocalization::translate('Admin - Taken', 'Opvolging taak', 'Opvolging taak') }}</h5>
                                 {{ KJField::select('FK_CORE_USER_ASSIGNEE', KJLocalization::translate('Admin - Taken', 'Toegewezen aan', 'Toegewezen aan'), $users, ( $item ? ($item->FK_CORE_USER_ASSIGNEE ?? Auth::guard()->user()->ID) : Auth::guard()->user()->ID ), true) }}
 
@@ -73,14 +74,18 @@
                                     {{ KJField::text('STARTED_DATE', KJLocalization::translate('Admin - Taken', 'Gestart op', 'Gestart op'), ( $item ? $item->getStartedDateFormattedAttribute() : ''), true, ['readonly', 'data-screen-mode' => 'read, edit']) }}
                                 @endif
                             @endif
-
                         </div>
                     </div>
 
-                    <div class="row">
-                        @if($item->FK_CRM_RELATION || $item->FK_PROJECT )
-                            <div class="col-xl-4 col-lg-6">
+
+                    @if($item->FK_CRM_RELATION || $item->FK_PROJECT )
+                        <div class="row mt-4">
+                            <div class="col">
                                 <h5 class="mb-3">{{ KJLocalization::translate('Admin - Taken', 'Koppelingen', 'Koppelingen') }}</h5>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xl-4 col-lg-6">
                                 @if($item->FK_CRM_RELATION)
                                     {{ KJField::text('RELATION_NAME', KJLocalization::translate('Admin - Taken', 'Relatie', 'Relatie'), $item ? ($item->relation ? $item->relation->title : '') : '-', true, ['readonly'], [
                                          'right' => [
@@ -98,65 +103,64 @@
                                     ]) }}
                                     {{ Form::hidden('FK_PROJECT', $item ? $item->FK_PROJECT : null) }}
                                 @endif
-                                {{ KJField::text('RELATION_PRODUCT', KJLocalization::translate('Admin - Taken', 'Product of dienst', 'Product of dienst'), $item ? ($item->product ? $item->product->title : '') : '-', true, ['readonly'], [
+
+                                {{ KJField::text('RELATION_PRODUCT', KJLocalization::translate('Admin - Taken', 'Interventie', 'Interventie'), $item ? ($item->product ? $item->product->title : '') : '-', true, ['readonly'], [
                                         'right' => [
-                                             ['type' => 'button', 'caption' => KJLocalization::translate('Algemeen', 'Product of dienst', 'Product of dienst'), 'class' => 'btn btn-primary btn-sm selectProduct'],
+                                             ['type' => 'button', 'caption' => KJLocalization::translate('Algemeen', 'Interventie', 'Interventie'), 'class' => 'btn btn-primary btn-sm selectProduct'],
                                              ['type' => 'button', 'caption' => KJLocalization::translate('Algemeen', 'Openen', 'Openen'), 'class' => 'btn btn-dark btn-sm openProduct']
                                         ]
                                    ]) }}
                                 {{ Form::hidden('FK_ASSORTMENT_PRODUCT', $item ? $item->FK_ASSORTMENT_PRODUCT : null) }}
-
-                            </div>
-                        @endif
-                        @if(!$item->FK_TASK_LIST && ($item->FK_ASSORTMENT_PRODUCT && $item->FK_PROJECT_ASSORTMENT_PRODUCT))
-                            <div class="col-xl-4 col-lg-6">
-                                <h5 class="mb-3">{{ KJLocalization::translate('Algemeen', 'Aanvullende gegevens', 'Aanvullende gegevens') }}</h5>
-                                {{ KJField::text('USER_CREATED', KJLocalization::translate('Admin - Taken', 'Aangemaakt door', 'Aangemaakt door'), ( $item ? ($item->user_created ? $item->user_created->title : '') : Auth::guard()->user()->title ), true, ['readonly', 'data-screen-mode' => 'read, edit']) }}
-                                {{ KJField::text('DATE_CREATED', KJLocalization::translate('Admin - Taken', 'Aangemaakt op', 'Aangemaakt op'), ( $item ? $item->getCreatedDateFormattedAttribute() : date(\KJ\Localization\libraries\LanguageUtils::getDateTimeFormat()) ), true, ['readonly', 'data-screen-mode' => 'read, edit']) }}
-                            </div>
-                        @endif
-                    </div>
-                <div class="row">
-                    <div class="col-xl-8 col-lg-10">
-                        <div class="row">
-                            <div class="col pr-0">
-                                <div class="md-form">
-                                    <div class="form-group">
-                                        {{ Form::text(
-                                            'CATEGORIES',
-                                            $item ? $item->categoriesAsText() : '',
-                                            [
-                                                'class' => 'form-control exclude-screen-mode',
-                                                'placeholder' => KJLocalization::translate('Admin - Taken', 'Categorieën', 'Categorieën' ),
-                                                'id' => 'CATEGORIES',
-                                                'data-wl' => json_encode($categories)
-                                            ]
-                                        ) }}
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="d-flex align-items-end">
-                                <button class="btn btn-label-brand btn-square btn-bold btn-upper btn-sm btn-icon mb-3 kj_managebutton" data-id="{{ config('dropdown_type.TYPE_TASK_CATEGORY') }}">. . .</button>
                             </div>
                         </div>
+                    @endif
 
+                    <div class="row">
+                        <div class="col-xl-8 col-lg-10">
+                            <div class="row">
+                                <div class="col pr-0">
+                                    <div class="md-form">
+                                        <div class="form-group">
+                                            {{ Form::text(
+                                                'CATEGORIES',
+                                                $item ? $item->categoriesAsText() : '',
+                                                [
+                                                    'class' => 'form-control exclude-screen-mode',
+                                                    'placeholder' => KJLocalization::translate('Admin - Taken', 'Categorieën', 'Categorieën' ),
+                                                    'id' => 'CATEGORIES',
+                                                    'data-wl' => json_encode($categories)
+                                                ]
+                                            ) }}
+                                        </div>
+                                    </div>
+                                </div>
 
-
-{{--                    {{ KJField::text('CATEGORIES', KJLocalization::translate('Admin - Taken', 'Categorieën', 'Categorieën' ), $item->categoriesAsText() , true,['data-screen-mode' => 'read, edit','class' => 'form-control m-input kjtagify', 'data-wl' => json_encode($categories)],--}}
-{{--                           ['right' => [--}}
-{{--                                   [--}}
-{{--                                       'type' => 'button',--}}
-{{--                                       'caption' => '. . .',--}}
-{{--                                       'class' => 'btn btn btn-label-brand btn-square btn-bold btn-upper btn-sm btn-icon kj_managebutton',--}}
-{{--                                       'options' => [--}}
-{{--                                           'data-id' => config('dropdown_type.TYPE_TASK_CATEGORY')--}}
-{{--                                        ]--}}
-{{--                                   ]--}}
-{{--                               ]--}}
-{{--                           ]) }}--}}
+                                <div class="d-flex align-items-end">
+                                    <button class="btn btn-label-brand btn-square btn-bold btn-upper btn-sm btn-icon mb-3 kj_managebutton" data-id="{{ config('dropdown_type.TYPE_TASK_CATEGORY') }}">. . .</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
+
+                    @if($item->canFollowUp())
+                        <div class="row">
+                            <div class="col-lg-12">
+                                @component('moreless::main', ['colsize' => 12, 'spacesize' => 0])
+                                    <div class="row mt-4">
+                                        <div class="col">
+                                            <h5 class="mb-3">{{ KJLocalization::translate('Algemeen', 'Aanvullende gegevens', 'Aanvullende gegevens') }}</h5>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-xl-4 col-lg-6">
+                                            {{ KJField::text('USER_CREATED', KJLocalization::translate('Admin - Taken', 'Aangemaakt door', 'Aangemaakt door'), ( $item ? ($item->user_created ? $item->user_created->title : '') : Auth::guard()->user()->title ), true, ['readonly', 'data-screen-mode' => 'read, edit']) }}
+                                            {{ KJField::text('DATE_CREATED', KJLocalization::translate('Admin - Taken', 'Aangemaakt op', 'Aangemaakt op'), ( $item ? $item->getCreatedDateFormattedAttribute() : date(\KJ\Localization\libraries\LanguageUtils::getDateTimeFormat()) ), true, ['readonly', 'data-screen-mode' => 'read, edit']) }}
+                                        </div>
+                                    </div>
+                                @endcomponent
+                            </div>
+                        </div>
+                    @endif
 
                     {{ KJField::saveCancel(
                         'btnSaveTask',

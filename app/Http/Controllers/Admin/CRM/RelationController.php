@@ -64,7 +64,11 @@ class RelationController extends AdminBaseController {
     public function indexModal()
     {
         $view = view('admin.crm.relation.modal');
+        $type = request('type');
 
+        if($type) {
+            $view->with('type', $type);
+        }
         return response()->json([
             'viewDetail' => $view->render()
         ]);
@@ -72,8 +76,10 @@ class RelationController extends AdminBaseController {
 
     public function allDatatable(Request $request)
     {
+        $type = request('type');
+
         $this->datatableFilter = array(
-            ['ID, NAME', array(
+            ['ID, NAME, EMAILADDRESS ', array(
                 'param' => 'ADM_RELATION_FILTER_SEARCH',
                 'operation' => 'like',
                 'default' => \KJ\Core\libraries\SessionUtils::getSession('ADM_RELATION', 'ADM_RELATION_FILTER_SEARCH', '')
@@ -84,8 +90,9 @@ class RelationController extends AdminBaseController {
             )],
             ['FK_CORE_DROPDOWNVALUE_RELATIONTYPE', array(
                 'param' => 'FK_CORE_DROPDOWNVALUE_RELATIONTYPE',
-                'default' => \KJ\Core\libraries\SessionUtils::getSession('ADM_RELATION', 'ADM_FILTER_RELATION_TYPE', '')
-            )],
+                'default' => $type? $type: \KJ\Core\libraries\SessionUtils::getSession('ADM_RELATION', 'ADM_FILTER_RELATION_TYPE',  '')
+            )]
+
         );
 
         return parent::allDatatable($request);

@@ -71,11 +71,6 @@ class Product extends Model {
         }
     }
 
-    public function producttype()
-    {
-        return $this->hasOne(ProductType::class, 'ID', 'FK_ASSORTMENT_PRODUCT_TYPE');
-    }
-
     public function document()
     {
         return $this->hasOne(Document::class, 'ID', 'FK_DOCUMENT');

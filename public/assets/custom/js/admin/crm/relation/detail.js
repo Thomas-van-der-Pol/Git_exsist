@@ -209,9 +209,6 @@ function afterLoadScreen(id, screen, data) {
     else if (screen === 'documents') {
         loadDropzone();
     }
-    else if (screen === 'guidelines') {
-        loadDatatable($('#ADM_RELATION_GUIDELINE_TABLE'));
-    }
     else if (screen === 'invoices') {
         loadDatatable($('#ADM_RELATION_INVOICE_TABLE'));
     }

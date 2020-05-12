@@ -381,16 +381,23 @@
 /*
     ---------------- KJ TAGS BEGIN ----------------
  */
-
-
 .tagify__input {
     margin: 0;
-    /*padding: 0.3em 0em;*/
+    padding: unset;
     font-weight: normal !important;
+}
+.tagify__input::before {
+    font-size: 0.8rem;
+    left: 0;
+    color: #757575;
+}
+.tagify__input:empty::before,
+.tagify__input:focus:empty::before {
+    opacity: 1;
 }
 
 .tagify__tag {
-    margin: 0px 0 5px 5px;
+    margin: 0 5px 5px 0;
     font-weight: normal !important;
 }
 

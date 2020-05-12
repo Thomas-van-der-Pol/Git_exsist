@@ -1,7 +1,9 @@
 $(document).ready(function() {
 
     kjlocalization.create('Admin - Dossiers', [
-        {'Selecteer product': 'Selecteer product'}
+        {'Selecteer product': 'Selecteer product'},
+        {'Verwijder projectproduct titel': 'Weet je het zeker?'},
+        {'Verwijder projectproduct tekst': 'Alle taken en alle factuurmomenten die aan deze interventie gekoppeld zijn worden verwijderd.'}
     ]);
 
     kjlocalization.create('Admin - CRM', [
@@ -125,11 +127,23 @@ $(document).ready(function() {
 
     $('body').on('click', '.selectRelation', function(e) {
         e.preventDefault();
-
         LastButton = $(this);
+        var type = LastButton.parent().parent().find('input')[0].id;
 
+        if(type === "REFERRER_NAME"){
+            selectRelation('VERWIJZER');
+        }
+        if(type === "EMPLOYER_NAME"){
+            selectRelation('WERKGEVER');
+        }
+        if(type === "PROVIDER_NAME"){
+            selectRelation('PROVIDER');
+        }
+    });
+
+    function selectRelation(type){
         $.ajax({
-            url: '/admin/crm/relation/modal',
+            url: '/admin/crm/relation/modal?type=' + type ,
             type: 'GET',
             dataType: 'JSON',
 
@@ -148,7 +162,7 @@ $(document).ready(function() {
                 });
             }
         });
-    });
+    }
 
     $('body').on('click', '.openRelation', function(e) {
         e.preventDefault();
@@ -205,11 +219,10 @@ $(document).ready(function() {
         e.preventDefault();
 
         var id = $(this).data('id');
-        var type = $(this).data('type');
         var text = kjlocalization.get('admin_-_dossiers', 'selecteer_product');
 
         $.ajax({
-            url: '/admin/product/modal?checkable=1&type=' + type,
+            url: '/admin/product/modal?checkable=1&id=' + id,
             type: 'GET',
             dataType: 'JSON',
 
@@ -291,13 +304,25 @@ $(document).ready(function() {
 
         var id = $(this).data('id');
         var type = $(this).data('type');
-        kjrequest('DELETE', '/admin/project/product/' + id, null, false,
-            function(result) {
-                if (result.success) {
-                    ADM_PROJECT_PRODUCTS_TABLE_configuration.datatableSelector.reload(null, false);
-                }
+
+        swal.fire({
+            title: kjlocalization.get('admin_-_dossiers', 'verwijder_projectproduct_titel'),
+            text: kjlocalization.get('admin_-_dossiers', 'verwijder_projectproduct_tekst'),
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonText: kjlocalization.get('algemeen', 'doorgaan'),
+            cancelButtonText: kjlocalization.get('algemeen', 'annuleren')
+        }).then(function(result) {
+            if(result.value){
+                kjrequest('DELETE', '/admin/project/product/' + id, null, false,
+                    function(result) {
+                        if (result.success) {
+                            ADM_PROJECT_PRODUCTS_TABLE_configuration.datatableSelector.reload(null, false);
+                        }
+                    }
+                );
             }
-        );
+        });
     });
 
     //delete invoice moment of dossier
@@ -418,14 +443,20 @@ function afterLoadScreen(id, screen, data) {
     else if (screen === 'products') {
         loadDatatable($('#ADM_PROJECT_PRODUCTS_TABLE'));
     }
-    else if (screen === 'guidelines') {
-        // Load uppy only for downloading files
-        loadUppyFileUpload($('#' + screen), ['.pdf', '.docx'], '', '', '/document/request');
-    }
     else if (screen === 'documents') {
         loadDropzone();
     }
 }
+
+$(document).on('ADM_PROJECT_PRODUCTS_TABLERowCallback', function(e, row, data, index) {
+    kjrequest('GET', '/admin/project/product/editable/'+data.ID, null, true, function (data) {
+        if(data.success){
+            if(!data.editable){
+                row.children().last().find('span').find('span').hide();
+            }
+        }
+    });
+});
 
 function determineDefaultDescription()
 {

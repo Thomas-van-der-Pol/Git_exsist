@@ -18,7 +18,7 @@ class MainController extends AdminBaseController {
 
         if ($user->hasPermission(config('permission.CRM'))) {
             $redirect = '/admin/crm/relation';
-        } else if ($user->hasPermission(config('permission.PRODUCTEN_DIENSTEN'))) {
+        } else if ($user->hasPermission(config('permission.INTERVENTIES'))) {
             $redirect = '/admin/product';
         } else if ($user->hasPermission(config('permission.DOSSIERS'))) {
             $redirect = '/admin/project';

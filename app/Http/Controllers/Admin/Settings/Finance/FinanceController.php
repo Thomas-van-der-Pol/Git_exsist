@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin\Settings\Finance;
 
+use App\Models\Admin\Core\Label;
 use App\Models\Admin\Finance\Ledger;
 use App\Models\Admin\Finance\VAT;
 use App\Models\Core\Document;
@@ -35,33 +36,44 @@ class FinanceController extends AdminBaseController
     protected $detailViewName = 'admin/settings/finance/detail';
 
     protected $saveUnsetValues = [
-        'LOGO_EMAIL',
+//        'LOGO_EMAIL',
         'requester_table',
         'requester_item',
-        'DEFAULT_RATE_KM_READ'
+        'PROXY_NAME'
     ];
 
-    protected $saveValidation = [
-        'LOGO_EMAIL' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
-    ];
+//    protected $saveValidation = [
+//        'LOGO_EMAIL' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+//    ];
 
     protected function authorizeRequest($method, $parameters)
     {
         return ( Auth::guard()->user()->hasPermission(config('permission.FACTURATIE')) && Auth::guard()->user()->hasPermission(config('permission.INSTELLINGEN')));
     }
 
-    public function __construct()
-    {
-        parent::__construct();
+//    public function __construct()
+//    {
+//        parent::__construct();
+//
+//        $this->saveValidationMessages = [
+//            'LOGO_EMAIL.uploaded' => KJLocalization::translate('Algemeen', 'Afbeelding te groot', 'Kan afbeelding niet uploaden. De maximale bestandsgrootte is 2 MB.'),
+//            'LOGO_EMAIL.max' => KJLocalization::translate('Algemeen', 'Afbeelding te groot', 'Kan afbeelding niet uploaden. De maximale bestandsgrootte is 2 MB.')
+//        ];
+//    }
 
-        $this->saveValidationMessages = [
-            'LOGO_EMAIL.uploaded' => KJLocalization::translate('Algemeen', 'Afbeelding te groot', 'Kan afbeelding niet uploaden. De maximale bestandsgrootte is 2 MB.'),
-            'LOGO_EMAIL.max' => KJLocalization::translate('Algemeen', 'Afbeelding te groot', 'Kan afbeelding niet uploaden. De maximale bestandsgrootte is 2 MB.')
-        ];
+    public function index()
+    {
+        $labels = Label::where('ACTIVE', true);
+        if ($labels->count() == 1) {
+            return redirect('/admin/settings/finance/detail/' . $labels->first()->ID);
+        }
+
+        return parent::index();
     }
 
     protected function beforeDetailScreen(int $id, $item, $screen)
     {
+//        dd($item);
         $bindings = [];
 
         $none = ['' => KJLocalization::translate('Algemeen', 'Niets geselecteerd', 'Niets geselecteerd') . '..'];
@@ -91,18 +103,18 @@ class FinanceController extends AdminBaseController
         return $bindings;
     }
 
-    protected function afterSave($item, $originalItem, Request $request, &$response)
-    {
-        // 1. Save e-mail logo
-        $file = $request->file('LOGO_EMAIL');
-
-        if ($file) {
-            // Save in storage
-            $fullpathsavedfile = Storage::disk('publicftp')->put('/label/logo/' . $item->ID, $file);
-            $item->LOGO_EMAIL = $fullpathsavedfile;
-            $item->save();
-        }
-    }
+//    protected function afterSave($item, $originalItem, Request $request, &$response)
+//    {
+//        // 1. Save e-mail logo
+//        $file = $request->file('LOGO_EMAIL');
+//
+//        if ($file) {
+//            // Save in storage
+//            $fullpathsavedfile = Storage::disk('ftp')->put('/label/logo/' . $item->ID, $file);
+//            $item->LOGO_EMAIL = $fullpathsavedfile;
+//            $item->save();
+//        }
+//    }
 
     public function delete(int $id)
     {

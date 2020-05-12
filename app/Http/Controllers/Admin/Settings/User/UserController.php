@@ -26,9 +26,9 @@ class UserController extends AdminBaseController
     protected $datatableFilter = array(
         ['ACTIVE', array(
             'param' => 'ACTIVE',
-            'default' => true
+            'default' => ''
         )],
-        ['FULLNAME', array(
+        ['FULLNAME, EMAILADDRESS', array(
             'param' => 'ADM_FILTER_USER',
             'operation' => 'like',
             'default' => ''
@@ -192,7 +192,7 @@ class UserController extends AdminBaseController
 
         if ($file) {
             // Save in storage
-            $fullpathsavedfile = Storage::disk('publicftp')->put('/user/photos/' . $item->ID, $file);
+            $fullpathsavedfile = Storage::disk('ftp')->put('/user/photos/' . $item->ID, $file);
             $item->PHOTO = $fullpathsavedfile;
             $item->save();
         }

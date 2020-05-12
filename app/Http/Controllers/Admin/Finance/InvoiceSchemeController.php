@@ -20,9 +20,16 @@ class InvoiceSchemeController extends AdminBaseController {
 
     protected $saveParentIDField = 'FK_ASSORTMENT_PRODUCT';
 
+    protected $datatableDefaultSort = array(
+        [
+            'field' => 'DATE',
+            'sort'  => 'ASC'
+        ]
+    );
+
     protected function authorizeRequest($method, $parameters)
     {
-        return (Auth::guard()->user()->hasPermission(config('permission.FACTURATIE')) && Auth::guard()->user()->hasPermission(config('permission.PRODUCTEN_DIENSTEN'))) ;
+        return (Auth::guard()->user()->hasPermission(config('permission.FACTURATIE')) && Auth::guard()->user()->hasPermission(config('permission.INTERVENTIES'))) ;
     }
 
     protected function beforeDatatable($datatable)
@@ -50,12 +57,11 @@ class InvoiceSchemeController extends AdminBaseController {
     public function save(Request $request)
     {
         $product = Product::find($request->get('PARENTID'));
-        $total = $product->invoiceSchemes->where('AUTOMATIC_REMNANT', false);
+        $total = $product->invoiceSchemes->where('AUTOMATIC_REMNANT', false)->whereNull('FK_PROJECT_ASSORTMENT_PRODUCT')->whereNull('FK_FINANCE_INVOICE_LINE');
 
         if ($request->get('ID') != $this->newRecordID) {
             $total = $total->where('ID', '<>', $request->get('ID'));
         }
-
         $total = $total->sum('PERCENTAGE');
 
         $total = $total + (float)$request->get('PERCENTAGE');

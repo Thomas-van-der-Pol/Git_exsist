@@ -39,8 +39,6 @@ class RouteServiceProvider extends ServiceProvider
 
         $this->mapWebRoutes();
 
-        $this->mapDocumentRoutes();
-
         $this->mapAdminRoutes();
     }
 
@@ -56,20 +54,6 @@ class RouteServiceProvider extends ServiceProvider
         Route::middleware('web')
              ->namespace($this->namespace)
              ->group(base_path('routes/web.php'));
-    }
-
-    /**
-     * Define the "document" routes for the application.
-     *
-     * These routes all receive session state, CSRF protection, etc.
-     *
-     * @return void
-     */
-    protected function mapDocumentRoutes()
-    {
-        Route::middleware('validate_document')
-            ->namespace($this->namespace)
-            ->group(base_path('routes/document.php'));
     }
 
     /**

@@ -116,29 +116,17 @@ foreach($alt_langs as $langCode) {
                 Route::delete('/{ID}', 'Admin\Project\ProjectController@delete');
                 Route::get('/data/{ID}', 'Admin\Project\ProjectController@find');
 
-                // Documents
-                Route::post('/shareDocuments', 'Admin\Project\ProjectController@shareDocuments');
-
                 // Product
                 Route::prefix('product')->group(function() {
                     Route::get('/detailRendered/{ID}', 'Admin\Project\Product\ProductProjectController@detailAsJSON');
                     Route::get('/allByProjectProductDatatable/{ID}', 'Admin\Project\Product\ProductProjectController@allByProjectProductDatatable');
                     Route::get('/allByProjectProductTotal/{ID}', 'Admin\Project\Product\ProductProjectController@allByProjectProductTotal');
+                    Route::get('/editable/{ID}', 'Admin\Project\Product\ProductProjectController@itemEditable');
                     Route::post('/save', 'Admin\Project\Product\ProductProjectController@save');
 
                     Route::post('/addProduct', 'Admin\Project\Product\ProductProjectController@addProduct');
                     Route::delete('/{ID}', 'Admin\Project\Product\ProductProjectController@delete');
                 });
-
-                // Service
-                Route::prefix('service')->group(function() {
-                    Route::get('/allByProjectServiceDatatable/{ID}', 'Admin\Project\Product\ProductProjectController@allByProjectServiceDatatable');
-
-                    Route::post('/addProduct', 'Admin\Project\Product\ProductProjectController@addProduct');
-                    Route::delete('/{ID}', 'Admin\Project\Product\ProductProjectController@delete');
-                });
-
-
 
                 Route::prefix('modal')->group(function() {
                     Route::get('/', 'Admin\Project\ProjectController@modal');
@@ -156,7 +144,7 @@ foreach($alt_langs as $langCode) {
             Route::prefix('product')->group(function() {
                 Route::get('/', 'Admin\Assortment\ProductController@index');
                 Route::get('/allDatatable', 'Admin\Assortment\ProductController@allDefaultDatatable');
-                Route::get('/allByTypeDatatable/{ID}', 'Admin\Assortment\ProductController@allByTypeDatatable');
+                Route::get('/allByProjectDatatable/{ID}', 'Admin\Assortment\ProductController@allByProjectDatatable');
                 Route::get('/detail/{ID}', 'Admin\Assortment\ProductController@detail');
                 Route::post('/detailScreen', 'Admin\Assortment\ProductController@detailScreen');
                 Route::post('/', 'Admin\Assortment\ProductController@save');
@@ -218,12 +206,9 @@ foreach($alt_langs as $langCode) {
                 Route::post('/detailScreen', 'Admin\Finance\InvoiceController@detailScreen');
                 Route::post('/', 'Admin\Finance\InvoiceController@save');
                 Route::get('/previewPDF/{ID}', 'Admin\Finance\InvoiceController@previewPDF');
-//                Route::post('/setFinal', 'Admin\Finance\InvoiceController@setFinal');
                 Route::post('/sendInvoice', 'Admin\Finance\InvoiceController@sendInvoice');
                 Route::post('/sendInvoiceReminder', 'Admin\Finance\InvoiceController@sendInvoiceReminder');
                 Route::delete('/{ID}', 'Admin\Finance\InvoiceController@delete');
-
-                Route::post('/createAdvance', 'Admin\Finance\InvoiceController@createAdvance');
 
                 Route::prefix('line')->group(function () {
                     Route::get('/allByInvoiceDatatable/{ID}', 'Admin\Finance\InvoiceLineController@allByInvoiceDatatable');
@@ -234,7 +219,6 @@ foreach($alt_langs as $langCode) {
 
                 Route::prefix('scheme')->group(function () {
                     Route::get('/allByProductDatatable/{ID}', 'Admin\Finance\InvoiceSchemeController@allByProductDatatable');
-//                    Route::get('/allByProjectDatatable/{ID}', 'Admin\Finance\InvoiceSchemeController@allByProjectDatatable');
                     Route::get('/detailRendered/{ID}', 'Admin\Finance\InvoiceSchemeController@detailAsJSON');
                     Route::post('/', 'Admin\Finance\InvoiceSchemeController@save');
                     Route::delete('/{ID}', 'Admin\Finance\InvoiceSchemeController@delete');
@@ -334,41 +318,6 @@ foreach($alt_langs as $langCode) {
                         Route::post('/', 'Admin\Settings\Finance\VatController@save');
                         Route::delete('/{ID}', 'Admin\Settings\Finance\VatController@delete');
                     });
-
-                    Route::prefix('overhead_charge')->group(function () {
-                        Route::get('/allByLabelDatatable/{ID}', 'Admin\Settings\Finance\OverheadChargeController@allByLabelDatatable');
-                        Route::get('/detailRendered/{ID}', 'Admin\Settings\Finance\OverheadChargeController@detailAsJSON');
-                        Route::post('/', 'Admin\Settings\Finance\OverheadChargeController@save');
-                        Route::delete('/{ID}', 'Admin\Settings\Finance\OverheadChargeController@delete');
-                    });
-                });
-
-                // Workflow
-                Route::prefix('workflow')->group(function () {
-                    Route::get('/', 'Admin\Settings\Workflow\WorkflowTypeController@index');
-                    Route::get('/allDatatable', 'Admin\Settings\Workflow\WorkflowTypeController@allDatatable');
-                    Route::get('/detail/{ID}', 'Admin\Settings\Workflow\WorkflowTypeController@detail');
-                    Route::post('/', 'Admin\Settings\Workflow\WorkflowTypeController@save');
-                    Route::delete('/{ID}', 'Admin\Settings\Workflow\WorkflowTypeController@delete');
-                    Route::post('/detailScreen', 'Admin\Settings\Workflow\WorkflowTypeController@detailScreen');
-
-                    Route::get('/allByProjectType/{ID}', 'Admin\Settings\Workflow\WorkflowTypeController@allByProjectType');
-
-                    Route::prefix('state')->group(function () {
-                        Route::get('/allByTypeDatatable/{ID}', 'Admin\Settings\Workflow\WorkflowController@allByTypeDatatable');
-                        Route::get('/detailRendered/{ID}', 'Admin\Settings\Workflow\WorkflowController@detailAsJSON');
-                        Route::post('/', 'Admin\Settings\Workflow\WorkflowController@save');
-                        Route::delete('/{ID}', 'Admin\Settings\Workflow\WorkflowController@delete');
-                        Route::post('/sequence/{ID}', 'Admin\Settings\Workflow\WorkflowController@sequence');
-                    });
-
-                    Route::prefix('product')->group(function () {
-                        Route::get('/allByWorkflowDatatable/{ID}', 'Admin\Settings\Workflow\Product\ProductWorkflowController@allByWorkflowDatatable');
-
-                        Route::post('/addProduct', 'Admin\Settings\Workflow\Product\ProductWorkflowController@addProduct');
-                        Route::delete('/{ID}', 'Admin\Settings\Workflow\Product\ProductWorkflowController@delete');
-                    });
-
                 });
 
                 // Role & Permission
@@ -409,14 +358,6 @@ foreach($alt_langs as $langCode) {
 
                 // Translation
                 KJLocalization::routesManagement();
-            });
-
-            Route::prefix('content-item')->group(function() {
-                Route::post('/new', 'Core\ContentItemController@newItem');
-                Route::get('/detailRendered/{ID}', 'Core\ContentItemController@detailAsJSON');
-                Route::post('/', 'Core\ContentItemController@save');
-                Route::delete('/{ID}', 'Core\ContentItemController@delete');
-                Route::post('/updateSequence', 'Core\ContentItemController@updateSequence');
             });
 
             // Dropdown value

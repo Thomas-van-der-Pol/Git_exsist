@@ -51,7 +51,7 @@
     </li>
 @endif
 
-@if(Auth::guard()->user()->hasPermission(config('permission.PRODUCTEN_DIENSTEN')))
+@if(Auth::guard()->user()->hasPermission(config('permission.INTERVENTIES')))
     <li class="kt-menu__item {{ ((\App\Libraries\Shared\AppUtils::isUrlActive(['admin/product']) == true) ? 'kt-menu__item--active' : '') }}" aria-haspopup="true">
         <a href="{{ \KJ\Localization\libraries\LanguageUtils::getUrl('admin/product') }}" class="kt-menu__link ">
             <span class="kt-menu__link-icon">
@@ -171,15 +171,16 @@
                         </span>
                     </a>
                 </li>
-
-                <li class="kt-menu__item {{ ((\App\Libraries\Shared\AppUtils::isUrlActive(['admin/accountancy']) == true) ? 'kt-menu__item--active' : '') }}" aria-haspopup="true">
-                    <a href="{{ \KJ\Localization\libraries\LanguageUtils::getUrl('admin/accountancy') }}" class="kt-menu__link ">
-                        <i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i>
-                        <span class="kt-menu__link-text">
-                            {{ KJLocalization::translate('Admin - Menu', 'Boekhouding', 'Boekhouding') }}
-                        </span>
-                    </a>
-                </li>
+                @if(Auth::guard()->user()->hasPermission(config('permission.FACTURATIE_BOEKHOUDING')))
+                    <li class="kt-menu__item {{ ((\App\Libraries\Shared\AppUtils::isUrlActive(['admin/accountancy']) == true) ? 'kt-menu__item--active' : '') }}" aria-haspopup="true">
+                        <a href="{{ \KJ\Localization\libraries\LanguageUtils::getUrl('admin/accountancy') }}" class="kt-menu__link ">
+                            <i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i>
+                            <span class="kt-menu__link-text">
+                                {{ KJLocalization::translate('Admin - Menu', 'Boekhouding', 'Boekhouding') }}
+                            </span>
+                        </a>
+                    </li>
+                @endif
 
             </ul>
         </div>
@@ -228,17 +229,6 @@
                             <i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i>
                             <span class="kt-menu__link-text">
                                 {{ KJLocalization::translate('Admin - Menu', 'Financieel', 'Financieel') }}
-                            </span>
-                        </a>
-                    </li>
-                @endif
-
-                @if( Auth::guard()->user()->hasPermission(config('permission.INSTELLINGEN')) )
-                    <li class="kt-menu__item {{ ((\App\Libraries\Shared\AppUtils::isUrlActive(['admin/settings/workflow']) == true) ? 'kt-menu__item--active' : '') }}" aria-haspopup="true">
-                        <a href="{{ \KJ\Localization\libraries\LanguageUtils::getUrl('admin/settings/workflow') }}" class="kt-menu__link ">
-                            <i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i>
-                            <span class="kt-menu__link-text">
-                                {{ KJLocalization::translate('Admin - Menu', 'Workflows', 'Workflows') }}
                             </span>
                         </a>
                     </li>

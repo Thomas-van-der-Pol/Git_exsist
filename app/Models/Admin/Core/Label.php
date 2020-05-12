@@ -2,8 +2,10 @@
 
 namespace App\Models\Admin\Core;
 
+use App\Models\Admin\CRM\Relation;
 use App\Models\Core\Document;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 use KJ\Localization\libraries\LanguageUtils;
 use KJLocalization;
 
@@ -36,6 +38,11 @@ class Label extends Model
         return $name;
     }
 
+    public function proxy()
+    {
+        return $this->hasOne(Relation::class, 'ID', 'FK_CRM_RELATION_PROXY');
+    }
+
     public function getNewInvoiceNumber()
     {
         $number = (int)$this->NEXT_INVOICE_NUMBER;
@@ -65,6 +72,11 @@ class Label extends Model
 
         return $number;
     }
+
+//    public function getLogo()
+//    {
+//        return Storage::disk('ftp')->get($this->LOGO_EMAIL);
+//    }
 
     public function document()
     {

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<TfrxReport Version="5.6.18" DotMatrixReport="False" IniFile="\Software\Fast Reports" PreviewOptions.Buttons="4095" PreviewOptions.Zoom="1" PrintOptions.Printer="Default" PrintOptions.PrintOnSheet="0" ReportOptions.Author="KJ Software" ReportOptions.CreateDate="42167,5111442014" ReportOptions.Description.Text="" ReportOptions.LastChange="43963,5001049306" ScriptLanguage="PascalScript" ScriptText.Text="begin&#13;&#10;&#13;&#10;end.">
+  <Variables>
+    <item Name="FACTUUR_TITEL" Value="'Conceptfactuur'"/>
+    <item Name="INCL_BTW" Value="False"/>
+    <item Name="PARTICULIER_TITEL" Value="'mevrouw S. van Baren'"/>
+    <item Name="INCASSO_TEKST" Value="''"/>
+    <item Name="LOCATIENUMMER" Value="' Harslaarseweg 59 3771 MA BARNEVELD'"/>
+    <item Name="CONTACTPERSOON" Value="'Mevrouw S. van Baren'"/>
+    <item Name="FACTUUR_TEKST" Value="''"/>
+  </Variables>
+  <TfrxDataPage Name="Data" Height="1000" Left="0" Top="0" Width="1000"/>
+  <TfrxReportPage Name="reportPage" Font.Charset="1" Font.Color="0" Font.Height="-13" Font.Name="DINPro-Light" Font.Style="0" PaperWidth="210" PaperHeight="297" PaperSize="9" LeftMargin="25" RightMargin="25" TopMargin="20" BottomMargin="20" ColumnWidth="0" ColumnPositions.Text="" LargeDesignHeight="True" HGuides.Text="" VGuides.Text="" OnBeforePrint="reportPageOnBeforePrint">
+    <TfrxReportTitle Name="ReportTitle" FillType="ftBrush" FillGap.Top="0" FillGap.Left="0" FillGap.Bottom="0" FillGap.Right="0" Font.Charset="1" Font.Color="0" Font.Height="-13" Font.Name="Poppins" Font.Style="0" Height="173,85837024" Left="0" ParentFont="False" Top="18,89765" Width="604,7248" OnBeforePrint="ReportTitleOnBeforePrint" Child="ReportTitle_Address" PrintChildIfInvisible="True" Stretched="True">
+      <TfrxMemoView Name="Memo1" Left="0" Top="147,40159921" Width="396,85083306" Height="22,67717024" Font.Charset="1" Font.Color="0" Font.Height="-12" Font.Name="Poppins SemiBold" Font.Style="0" GapX="4" GapY="2" ParentFont="False" Text="[CRM_RELATION.&#34;NAME&#34;]"/>
+    </TfrxReportTitle>
+    <TfrxChild Name="ReportTitle_Address" FillType="ftBrush" FillGap.Top="0" FillGap.Left="0" FillGap.Bottom="0" FillGap.Right="0" Height="718,1107" Left="0" Top="215,43321" Width="604,7248" PrintChildIfInvisible="True" Stretched="True">
+      <TfrxMemoView Name="Memo10" Left="0" Top="0" Width="604,72498306" Height="268,34663" Font.Charset="1" Font.Color="0" Font.Height="-12" Font.Name="Poppins" Font.Style="0" GapX="4" GapY="2" ParentFont="False" Text="[CRM_RELATION_ADDRESS.&#34;ADDRESSLINE&#34;] [CRM_RELATION_ADDRESS.&#34;HOUSENUMBER&#34;]&#13;&#10;[CRM_RELATION_ADDRESS.&#34;ZIPCODE&#34;] [CRM_RELATION_ADDRESS.&#34;CITY&#34;]&#13;&#10;&#13;&#10;&#13;&#10;&#13;&#10;&#13;&#10;&#13;&#10;[TEXT.&#34;HOOFDKANTOOR&#34;],  [TEXT.&#34;DATUM&#34;]&#13;&#10;&#13;&#10;[TEXT.&#34;ONDERWERP&#34;]: [TEXT.&#34;FINANCIELE_INTERVENTIE&#34;]&#13;&#10;&#13;&#10;&#13;&#10;&#13;&#10;&#13;&#10;[TEXT.&#34;AANHEF&#34;],&#13;&#10;&#13;&#10;[TEXT.&#34;TEXTLETTER_BEGIN&#34;]">
+        <Formats>
+          <item/>
+          <item/>
+          <item/>
+          <item/>
+          <item/>
+          <item/>
+          <item/>
+          <item/>
+        </Formats>
+      </TfrxMemoView>
+      <TfrxMemoView Name="Memo2" Left="0" Top="298,58287" Width="604,72498306" Height="438,42548" Font.Charset="1" Font.Color="0" Font.Height="-12" Font.Name="Poppins" Font.Style="0" GapX="4" GapY="2" ParentFont="False" Text="[TEXT.&#34;TEXT_BEFORE_PERCENTAGE&#34;] [COMPENSATION.&#34;PERCENTAGE&#34;] [TEXT.&#34;TEXT_AFTER_PERCENTAGE&#34;] [COMPENSATION.&#34;PRICE&#34;].&#13;&#10;&#13;&#10;[TEXT.&#34;TEXT_AFTER_PRICE&#34;]&#13;&#10;&#13;&#10;[TEXT.&#34;AFSLUITER&#34;]&#13;&#10;&#13;&#10;[TEXT.&#34;GROET&#34;]&#13;&#10;&#13;&#10;&#13;&#10;[TEXT.&#34;EXSIST&#34;]">
+        <Formats>
+          <item/>
+          <item/>
+          <item/>
+          <item/>
+          <item/>
+          <item/>
+          <item/>
+          <item/>
+          <item/>
+          <item/>
+          <item/>
+        </Formats>
+      </TfrxMemoView>
+      <TfrxMemoView Name="Memo3" Left="0" Top="268,34663" Width="604,72498306" Height="26,45671" Font.Charset="1" Font.Color="0" Font.Height="-12" Font.Name="Poppins SemiBold" Font.Style="0" GapX="4" GapY="2" ParentFont="False" Text="[TEXT.&#34;QUESTION&#34;]"/>
+    </TfrxChild>
+  </TfrxReportPage>
+</TfrxReport>

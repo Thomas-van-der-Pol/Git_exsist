@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin\Project\Product;
 
+use App\Models\Admin\Project\Product;
 use App\Models\Admin\Project\Project;
 use App\Models\Admin\User;
 use Illuminate\Http\Request;
@@ -54,20 +55,22 @@ class ProductProjectController extends AdminBaseController
             });
     }
 
+    public function itemEditable($ID){
+        $item = Product::find($ID);
+
+        return response()->json([
+            'success' => true,
+            'ID' => $ID,
+            'editable' => $item->editable()
+        ]);
+    }
+
     public function allByProjectProductDatatable(Request $request, int $ID)
     {
-        $this->datatableFilter = array(
-            ['ASSORTMENT_PRODUCT.DESCRIPTION_INT, ASSORTMENT_PRODUCT.DESCRIPTION_EXT, CRM_RELATION.NAME', array(
-                'param' => 'ADM_PROJECT_PRODUCT_FILTER_SEARCH',
-                'operation' => 'like',
-                'default' => ''
-            )]
-        );
 
         $this->whereClause = array(
             ['ACTIVE', true],
             ['FK_PROJECT', $ID],
-            ['ASSORTMENT_PRODUCT.FK_ASSORTMENT_PRODUCT_TYPE', config('product_type.TYPE_PRODUCT')]
         );
 
         return parent::allDatatable($request);
@@ -75,18 +78,10 @@ class ProductProjectController extends AdminBaseController
 
     public function allByProjectProductTotal(Request $request, int $ID)
     {
-        $this->datatableFilter = array(
-            ['ASSORTMENT_PRODUCT.DESCRIPTION_INT, ASSORTMENT_PRODUCT.DESCRIPTION_EXT, CRM_RELATION.NAME', array(
-                'param' => 'ADM_PROJECT_PRODUCT_FILTER_SEARCH',
-                'operation' => 'like',
-                'default' => ''
-            )]
-        );
 
         $this->whereClause = array(
             ['ACTIVE', true],
             ['FK_PROJECT', $ID],
-            ['ASSORTMENT_PRODUCT.FK_ASSORTMENT_PRODUCT_TYPE', config('product_type.TYPE_PRODUCT')]
         );
 
         $items = $this->allInternal(

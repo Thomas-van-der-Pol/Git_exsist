@@ -20,7 +20,7 @@
 
 @section('content')
     <div class="row">
-        @component('portlet::main', ['title' => KJLocalization::translate('Admin - Dossiers', 'Interventies', 'Interventies'), 'colsize' => 12])
+        @component('portlet::main', ['title' => KJLocalization::translate('Admin - Menu', 'Interventies', 'Interventies'), 'colsize' => 12])
             @slot('headicon')
                 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="kt-svg-icon">
                     <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -35,7 +35,7 @@
                 <div class="kt-portlet__head-wrapper">
                     <a href="{{ \KJ\Localization\libraries\LanguageUtils::getUrl('admin/product/detail/-1') }}" id="newProduct" class="btn btn-success btn-sm btn-upper">
                         <i class="fa fa-plus-square"></i>
-                        {{ KJLocalization::translate('Admin - Dossiers', 'Toevoegen', 'Toevoegen')}}
+                        {{ KJLocalization::translate('Admin - Interventies', 'Toevoegen', 'Toevoegen')}}
                     </a>
                 </div>
             @endslot
@@ -57,27 +57,6 @@
                                             'data-key'      => 'ADM_FILTER_PRODUCT'
                                         )
                                     ) }}
-                                </div>
-                            </div>
-
-                            <div class="col-2">
-                                <div class="kt-form__group kt-form__group--inline">
-                                    <div class="kt-form__label">
-                                        {{ Form::label('ADM_FILTER_PRODUCT_PRODUCTTYPE', KJLocalization::translate('Admin - Dossiers', 'Producttype', 'Producttype'). ':') }}
-                                    </div>
-                                    <div class="kt-form__control">
-                                        {{ Form::select(
-                                            'ADM_FILTER_PRODUCT_PRODUCTTYPE',
-                                            $producttypes,
-                                            \KJ\Core\libraries\SessionUtils::getSession('ADM_ASSORTMENT', 'ADM_FILTER_PRODUCT_PRODUCTTYPE', ''),
-                                            [
-                                                'class' => 'form-control filter kt-bootstrap-select hasSessionState',
-                                                'id'            => 'ADM_FILTER_PRODUCT_PRODUCTTYPE',
-                                                'data-module'   => 'ADM_ASSORTMENT',
-                                                'data-key'      => 'ADM_FILTER_PRODUCT_PRODUCTTYPE'
-                                            ]
-                                        ) }}
-                                    </div>
                                 </div>
                             </div>
 
@@ -121,20 +100,21 @@
                         'saveURL' => '/admin/product',
                         'columns' => array(
                             array(
-                                'field' => 'TYPE_PRODUCT',
-                                'title' => KJLocalization::translate('Admin - Dossiers', 'Type product', 'Type product')
+                                'field' => 'DESCRIPTION_INT',
+                                'title' => KJLocalization::translate('Admin - Interventies', 'Omschrijving intern', 'Omschrijving intern')
                             ),
                             array(
-                                'field' => 'DESCRIPTION_INT',
-                                'title' => KJLocalization::translate('Admin - Dossiers', 'Omschrijving intern', 'Omschrijving intern')
+                                'field' => 'DESCRIPTION_EXT',
+                                'title' => KJLocalization::translate('Admin - Interventies', 'Omschrijving extern', 'Omschrijving extern'),
+                                'width' => 350
                             ),
                             array(
                                 'field' => 'PRICE_FORMATTED',
-                                'title' => KJLocalization::translate('Admin - Dossiers', 'Prijs excl', 'Prijs excl'),
+                                'title' => KJLocalization::translate('Admin - Interventies', 'Prijs excl', 'Prijs excl'),
                             ),
                             array(
                                 'field' => 'PRICE_INCVAT_FORMATTED',
-                                'title' => KJLocalization::translate('Admin - Dossiers', 'Prijs incl', 'Prijs incl'),
+                                'title' => KJLocalization::translate('Admin - Interventies', 'Prijs incl', 'Prijs incl'),
                             )
                         ),
                         'filters' => array(
@@ -142,11 +122,6 @@
                                 'input' => '#ADM_FILTER_PRODUCT_STATUS',
                                 'queryParam' => 'ACTIVE',
                                 'default' => \KJ\Core\libraries\SessionUtils::getSession('ADM_ASSORTMENT', 'ADM_FILTER_PRODUCT_STATUS', 1)
-                            ),
-                            array(
-                                'input' => '#ADM_FILTER_PRODUCT_PRODUCTTYPE',
-                                'queryParam' => 'FK_ASSORTMENT_PRODUCT_TYPE',
-                                'default' => \KJ\Core\libraries\SessionUtils::getSession('ADM_ASSORTMENT', 'ADM_FILTER_PRODUCT_PRODUCTTYPE', '')
                             )
                         )
                     )

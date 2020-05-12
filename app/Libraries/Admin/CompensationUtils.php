@@ -28,13 +28,16 @@ class CompensationUtils
             'Statements' => array(
                 array(
                     'Identifier' => "CRM_RELATION",
-                    'Query' => "SELECT CR.ID, ISNULL(NUMBER_DEBTOR,'') AS NUMBER_DEBTOR, CR.NAME, CR.VAT_LIABLE, CR.VAT_NUMBER FROM CRM_RELATION CR WITH(NOLOCK) WHERE CR.ID = {1}",
-                    'Parameters' => [(int)$invoice->FK_CRM_RELATION]
+                    'Query' => "SELECT CR.ID, CR.NAME FROM CRM_RELATION CR WITH(NOLOCK) WHERE CR.ID = {1}",
+                    'Parameters' => [(int)$invoice->label->proxy->ID]
                 ),
                 array(
                     'Identifier' => "CRM_RELATION_ADDRESS",
-                    'Query' => "SELECT CA.* FROM dbo.CRM_RELATION_ADDRESS CRA WITH (NOLOCK) JOIN CORE_ADDRESS CA WITH (NOLOCK) ON CA.ID = CRA.FK_CORE_ADDRESS WHERE CRA.ID = {1} AND CRA.ACTIVE = 1",
-                    'Parameters' => [(int)$invoice->FK_CRM_RELATION_ADDRESS]
+                    'Query' => "SELECT TOP 1 CA.* FROM CRM_RELATION_ADDRESS CRA WITH (NOLOCK) JOIN CORE_ADDRESS CA WITH (NOLOCK) ON CA.ID = CRA.FK_CORE_ADDRESS WHERE CRA.FK_CRM_RELATION = {1} AND CRA.ACTIVE = 1 AND CRA.FK_CORE_DROPDOWNVALUE_ADRESSTYPE = {2}",
+                    'Parameters' => [
+                        (int)$invoice->label->proxy->ID,
+                        (int)config('dropdown_type.TYPE_ADDRESSTYPE_VALUE.VISIT')
+                    ]
                 ),
                 array(
                     'Identifier' => "COMPENSATION",

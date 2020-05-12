@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\Admin\Assortment;
 
 use App\Libraries\Core\DropdownvalueUtils;
+use App\Mail\Consumer\Relocation\DocumentDeleted;
 use App\Models\Admin\Assortment\Product;
-use App\Models\Admin\Assortment\ProductType;
+
 use App\Models\Admin\Finance\InvoiceScheme;
 use App\Models\Admin\Finance\Ledger;
 use App\Models\Admin\Finance\VAT;
+use App\Models\Admin\Project\Project;
 use App\Models\Admin\User;
 use App\Models\Core\Document;
 use Illuminate\Http\Request;
@@ -16,6 +18,9 @@ use Illuminate\Support\Facades\DB;
 use KJ\Core\controllers\AdminBaseController;
 use KJ\Core\libraries\SessionUtils;
 use KJLocalization;
+use phpDocumentor\Reflection\DocBlock\Tags\Formatter\AlignFormatter;
+use Yajra\DataTables\DataTables;
+use function MongoDB\BSON\toRelaxedExtendedJSON;
 
 class ProductController extends AdminBaseController
 {
@@ -23,7 +28,7 @@ class ProductController extends AdminBaseController
 
     protected $mainViewName = 'admin.assortment.product.main';
 
-    protected $allColumns = ['ID', 'ACTIVE', 'FK_ASSORTMENT_PRODUCT_TYPE', 'DESCRIPTION_INT', 'DESCRIPTION_EXT', 'PRICE', 'PRICE_INCVAT'];
+    protected $allColumns = ['ID', 'ACTIVE', 'DESCRIPTION_INT', 'DESCRIPTION_EXT', 'PRICE', 'PRICE_INCVAT'];
 
     protected $datatableFilter = [
         ['ACTIVE', array(
@@ -48,25 +53,22 @@ class ProductController extends AdminBaseController
     protected $detailScreenFolder = 'admin.assortment.product.detail_screens';
     protected $detailViewName = 'admin.assortment.product.detail';
 
-    protected $exceptAuthorization = ['indexRendered', 'allByTypeDatatable'];
+    protected $exceptAuthorization = ['indexRendered', 'allByProjectDatatable'];
 
     protected function authorizeRequest($method, $parameters)
     {
-        return Auth::guard()->user()->hasPermission(config('permission.PRODUCTEN_DIENSTEN'));
+        return Auth::guard()->user()->hasPermission(config('permission.INTERVENTIES'));
     }
 
     protected function beforeIndex()
     {
         $none = ['' => KJLocalization::translate('Algemeen', 'Niets geselecteerd', 'Niets geselecteerd') . '..'];
 
-        $producttypesOri = ProductType::all()->where('ACTIVE', true)->sortBy('title')->pluck('title', 'ID');
-        $producttypes = $none + $producttypesOri->toArray();
         $contactsOri = User::all()->where('ACTIVE',true)->pluck('FULLNAME', 'ID');
         $contacts = $none + $contactsOri->toArray();
         $status = DropdownvalueUtils::getStatusDropdown(false);
 
         $bindings = array(
-            ['producttypes', $producttypes],
             ['status', $status],
             ['contacts', $contacts]
         );
@@ -78,11 +80,14 @@ class ProductController extends AdminBaseController
     {
         $view = view('admin.assortment.product.modal');
 
+        $id = request('id');
+        $project = Project::find($id);
         $extraBindings = $this->beforeIndex();
         if ($extraBindings != []) {
             foreach ($extraBindings as $binding) {
                 $view->with($binding[0], $binding[1]);
             }
+            $view->with('project', $project);
         }
 
         return response()->json([
@@ -97,9 +102,6 @@ class ProductController extends AdminBaseController
 
         switch ($screen) {
             case 'default':
-                $producttypesOri = ProductType::all()->where('ACTIVE', true)->sortBy('title')->pluck('title', 'ID');
-                $producttypes = $none + $producttypesOri->toArray();
-
                 $ledgersOri = Ledger::select(DB::raw("CONCAT(ACCOUNT,' - ',DESCRIPTION) AS COMBINEDDESCRIPTION"),'ID','ACTIVE', 'FK_CORE_LABEL')
                     ->where('ACTIVE', TRUE)
                     ->orderBy('COMBINEDDESCRIPTION')
@@ -112,7 +114,6 @@ class ProductController extends AdminBaseController
                 $vat = $none + $vatOri->toArray();
 
                 $bindings = array_merge($bindings, [
-                    ['producttypes', $producttypes],
                     ['ledgers', $ledgers],
                     ['vat', $vat],
                 ]);
@@ -128,8 +129,6 @@ class ProductController extends AdminBaseController
             return $product->getPriceFormattedAttribute();
         })->addColumn('PRICE_INCVAT_FORMATTED', function(Product $product) {
             return $product->getPriceIncFormattedAttribute();
-        })->addColumn('TYPE_PRODUCT', function(Product $product) {
-            return isset($product->producttype) ? $product->producttype->title : '';
         });
     }
 
@@ -144,10 +143,6 @@ class ProductController extends AdminBaseController
             ['ACTIVE', array(
                 'param' => 'ACTIVE',
                 'default' => true
-            )],
-            ['FK_ASSORTMENT_PRODUCT_TYPE', array(
-                'param' => 'ASSORTMENT_PRODUCT_TYPE',
-                'default' => SessionUtils::getSession('ADM_ASSORTMENT', 'ADM_FILTER_PRODUCT_PRODUCTTYPE', '')
             )]
         ];
 
@@ -169,29 +164,14 @@ class ProductController extends AdminBaseController
         }
     }
 
-    public function allByTypeDatatable(Request $request, int $ID)
+    public function allByProjectDatatable(Request $request, int $ID)
     {
-        $this->whereClause = [
-            ['ACTIVE', true]
-        ];
+        $items  = \App\Models\Admin\Project\Product::all()->where('FK_PROJECT',  $ID);
+        $products = Product::all()->whereNotIn('ID', $items->pluck('FK_ASSORTMENT_PRODUCT'))->where('ACTIVE', true);
 
-        if ($ID > 0) {
-            array_push($this->whereClause, ['FK_ASSORTMENT_PRODUCT_TYPE', $ID]);
-        }
-
-        $this->datatableFilter = [
-            ['DESCRIPTION_INT, DESCRIPTION_EXT', array(
-                'param' => 'ADM_FILTER_PRODUCT',
-                'operation' => 'like',
-                'default' => ''
-            )],
-            ['FK_ASSORTMENT_PRODUCT_TYPE', array(
-                'param' => 'FK_ASSORTMENT_PRODUCT_TYPE',
-                'default' => ''
-            )]
-        ];
-
-        return parent::allDatatable($request);
+        $datatable = Datatables::of($products);
+        $this->beforeDatatable($datatable);
+        return $datatable->make(true);
     }
 
     public function delete(int $id)

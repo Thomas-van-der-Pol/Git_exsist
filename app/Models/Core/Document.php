@@ -2,7 +2,6 @@
 
 namespace App\Models\Core;
 
-use App\Models\Admin\Project\Document\CollectionDocument;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -34,11 +33,6 @@ class Document extends Model {
             {
                 $log->delete();
             }
-
-            foreach ($document->collectionDocuments as $collectionDocument)
-            {
-                $collectionDocument->delete();
-            }
         });
     }
 
@@ -57,11 +51,6 @@ class Document extends Model {
     public function logs()
     {
         return $this->hasMany(DocumentLog::class, 'FK_DOCUMENT','ID');
-    }
-
-    public function collectionDocuments()
-    {
-        return $this->hasMany(CollectionDocument::class, 'FK_DOCUMENT', 'ID');
     }
 
     public function uploader()

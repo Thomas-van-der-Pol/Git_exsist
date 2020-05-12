@@ -8,6 +8,7 @@ use App\Models\Admin\Project\Project;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use KJ\Core\controllers\AdminBaseController;
+use phpDocumentor\Reflection\DocBlock\Tags\Formatter\AlignFormatter;
 use Yajra\DataTables\DataTables;
 use KJLocalization;
 
@@ -19,12 +20,17 @@ class InvoiceSchemeController extends AdminBaseController {
 
     protected $detailViewName = 'admin.project.invoice_scheme.detail';
 
-//    protected $saveParentIDField = 'FK_PROJECT_ASSORTMENT_PRODUCT';
-
     protected function authorizeRequest($method, $parameters)
     {
-        return (Auth::guard()->user()->hasPermission(config('permission.FACTURATIE')) && Auth::guard()->user()->hasPermission(config('permission.PRODUCTEN_DIENSTEN'))) ;
+        return (Auth::guard()->user()->hasPermission(config('permission.FACTURATIE')) && Auth::guard()->user()->hasPermission(config('permission.INTERVENTIES'))) ;
     }
+
+    protected $datatableDefaultSort = array(
+        [
+            'field' => 'DATE',
+            'sort'  => 'ASC'
+        ]
+    );
 
     protected $saveUnsetValues = [
         'FK_ASSORTMENT_PRODUCT',
@@ -35,7 +41,7 @@ class InvoiceSchemeController extends AdminBaseController {
 
     protected function beforeDatatable($datatable)
     {
-        $datatable->addColumn('DATUM', function(InvoiceScheme $invoiceScheme) {
+        $datatable->addColumn('DATE', function(InvoiceScheme $invoiceScheme) {
             return $invoiceScheme->getDateFormattedAttribute();
         })
         ->addColumn('BLOCKED', function(InvoiceScheme $invoiceScheme) {
@@ -51,10 +57,10 @@ class InvoiceSchemeController extends AdminBaseController {
             return $invoiceScheme->getPercentageFormattedAttribute();
         })
         ->addColumn('INTERVENTION_PRICE', function(InvoiceScheme $invoiceScheme) {
-            return $invoiceScheme->product->getPriceFormattedAttribute();
+            return $invoiceScheme->getPriceMultipleAmountFormattedAttribute();
         })
         ->addColumn('SUBTOTAL_PERCENTAGE', function(InvoiceScheme $invoiceScheme) {
-            return $invoiceScheme->getPricePercentageFormattedAttribute();
+            return $invoiceScheme->getPricePercentageMultipleAmountFormattedAttribute();
         })
         ->addColumn('INVOICE_NUMBER', function(InvoiceScheme $invoiceScheme) {
             if($invoiceScheme->invoiceLine) {
@@ -76,6 +82,9 @@ class InvoiceSchemeController extends AdminBaseController {
                 }
             }
         }
+
+        $invoiceSchemesOfProject = collect($invoiceSchemesOfProject)->sortBy('DATE');
+
         $datatable = Datatables::of($invoiceSchemesOfProject);
         $this->beforeDatatable($datatable);
         return $datatable->make(true);
@@ -91,10 +100,15 @@ class InvoiceSchemeController extends AdminBaseController {
                 'ACTIVE' => true,
                 'FK_PROJECT' => $pid
             ])
-            ->get()
-            ->pluck('product.DESCRIPTION_INT', 'ID')
-            ->toArray();
-        $products = $none + $products;
+            ->get();
+
+        foreach ($products as $key => $product){
+            if(!$product->editable()){
+                unset($products[$key]);
+            }
+        }
+
+        $products = $none + $products->pluck('product.DESCRIPTION_INT', 'ID')->toArray();
 
         $bindings =  [
             ['products', $products]
@@ -104,14 +118,7 @@ class InvoiceSchemeController extends AdminBaseController {
     }
 
     private function getProjectProduct(Request $request){
-        $assortmentProduct = Product::find($request->get('FK_ASSORTMENT_PRODUCT'));
-        $project = Project::find($request->get('PARENTID'));
-        $projectProduct = null;
-        foreach($project->products as $product){
-            if($product->FK_ASSORTMENT_PRODUCT == $assortmentProduct->ID){
-                $projectProduct = $product;
-            }
-        }
+        $projectProduct = \App\Models\Admin\Project\Product::find($request->get('FK_ASSORTMENT_PRODUCT'));
         return $projectProduct;
     }
 
@@ -170,6 +177,14 @@ class InvoiceSchemeController extends AdminBaseController {
         $item = $this->find($ID);
 
         if ($item) {
+
+            $allInvoiceSchemes = $item->project_product->invoiceSchemes->whereNotNull('FK_FINANCE_INVOICE_LINE')->count();
+            if($allInvoiceSchemes > 0) {
+                return response()->json([
+                    'success' => false,
+                    'message' => KJLocalization::translate('Admin - Dossiers', 'Item is al gefactureerd', 'Item is al gefactureerd'),
+                ], 200);
+            }
 
             if($item->invoiceLine){
                 if($item->invoiceLine->invoice->FK_CORE_WORKFLOWSTATE == config('workflowstate.INVOICE_FINAL')){

@@ -129,7 +129,8 @@ class AddressController extends AdminBaseController {
     public function delete(int $id)
     {
         $item = $this->find($id);
-        $address = \App\Models\Admin\Core\Address::find($id);
+
+        $address = $item->address;
 
         $invoice = Invoice::where([
             'FK_CRM_RELATION_ADDRESS' => $id

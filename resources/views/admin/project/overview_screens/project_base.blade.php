@@ -33,25 +33,13 @@
                                     'searchinput' => '#ADM_PROJECT_FILTER_SEARCH',
                                     'columns' => array(
                                         array(
-                                            'field' => 'ID',
-                                            'title' => KJLocalization::translate('Admin - Dossiers', 'Nr', 'Nr.'),
-                                            'width' => 20
-                                        ),
-                                        array(
-                                            'field' => 'REFERRER',
-                                            'title' => KJLocalization::translate('Admin - Dossiers', 'Verwijzer', 'Verwijzer')
-                                        ),
-                                        array(
-                                            'field' => 'EMPLOYER',
-                                            'title' => KJLocalization::translate('Admin - Dossiers', 'Werkgever', 'Werkgever')
-                                        ),
-                                        array(
-                                            'field' => 'EMPLOYEE',
-                                            'title' => KJLocalization::translate('Admin - Dossiers', 'Werknemer', 'Werknemer')
+                                            'field' => 'DESCRIPTION',
+                                            'title' => KJLocalization::translate('Admin - Dossiers', 'Dossiernaam', 'Dossiernaam')
                                         ),
                                         array(
                                             'field' => 'WORKFLOWSTATE',
-                                            'title' => KJLocalization::translate('Admin - Dossiers', 'Status', 'Status')
+                                            'title' => KJLocalization::translate('Admin - Dossiers', 'Status', 'Status'),
+                                            'sortable' => false
                                         ),
                                         array(
                                             'field' => 'LASTMODIFIED_STATE_FORMATTED',
@@ -62,8 +50,8 @@
                                             'title' => KJLocalization::translate('Admin - Dossiers', 'Eerste ziektedag', 'Eerste ziektedag')
                                         ),
                                         array(
-                                            'field' => 'POLICY_NUMBER',
-                                            'title' => KJLocalization::translate('Admin - Dossiers', 'Polisnummer', 'Polisnummer')
+                                            'field' => 'CREATED_DATE_FORMATTED',
+                                            'title' => KJLocalization::translate('Admin - Dossiers', 'Aanmaakdatum', 'Aanmaakdatum')
                                         )
                                     ),
                                     'filters' => array(

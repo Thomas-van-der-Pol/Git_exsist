@@ -52,7 +52,11 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-xl-4 col-lg-6">
-                                        {{ KJField::select('FK_CRM_CONTACT_FINANCE', KJLocalization::translate('Admin - CRM', 'Financieel contact', 'Financieel contact'), $contactpersonen, $item ? $item->FK_CRM_CONTACT_FINANCE : 0, true, -1, ['data-screen-mode' => 'read, edit']) }}
+                                        @if($item && ($item->contacts->where('ACTIVE', true)->count() > 0))
+                                            {{ KJField::select('FK_CRM_CONTACT_FINANCE', KJLocalization::translate('Admin - CRM', 'Financieel contact', 'Financieel contact'), $contactpersonen, $item ? $item->FK_CRM_CONTACT_FINANCE : 0, true, -1, ['data-screen-mode' => 'read, edit']) }}
+                                        @else
+                                            {{KJLocalization::translate('Admin - CRM', 'Voeg eerst contactpersonen toe', 'Voeg eerst contactpersonen toe')}}
+                                        @endif
                                     </div>
 
                                     <div class="col-xl-4 col-lg-6">

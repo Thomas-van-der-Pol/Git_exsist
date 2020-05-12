@@ -748,9 +748,9 @@ td.form-group-mb-0 .form-group {
     background-position: center right !important
 }
 
-.md-form .validate {
-    margin-bottom: 2.5rem
-}
+/*.md-form .validate {*/
+/*    margin-bottom: 2.5rem*/
+/*}*/
 
 .md-form label {
     font-size: 1rem

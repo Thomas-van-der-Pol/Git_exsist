@@ -95,7 +95,7 @@ $(document).ready(function() {
 
 function afterLoadScreen(id, screen, data) {
     if (screen === 'default') {
-
+        loadDropdowns();
     } else if (screen === 'invoice_scheme') {
         loadDatatable($('#ADM_PRODUCT_INVOICE_SCHEME_TABLE'));
     }

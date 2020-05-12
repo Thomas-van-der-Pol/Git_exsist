@@ -21,7 +21,7 @@ class ProjectController extends AdminBaseController {
 
     protected $detailScreenOverviewFolder = 'admin.project.overview_screens';
 
-    protected $allColumns = ['ID', 'ACTIVE', 'TS_LASTMODIFIED_STATE', 'FK_CRM_RELATION_REFERRER', 'FK_CRM_RELATION_EMPLOYER', 'FK_CRM_CONTACT_EMPLOYEE', 'FK_CORE_DROPDOWNVALUE_PROJECTTYPE', 'FK_CORE_WORKFLOWSTATE', 'START_DATE', 'POLICY_NUMBER'];
+    protected $allColumns = ['ID', 'ACTIVE', 'TS_CREATED', 'TS_LASTMODIFIED_STATE', 'DESCRIPTION', 'FK_CRM_RELATION_REFERRER', 'FK_CRM_RELATION_EMPLOYER', 'FK_CRM_CONTACT_EMPLOYEE', 'FK_CORE_DROPDOWNVALUE_PROJECTTYPE', 'FK_CORE_WORKFLOWSTATE', 'START_DATE'];
 
     protected $joinClause = [
         [
@@ -95,6 +95,19 @@ class ProjectController extends AdminBaseController {
         ]);
     }
 
+    protected function getSortField($sortField)
+    {
+        if ($sortField === 'LASTMODIFIED_STATE_FORMATTED') {
+            return 'TS_LASTMODIFIED_STATE';
+        } else if ($sortField === 'START_DATE_FORMATTED') {
+            return 'START_DATE';
+        } else if ($sortField === 'CREATED_DATE_FORMATTED') {
+            return 'TS_CREATED';
+        } else {
+            return parent::getSortField($sortField);
+        }
+    }
+
     public function allByWorkflowDatatable(Request $request, int $TYPE_ID, int $ID)
     {
         $this->whereClause = [];
@@ -113,7 +126,7 @@ class ProjectController extends AdminBaseController {
                 'param' => 'ACTIVE',
                 'default' => SessionUtils::getSession('ADM_PROJECT', 'ADM_FILTER_PROJECT_STATUS', 1)
             )],
-            ['ID, REFERRER.NAME, EMPLOYER.NAME, EMPLOYEE.FULLNAME, POLICY_NUMBER', array(
+            ['ID, DESCRIPTION, REFERRER.NAME, EMPLOYER.NAME, EMPLOYEE.FULLNAME', array(
                 'param' => 'ADM_PROJECT_FILTER_SEARCH',
                 'operation' => 'like',
                 'default' => SessionUtils::getSession('ADM_PROJECT', 'ADM_PROJECT_FILTER_SEARCH', ''),
@@ -140,7 +153,7 @@ class ProjectController extends AdminBaseController {
         );
 
         $this->datatableFilter = [
-            ['ID, REFERRER.NAME, EMPLOYER.NAME, EMPLOYEE.FULLNAME, POLICY_NUMBER', array(
+            ['ID, DESCRIPTION, REFERRER.NAME, EMPLOYER.NAME, EMPLOYEE.FULLNAME', array(
                 'param' => 'ADM_PROJECT_FILTER',
                 'operation' => 'like',
                 'default' => ''
@@ -175,6 +188,9 @@ class ProjectController extends AdminBaseController {
             })
             ->addColumn('START_DATE_FORMATTED', function(Project $project) {
                 return $project->getStartDateFormattedAttribute();
+            })
+            ->addColumn('CREATED_DATE_FORMATTED', function(Project $project) {
+                return $project->getCreatedDateFormattedAttribute();
             })
             ->addColumn('LASTMODIFIED_STATE_FORMATTED', function(Project $project) {
                 return $project->getLastModifiedStateFormattedAttribute();
@@ -320,52 +336,5 @@ class ProjectController extends AdminBaseController {
             ]);
         }
     }
-
-//    public function shareDocuments(Request $request)
-//    {
-//        $id = ( $request->get('id') ?? 0 );
-//        $documents = json_decode(( $request->get('documents') ?? 0 ), true);
-//        $contacts = json_decode(( $request->get('contacts') ?? 0 ), true);
-//
-//        if ((count($documents) > 0) && (count($contacts) > 0)) {
-//            $collection = new Collection([
-//                'FK_PROJECT' => $id
-//            ]);
-//            $collection->save();
-//
-//            foreach ($documents as $document_id) {
-//                if ((int)$document_id > 0) {
-//                    $collectionDocument = new CollectionDocument([
-//                        'FK_DOCUMENT_COLLECTION' => $collection->ID,
-//                        'FK_DOCUMENT' => (int)$document_id
-//                    ]);
-//                    $collectionDocument->save();
-//                }
-//            }
-//
-//            foreach ($contacts as $contact_id) {
-//                if ((int)$contact_id > 0) {
-//                    $collectionContact = new CollectionContact([
-//                        'FK_DOCUMENT_COLLECTION' => $collection->ID,
-//                        'FK_CRM_CONTACT' => (int)$contact_id
-//                    ]);
-//                    $collectionContact->save();
-//
-//                    // Send mail to contact
-//                    $collectionContact->notifyContact();
-//                }
-//            }
-//
-//            return response()->json([
-//                'success' => true,
-//                'collection' => $collection
-//            ]);
-//        } else {
-//            return response()->json([
-//                'success' => false,
-//                'message' => KJLocalization::translate('Admin - Dossiers', 'Foutmelding documenten delen', 'Er zijn geen documenten of contactpersonen geselecteerd om deze actie uit te voeren')
-//            ]);
-//        }
-//    }
 
 }

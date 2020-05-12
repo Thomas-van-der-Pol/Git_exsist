@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\Settings\Host;
 use App\Models\Core\Host;
 use Illuminate\Http\Request;
 use KJ\Core\controllers\AdminBaseController;
+use KJLocalization;
 
 class HostController extends AdminBaseController
 {
@@ -55,10 +56,17 @@ class HostController extends AdminBaseController
             'HOSTNAME' => $name,
             'MAC_ADDRESS' => $macAddress
         ])->first();
-
-        return response()->json([
-            'success' => ($host != null),
-            'host' => $host
-        ], 200);
+        if($host != null) {
+            return response()->json([
+                'success' => true,
+                'host' => $host
+            ], 200);
+        }
+        else {
+            return response()->json([
+                'success' => false,
+                'message' => KJLocalization::translate('Admin - Facturen', 'Werkstation niet gevonden','Werkstation niet gevonden')
+            ], 200);
+        }
     }
 }

@@ -78,6 +78,13 @@ class DropdownValueController extends AdminBaseController
     {
         $datatable->addColumn('VALUE', function(DropdownValue $value) {
             return $value->VALUE;
+        })->addColumn('SEQUENCE', function(DropdownValue $value) {
+            if($value->SEQUENCE){
+                return $value->getSequenceFormattedAttribute();
+            }
+            else {
+                '';
+            }
         });
     }
 

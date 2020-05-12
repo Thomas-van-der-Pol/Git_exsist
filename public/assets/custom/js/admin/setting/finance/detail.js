@@ -1,4 +1,4 @@
-var logo_email_select;
+// var logo_email_select;
 
 $(document).ready(function() {
 
@@ -119,23 +119,55 @@ $(document).ready(function() {
         );
     });
 
-    $('body').on('click', '.deleteOverheadCharge', function(e) {
+    $('body').on('click', '.selectRelation', function(e) {
         e.preventDefault();
 
-        var id = $(this).data('id');
-        kjrequest('DELETE', '/admin/settings/finance/overhead_charge/' + id, null, false,
-            function(result) {
-                if (result.success) {
-                    ADM_LABEL_OVERHEAD_CHARGE_TABLE_configuration.datatableSelector.reload(null, false);
-                }
+        LastButton = $(this);
+
+        $.ajax({
+            url: '/admin/crm/relation/modal',
+            type: 'GET',
+            dataType: 'JSON',
+
+            success: function (data) {
+                // Load detail form
+                $('.kj_field_modal .modal-title').text(kjlocalization.get('admin_-_crm', 'selecteer_relatie'));
+                $('.kj_field_modal .modal-body').html(data.viewDetail);
+                loadDatatable($('#ADM_RELATION_TABLE'));
+                loadDropdowns();
+
+                // Modal showen
+                $('.kj_field_modal').modal('show');
+                $('.kj_field_modal').off('shown.bs.modal').on('shown.bs.modal', function() {
+                    ADM_RELATION_TABLE_configuration.datatableSelector.redraw();
+                    $('input[name=ADM_RELATION_FILTER_SEARCH]').focus();
+                });
             }
-        );
+        });
+    });
+
+    $('body').on('click', '.openRelation', function(e) {
+        e.preventDefault();
+
+        var id = $(this).closest('.md-form').next('input[type="hidden"]').val();
+        if (id > 0) {
+            // Open client in new window
+            var win = window.open('/admin/crm/relation/detail/' + id, '_blank');
+            if (win) {
+                // Browser has allowed it to be opened
+                win.focus();
+            } else {
+                // Browser has blocked it
+            }
+
+            return false;
+        }
     });
 });
 
 function afterLoadScreen(id, screen, data) {
     if (screen === 'default') {
-        logo_email_select = new KTAvatar('LOGO_EMAIL_SELECT');
+        // logo_email_select = new KTAvatar('LOGO_EMAIL_SELECT');
         loadUppyFileUpload($('#'+screen), ['.pdf'], '/admin/settings/finance/upload', '/admin/settings/finance/deleteFile/', '/document/request');
     }
     else if (screen === 'ledgers') {
@@ -144,7 +176,18 @@ function afterLoadScreen(id, screen, data) {
     else if (screen === 'vat') {
         loadDatatable($('#ADM_LABEL_VAT_TABLE'));
     }
-    else if (screen === 'overhead_charge') {
-        loadDatatable($('#ADM_LABEL_OVERHEAD_CHARGE_TABLE'));
-    }
 }
+
+$(document).on('ADM_RELATION_TABLEAfterSelect', function(e, selectedId, linkObj) {
+    // Waardes opzoeken
+    var name = linkObj.closest('tr').find('[data-field=NAME]').find('span').text();
+
+    var id_input = LastButton.closest('.md-form').next('input[type="hidden"]');
+    id_input.val(selectedId);
+
+    var text_input = LastButton.closest('div.form-group').find('input[type=text]');
+    text_input.val(name);
+
+    // Modal hidden
+    $('.kj_field_modal').modal('hide');
+});

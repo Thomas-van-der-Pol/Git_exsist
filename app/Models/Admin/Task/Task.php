@@ -96,7 +96,21 @@ class Task extends Model
     public function customMaps()
     {
         return $this->belongsToMany(CustomMap::class, 'TASK_USER_CUSTOM_MAP', 'FK_TASK', 'FK_USER_CUSTOM_MAP');
+    }
 
+    public function canFollowUp()
+    {
+        $follow_up = true;
+
+        if ($this->FK_TASK_LIST > 0) {
+            $follow_up = false;
+        }
+
+        if (($this->FK_ASSORTMENT_PRODUCT > 0) && (!$this->FK_PROJECT > 0)) {
+            $follow_up = false;
+        }
+
+        return $follow_up;
     }
 
     public function categoriesAsText()
@@ -119,7 +133,7 @@ class Task extends Model
     }
     public function getReminderDateDatePickerFormattedAttribute()
     {
-        if($this->DEADLINE) {
+        if($this->REMINDER_DATE) {
             return date(LanguageUtils::getDateFormat(), strtotime($this->REMINDER_DATE));
         } else {
             return '';
@@ -128,28 +142,40 @@ class Task extends Model
 
     public function getDeadlineFormattedAttribute()
     {
-//        if($this->DEADLINE) {
-//            $deadline = new Carbon($this->DEADLINE);
-//            $now = Carbon::now();
-//            $difference = ($deadline->diff($now)->days < 1)
-//                ? KJLocalization::translate('Datumtijd', 'vandaag in kleine letters', 'vandaag')
-//                : $deadline->diffForHumans($now);
-//
-//            return $difference;
-//        } else {
-//            return KJLocalization::translate('Admin - Taken', 'geen deadline', 'geen deadline');
-//        }
         if($this->TS_LASTMODIFIED_STATE) {
             return KJUtils::time_since(time() - strtotime($this->TS_LASTMODIFIED_STATE));
         } else {
             return '';
         }
+    }
 
+    public function getDeadlineDaysFormattedAttribute()
+    {
+        if($this->EXPIRATION_DATES) {
+            return $this->EXPIRATION_DATES.' '.KJLocalization::translate('Admin - Taken', 'dagen tot deadline', 'dagen tot deadline');
+        } else {
+            return '';
+        }
+    }
+
+    public function getReminderDaysFormattedAttribute()
+    {
+        if($this->REMEMBER_DATES) {
+            return $this->REMEMBER_DATES.' '.KJLocalization::translate('Admin - Taken', 'dagen tot herinnering', 'dagen tot herinnering');
+        } else {
+            return '';
+        }
     }
 
     public function getDoneFormattedAttribute()
     {
-        return ($this->DONE == true) ? KJLocalization::translate('Admin - Taken', 'Gereed', 'Gereed') : KJLocalization::translate('Admin - Taken', 'Openstaand', 'Openstaand');
+        if ($this->DONE == true) {
+            return KJLocalization::translate('Admin - Taken', 'Voltooid', 'Voltooid');
+        } else if ($this->STARTED == true) {
+            return KJLocalization::translate('Admin - Taken', 'Gestart', 'Gestart');
+        } else {
+            return KJLocalization::translate('Admin - Taken', 'Niet gestart', 'Niet gestart');
+        }
     }
 
     public function getCreatedDateFormattedAttribute()

@@ -40,24 +40,24 @@
                     </div>
 
                     <div class="col-xl-4 col-lg-6">
-                        <div class="md-form mt-3 mb-5">
-                            <div class="form-group">
-                                <div class="kt-avatar" id="LOGO_EMAIL_SELECT">
-                                    <div class="kt-avatar__holder" style="width: 350px; background-image: url({{ asset($item ? ((($item->LOGO_EMAIL ?? '') != '') ? config('app.cdn_url') . $item->LOGO_EMAIL : '/assets/theme/img/missing_logo_thumbnail.jpg') : '/assets/theme/img/missing_logo_thumbnail.jpg') }})"></div>
-                                    <label class="kt-avatar__upload default-label" data-toggle="kt-tooltip" title="" data-original-title="{{ KJLocalization::translate('Algemeen', 'Afbeelding veranderen', 'Afbeelding veranderen') }}">
-                                        <i class="fa fa-pen"></i>
-                                        <input type="file" name="LOGO_EMAIL">
-                                    </label>
-                                    <span class="kt-avatar__cancel" data-toggle="kt-tooltip" title="" data-original-title="{{ KJLocalization::translate('Algemeen', 'Afbeelding herstellen', 'Afbeelding herstellen') }}">
-                                        <i class="fa fa-times"></i>
-                                    </span>
-                                </div>
-                                <span class="form-text text-muted">{{ KJLocalization::translate('Algemeen', 'Afbeelding bestanden', 'Afbeelding bestanden') }}: *.jpg, *.jpeg, *.png</span>
-                                <label class="active" style="top: -14px;">{{ KJLocalization::translate('Admin - Financieel', 'Logo e-mail', 'Logo e-mail') }}</label>
-                            </div>
-                        </div>
+                        {{--<div class="md-form mt-3 mb-5">--}}
+                            {{--<div class="form-group">--}}
+                                {{--<div class="kt-avatar" id="LOGO_EMAIL_SELECT">--}}
+                                    {{--<div class="kt-avatar__holder" style="width: 350px; background-image: url({{ asset($item ? ((($item->getLogo() ?? '') != '') ? 'admin/settings/finance/getLogo/'.$item->ID : '/assets/theme/img/missing_logo_thumbnail.jpg') : '/assets/theme/img/missing_logo_thumbnail.jpg') }})"></div>--}}
+                                    {{--<label class="kt-avatar__upload default-label" data-toggle="kt-tooltip" title="" data-original-title="{{ KJLocalization::translate('Algemeen', 'Afbeelding veranderen', 'Afbeelding veranderen') }}">--}}
+                                        {{--<i class="fa fa-pen"></i>--}}
+                                        {{--<input type="file" name="LOGO_EMAIL">--}}
+                                    {{--</label>--}}
+                                    {{--<span class="kt-avatar__cancel" data-toggle="kt-tooltip" title="" data-original-title="{{ KJLocalization::translate('Algemeen', 'Afbeelding herstellen', 'Afbeelding herstellen') }}">--}}
+                                        {{--<i class="fa fa-times"></i>--}}
+                                    {{--</span>--}}
+                                {{--</div>--}}
+                                {{--<span class="form-text text-muted">{{ KJLocalization::translate('Algemeen', 'Afbeelding bestanden', 'Afbeelding bestanden') }}: *.jpg, *.jpeg, *.png</span>--}}
+                                {{--<label class="active" style="top: -14px;">{{ KJLocalization::translate('Admin - Financieel', 'Logo e-mail', 'Logo e-mail') }}</label>--}}
+                            {{--</div>--}}
+                        {{--</div>--}}
 
-                        <div class="form-group mt-3">
+                        <div class="form-group ">
                             <div class="md-form">
                                 <label class="active" style="top: -14px;">{{ KJLocalization::translate('Admin - Financieel', 'Briefpapier', 'Briefpapier') }}</label>
                             </div>

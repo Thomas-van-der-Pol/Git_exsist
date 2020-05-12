@@ -97,4 +97,9 @@ class Product extends Model
         }
     }
 
+    public function editable(){
+        $allInvoiceSchemes = $this->invoiceSchemes->whereNotNull('FK_FINANCE_INVOICE_LINE')->count();
+        return ($allInvoiceSchemes > 0) ? false : true;
+    }
+
 }

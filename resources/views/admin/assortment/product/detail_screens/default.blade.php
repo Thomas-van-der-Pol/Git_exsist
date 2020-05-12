@@ -2,7 +2,7 @@
     <div class="kt-widget__content">
         <div class="kt-widget__head">
             <a href="{{ \KJ\Localization\libraries\LanguageUtils::getUrl('admin/product') }}" class="back-button"></a>
-            <h4>{{ ( $item ? $item->title : KJLocalization::translate('Admin - Dossiers', 'Nieuw product of dienst', 'Nieuw product of dienst') ) }} <button type="button" class="btn btn-sm btn-icon setEditMode" data-target="default"><i class="fa fa-pen"></i></button></h4>
+            <h4>{{ ( $item ? $item->title : KJLocalization::translate('Admin - Interventies', 'Nieuwe interventie', 'Nieuwe interventie') ) }} <button type="button" class="btn btn-sm btn-icon setEditMode" data-target="default"><i class="fa fa-pen"></i></button></h4>
 
             <div class="kt-widget__action">
                 @if($item)
@@ -29,17 +29,16 @@
 
                     <div class="row">
                         <div class="col-xl-4 col-lg-6">
-                            {{ KJField::select('FK_ASSORTMENT_PRODUCT_TYPE', KJLocalization::translate('Admin - Dossiers', 'Producttype', 'Producttype'), $producttypes, ( $item ? $item->FK_ASSORTMENT_PRODUCT_TYPE : '' ), true, 0,['required', 'data-screen-mode' => 'read, edit']) }}
-                            {{ KJField::text('DESCRIPTION_INT', KJLocalization::translate('Admin - Dossiers', 'Omschrijving intern', 'Omschrijving intern'), ( $item ? $item->DESCRIPTION_INT : '' ), true, ['required', 'data-screen-mode' => 'read, edit']) }}
-                            {{ KJField::text('DESCRIPTION_EXT', KJLocalization::translate('Admin - Dossiers', 'Omschrijving extern', 'Omschrijving extern'), ( $item ? $item->DESCRIPTION_EXT : '' ), true, ['required', 'data-screen-mode' => 'read, edit']) }}
+                            {{ KJField::text('DESCRIPTION_INT', KJLocalization::translate('Admin - Interventies', 'Omschrijving intern', 'Omschrijving intern'), ( $item ? $item->DESCRIPTION_INT : '' ), true, ['required', 'data-screen-mode' => 'read, edit']) }}
+                            {{ KJField::text('DESCRIPTION_EXT', KJLocalization::translate('Admin - Interventies', 'Omschrijving extern', 'Omschrijving extern'), ( $item ? $item->DESCRIPTION_EXT : '' ), true, ['required', 'data-screen-mode' => 'read, edit']) }}
                         </div>
 
                         <div class="col-xl-4 col-lg-6">
-                            {{ KJField::text('PRICE_READ',KJLocalization::translate('Admin - Dossiers', 'Prijs exclusief', 'Prijs exclusief') . (( $item && ($item->FK_ASSORTMENT_PRODUCT_TYPE == config('product_type.TYPE_SERVICE')) ) ? ' '.KJLocalization::translate('Algemeen', 'per uur', ' per uur') : ''), $item ? $item->getPriceFormattedAttribute() : '', true, ['data-screen-mode' => 'read']) }}
-                            {{ KJField::number('PRICE',KJLocalization::translate('Admin - Dossiers', 'Prijs exclusief', 'Prijs exclusief') . (( $item && ($item->FK_ASSORTMENT_PRODUCT_TYPE == config('product_type.TYPE_SERVICE')) ) ? ' '.KJLocalization::translate('Algemeen', 'per uur', ' per uur') : ''), $item ? number_format((float)$item->PRICE,2, '.', '') : 0, true, ['required', 'data-screen-mode' => 'edit'], ['right' => [['type' => 'text', 'caption' => '&euro;']] ]) }}
+                            {{ KJField::text('PRICE_READ',KJLocalization::translate('Admin - Interventies', 'Prijs exclusief', 'Prijs exclusief'), $item ? $item->getPriceFormattedAttribute() : '', true, ['data-screen-mode' => 'read']) }}
+                            {{ KJField::number('PRICE',KJLocalization::translate('Admin - Interventies', 'Prijs exclusief', 'Prijs exclusief'), $item ? number_format((float)$item->PRICE,2, '.', '') : 0, true, ['required', 'data-screen-mode' => 'edit'], ['right' => [['type' => 'text', 'caption' => '&euro;']] ]) }}
 
-                            {{ KJField::select('FK_FINANCE_LEDGER', KJLocalization::translate('Admin - Dossiers', 'Grootboekrekening', 'Grootboekrekening'), $ledgers, ( $item ? $item->FK_FINANCE_LEDGER : '' ), true, 0, ['required', 'data-screen-mode' => 'read, edit']) }}
-                            {{ KJField::select('FK_FINANCE_VAT', KJLocalization::translate('Admin - Dossiers', 'Btw', 'Btw'), $vat, ( $item ? $item->FK_FINANCE_VAT : '' ), true, 0,['required', 'data-screen-mode' => 'read, edit']) }}
+                            {{ KJField::select('FK_FINANCE_LEDGER', KJLocalization::translate('Admin - Interventies', 'Grootboekrekening', 'Grootboekrekening'), $ledgers, ( $item ? $item->FK_FINANCE_LEDGER : '' ), true, 0, ['required', 'data-screen-mode' => 'read, edit']) }}
+                            {{ KJField::select('FK_FINANCE_VAT', KJLocalization::translate('Admin - Interventies', 'Btw', 'Btw'), $vat, ( $item ? $item->FK_FINANCE_VAT : '' ), true, 0,['required', 'data-screen-mode' => 'read, edit']) }}
                         </div>
                     </div>
 

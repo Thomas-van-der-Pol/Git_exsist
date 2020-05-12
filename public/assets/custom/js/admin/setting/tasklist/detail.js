@@ -59,7 +59,7 @@ $(document).ready(function() {
                 }
 
                 loadScreen(container, {
-                    url: '/admin/settings/tasklits/detailScreen',
+                    url: '/admin/settings/tasklist/detailScreen',
                     mode: 'read',
                     afterLoad: afterLoadScreen
                 });

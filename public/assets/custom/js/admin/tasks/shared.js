@@ -164,6 +164,18 @@ $(document).ready(function() {
             loadTaskScreen(container);
         }
     });
+
+    //Enter zoeken
+    $('body').on('change', '#ADM_TASK_FILTER_STATUS', function() {
+        // Store session
+        var value = $(this).val();
+        storeSession('ADM_TASK', 'ADM_TASK_FILTER_STATUS', value);
+
+        // Load items
+        var container = $(this).closest('.tab-pane');
+        loadTaskScreen(container);
+
+    });
     $('body').on('click', '.shiftDeadline, .connectEmployee, .copyToMap', function(e) {
         e.preventDefault();
 
@@ -302,6 +314,15 @@ function loadTaskScreen(object, beginDate = null, endDate = null)
         }
     }
 
+    // Hide/show deadline filter if necessary
+    if ($('.filterDeadline').length) {
+        if ((screen === 'today_tasks') || (screen === 'this_week_tasks') || (screen === 'this_month_tasks')) {
+            $('.filterDeadline').hide();
+        } else {
+            $('.filterDeadline').show();
+        }
+    }
+
     var category = $('#ADM_FILTER_TASK_FILTERS').val()|| '';
 
     if(beginDate == null && endDate == null){
@@ -310,6 +331,7 @@ function loadTaskScreen(object, beginDate = null, endDate = null)
     }
 
     var filter = ($('#ADM_TASK_FILTER_SEARCH').val() || '');
+    var active = ($('#ADM_TASK_FILTER_STATUS').val() || '');
 
     var formData = new FormData();
     formData.append('SCREEN', screen);
@@ -318,6 +340,7 @@ function loadTaskScreen(object, beginDate = null, endDate = null)
     formData.append('ASSIGNEE', assignee);
     formData.append('CATEGORY', category);
     formData.append('FILTER', filter);
+    formData.append('STATUS', active);
     formData.append('PAGE', page);
     formData.append('BEGINDATE', beginDate);
     formData.append('ENDDATE', endDate);
@@ -339,6 +362,7 @@ function loadTaskScreen(object, beginDate = null, endDate = null)
             if (data.success === true) {
                 screenEl.html(data.view);
                 KTApp.initTooltips();
+                loadDropdowns();
                 screenEl.find('#ADM_TASK_FILTER_SEARCH').focus();
                 KTApp.unblock(container);
             }

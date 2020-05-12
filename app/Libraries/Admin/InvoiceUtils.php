@@ -3,6 +3,7 @@
 namespace App\Libraries\Admin;
 
 use App\Mail\Admin\Invoice\NewInvoice;
+use App\Mail\Admin\Invoice\NewInvoiceCompensation;
 use App\Mail\Admin\Invoice\Reminder;
 use App\Models\Admin\Finance\Invoice;
 use App\Models\Core\Document;
@@ -32,12 +33,16 @@ class InvoiceUtils
         $invoice_report = self::generateReport($invoice, $state);
 
         // Generate extra documents when compensated
-        if ($invoice->project->COMPENSATED) {
-            // Generate compensation letter
-            $compensation_report = CompensationUtils::generateReport($invoice, $state);
+        if($invoice->project) {
+            if ($invoice->project->COMPENSATED) {
+                // Generate compensation letter
+                if ($invoice->label->proxy) {
+                    $compensation_report = CompensationUtils::generateReport($invoice, $state);
+                }
 
-            // Generate anonymized invoice
-            $invoice_anonymized_report = self::generateReport($invoice, $anonymize_state);
+                // Generate anonymized invoice
+                $invoice_anonymized_report = self::generateReport($invoice, $anonymize_state);
+            }
         }
 
         return [
@@ -58,15 +63,13 @@ class InvoiceUtils
         }
 
         $pdfPaper = $invoice->label->document;
-
+//        dd($invoice);
         $locale = App::getLocale();
         $localeId = config('language.langs')[array_search(strtoupper($locale), array_column(config('language.langs'), 'CODE'))]['ID'];
 
-        $paymentText = KJLocalization::translate('Admin - Facturen', 'Betalingstekst', 'Gaarne betalingen binnen :DAYS dagen op IBAN.: :IBAN_NUMBER, BIC: :BIC_NUMBER, Btw nr: :VAT_NUMBER', [
-            'DAYS' => $invoice->getPaymentCondition(),
-            'IBAN_NUMBER' => $invoice->label->IBAN_NUMBER,
-            'BIC_NUMBER' => $invoice->label->BIC_NUMBER,
-            'VAT_NUMBER' => $invoice->label->VAT_NUMBER
+        $paymentText = KJLocalization::translate('Admin - Facturen', 'Betalingstekst', 'Wij verzoeken u deze factuur voor :TODAY te voldoen op bankrekening :IBAN_NUMBER ten name van Exsist B.V. te Doetinchem, onder vermelding van het factuurnummer en uw debiteurnummer', [
+            'TODAY' => date('Y-m-d'),
+            'IBAN_NUMBER' => $invoice->label->IBAN_NUMBER
         ], $locale);
         $title = KJLocalization::translate('Admin - Facturen', 'Factuur', 'Factuur', [], $locale);
         if ($invoice->IS_ADVANCE) {
@@ -74,14 +77,20 @@ class InvoiceUtils
         }
 
         $is_anonymized = 0;
-        if ($invoice->project->COMPENSATED && in_array($state, ['anonymize', 'anonymize_final'])) {
-            $is_anonymized = 1;
+        if($invoice->project){
+            if ($invoice->project->COMPENSATED && in_array($state, ['anonymize', 'anonymize_final'])) {
+                $is_anonymized = 1;
+            }
+        }
+        $reportName = KJLocalization::translate('Admin - Facturen', 'Factuur', 'Factuur', [], $locale) . ' ' . ($invoice->NUMBER ?? KJLocalization::translate('Admin - Facturen', 'Concept', 'Concept', [], $locale));
+        if($is_anonymized === 1){
+            $reportName = KJLocalization::translate('Admin - Facturen', 'Geanonimiseerde kopie factuur', 'Geanonimiseerde kopie factuur', [], $locale) . ' ' . ($invoice->NUMBER ?? KJLocalization::translate('Admin - Facturen', 'Concept', 'Concept', [], $locale));
         }
 
         $data = array(
             'OutputFolder' => config('documentservice.output_folder') . '\\' . $invoice->getTable() . '\\' . $invoice->ID . '\\Facturen',
             'Sjabloon' => 'Invoice',
-            'ReportName' => KJLocalization::translate('Admin - Facturen', 'Factuur', 'Factuur', [], $locale) . ' ' . ($invoice->NUMBER ?? KJLocalization::translate('Admin - Facturen', 'Concept', 'Concept', [], $locale)) . (($is_anonymized === 1) ? ' - ' . KJLocalization::translate('Admin - Facturen', 'Geanonimiseerd', 'Geanonimiseerd', [], $locale) : ''),
+            'ReportName' => $reportName,
             'Statements' => array(
                 array(
                     'Identifier' => "CRM_RELATION",
@@ -95,7 +104,7 @@ class InvoiceUtils
                 ),
                 array(
                     'Identifier' => "CRM_RELATION_ADDRESS",
-                    'Query' => "SELECT CA.* FROM dbo.CRM_RELATION_ADDRESS CRA WITH (NOLOCK) JOIN CORE_ADDRESS CA WITH (NOLOCK) ON CA.ID = CRA.FK_CORE_ADDRESS WHERE CRA.ID = {1} AND CRA.ACTIVE = 1",
+                    'Query' => "SELECT CA.* , '" . KJLocalization::translate('Admin - Facturen', 'Nederland', 'Nederland', [], $locale) . "' AS COUNTRY FROM dbo.CRM_RELATION_ADDRESS CRA WITH (NOLOCK) JOIN CORE_ADDRESS CA WITH (NOLOCK) ON CA.ID = CRA.FK_CORE_ADDRESS WHERE CRA.ID = {1} AND CRA.ACTIVE = 1",
                     'Parameters' => [(int)$invoice->FK_CRM_RELATION_ADDRESS]
                 ),
                 array(
@@ -275,6 +284,24 @@ class InvoiceUtils
                 $fileRequest->save();
                 $fileRequest->refresh();
             }
+
+            // Send to proxy relation
+            if($invoice->project) {
+                if ($invoice->project->COMPENSATED) {
+                    if ($invoice->label->proxy) {
+                        if ($invoice->label->proxy->EMAILADDRESS && ($invoice->label->proxy->EMAILADDRESS != '')) {
+                            try {
+                                Mail::to($invoice->label->proxy->EMAILADDRESS)->send(new NewInvoiceCompensation($invoice));
+                            } catch (\Exception $exception) {
+                                return response()->json([
+                                    'success' => false,
+                                    'message' => KJLocalization::translate('Admin - Facturen', 'Versturen vergoeding mislukt', 'Het is niet gelukt om de vergoeding te versturen. Probeer het opnieuw.') . PHP_EOL . $exception->getMessage()
+                                ], 200);
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         // Status bijwerken
@@ -295,7 +322,12 @@ class InvoiceUtils
             ], 200);
         }
         else {
-            return true;
+            return [
+                'success' => true,
+                'print' => !$digital,
+                'url' => URL::to('/') . '/api/',
+                'fileRequest' => $fileRequest,
+            ];
         }
     }
 

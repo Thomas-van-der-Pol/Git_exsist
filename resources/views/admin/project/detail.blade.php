@@ -23,18 +23,6 @@
 @endsection
 
 @section('content')
-    @if($item && ($item->INVOICING_COMPLETE ?? false) == true)
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="alert alert-solid-success alert-bold" role="alert">
-                    <div class="alert-text">
-                        {{ KJLocalization::translate('Admin - Dossiers', 'Let op! Dit dossier is volledig gefactureerd en kan niet meer worden aangepast', 'Let op! Dit dossier is volledig gefactureerd en kan niet meer worden aangepast') }}.
-                    </div>
-                </div>
-            </div>
-        </div>
-    @endif
-
     <div class="row">
         @component('portlet::main', ['notitle' => true, 'colsize' => 12])
             <div class="kt-widget kt-widget--user-profile-3" id="default" data-id="{{ ( $item ? $item->ID : -1 ) }}"></div>
@@ -140,7 +128,7 @@
                                         </svg>
                                     </span>
                                     <span class="kt-widget__desc">
-                                        {{ KJLocalization::translate('Admin - Projecten', 'Documenten', 'Documenten') }}
+                                        {{ KJLocalization::translate('Admin - Dossiers', 'Documenten', 'Documenten') }}
                                     </span>
                                 </span>
                             </a>

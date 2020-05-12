@@ -19,7 +19,7 @@
             ]) }}
             {{ Form::hidden('FK_CRM_RELATION', $item ? $item->FK_CRM_RELATION : null) }}
 
-            {{ KJField::number('PRICE', KJLocalization::translate('Admin - Dossiers', 'Stukprijs exclusief', 'Stukprijs exclusief') . (( $item->product && ($item->product->FK_ASSORTMENT_PRODUCT_TYPE == config('product_type.TYPE_SERVICE')) ) ? ' '.KJLocalization::translate('Algemeen', 'per uur', ' per uur') : ''), $item ? number_format((float)$item->PRICE,2, '.', '') : 0, true, [], ['right' => [['type' => 'text', 'caption' => '&euro;']] ]) }}
+            {{ KJField::number('PRICE', KJLocalization::translate('Admin - Dossiers', 'Stukprijs exclusief', 'Stukprijs exclusief'), $item ? number_format((float)$item->PRICE,2, '.', '') : 0, true, [], ['right' => [['type' => 'text', 'caption' => '&euro;']] ]) }}
         </div>
     </div>
 

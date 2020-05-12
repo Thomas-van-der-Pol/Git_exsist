@@ -67,6 +67,24 @@ class InvoiceScheme extends Model
             return '';
         }
     }
+    public function getPriceMultipleAmountFormattedAttribute()
+    {
+        if ($this->project_product) {
+            return '€ ' . number_format($this->project_product->PRICE * $this->project_product->QUANTITY,2, LanguageUtils::getDecimalPoint(), LanguageUtils::getThousandsSeparator());
+        } else {
+            return '';
+        }
+    }
+
+    public function getPricePercentageMultipleAmountFormattedAttribute()
+    {
+        if ($this->project_product) {
+            return '€ ' . number_format(($this->project_product->PRICE * $this->project_product->QUANTITY) * ( $this->PERCENTAGE / 100),2, LanguageUtils::getDecimalPoint(), LanguageUtils::getThousandsSeparator());
+        } else {
+            return '';
+        }
+    }
+
     public function getPricePercentageFormattedAttributeFloat()
     {
 

@@ -102,6 +102,16 @@ class Invoice extends Model
         return $this->hasOne(Document::class, 'ID', 'FK_DOCUMENT');
     }
 
+    public function document_anonymized()
+    {
+        return $this->hasOne(Document::class, 'ID', 'FK_DOCUMENT_ANONYMIZED');
+    }
+
+    public function document_compensation_letter()
+    {
+        return $this->hasOne(Document::class, 'ID', 'FK_DOCUMENT_COMPENSATION_LETTER');
+    }
+
     public function label()
     {
         return $this->hasOne(Label::class, 'ID', 'FK_CORE_LABEL');

@@ -20,7 +20,6 @@
                         </span>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
@@ -30,7 +29,7 @@
     'ADM_RELATION_TABLE',
     array (
         'method' => 'GET',
-        'url' => '/admin/crm/relation/allDatatable',
+        'url' => '/admin/crm/relation/allDatatable' . (isset($type) ? '?type='.config('relation_type.'.$type) : ''),
         'pagination' => true,
         'sortable' => true,
         'searchinput' => '#ADM_RELATION_FILTER_SEARCH',

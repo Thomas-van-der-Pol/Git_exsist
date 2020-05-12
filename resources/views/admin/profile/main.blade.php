@@ -48,8 +48,8 @@
             {{ Form::hidden('ID', $item ? $item->ID : -1) }}
 
                 {{ KJField::password('USER_PASSWORD', KJLocalization::translate('Admin - Profiel', 'Huidig wachtwoord', 'Huidig wachtwoord'), ['required']) }}
-                {{ KJField::password('USER_PASSWORD_NEW', KJLocalization::translate('Admin - Profiel', 'Nieuwe wachtwoord', 'Nieuwe wachtwoord'), ['required', 'minlength' => 8]) }}
-                {{ KJField::password('USER_PASSWORD_NEW_CONFIRM', KJLocalization::translate('Admin - Profiel', 'Bevestig nieuwe wachtwoord', 'Bevestig nieuwe wachtwoord'), ['required', 'minlength' => 8]) }}
+                {{ KJField::password('USER_PASSWORD_NEW', KJLocalization::translate('Admin - Profiel', 'Nieuw wachtwoord', 'Nieuw wachtwoord'), ['required', 'minlength' => 8]) }}
+                {{ KJField::password('USER_PASSWORD_NEW_CONFIRM', KJLocalization::translate('Admin - Profiel', 'Bevestig nieuw wachtwoord', 'Bevestig nieuw wachtwoord'), ['required', 'minlength' => 8]) }}
 
                 {{ KJField::saveCancel('btnSave', 'btnCancel', false, [
                     'removeCancel' => true,

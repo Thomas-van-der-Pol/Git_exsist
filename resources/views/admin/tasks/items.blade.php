@@ -41,7 +41,6 @@
                                     </svg>
                                 </button>
                             @endif
-
                         @endif
 
                         <div class="form-inline md-form filter-icon">
@@ -56,6 +55,19 @@
                             ) }}
                         </div>
 
+                        <div class="form-inline md-form ml-3">
+                            {{ Form::select(
+                               'ADM_TASK_FILTER_STATUS',
+                                    $status,
+                                    \KJ\Core\libraries\SessionUtils::getSession('ADM_TASK', 'ADM_TASK_FILTER_STATUS', 1),
+                                    [
+                                        'class' => 'form-control filter kt-bootstrap-select hasSessionState',
+                                        'id'            => 'ADM_TASK_FILTER_STATUS',
+                                        'data-module'   => 'ADM_TASK',
+                                        'data-key'      => 'ADM_TASK_FILTER_STATUS'
+                                    ]
+                            ) }}
+                        </div>
                     </div>
                 </div>
                 <div>
@@ -113,13 +125,20 @@
                                             {{ $item->getContentFormattedAttribute($item->CONTENT, 100) }}
                                         </span>
                                     </div>
-                                    @if(!$item->FK_TASK_LIST)
+                                    @if($type != config('task_type.TYPE_TASKLIST') && $type != config('task_type.TYPE_PRODUCT'))
                                         <div class="mr-3" style="width: 105px;">
                                             {{ $item->getDoneFormattedAttribute() }}
                                         </div>
 
                                         <div class="mr-3"  style="width: 130px;">
                                             {{ $item->getDeadlineDatePickerFormattedAttribute() }}
+                                        </div>
+                                    @else
+                                        <div class="mr-3" style="width: 230px;">
+                                            {{ $item->getDeadlineDaysFormattedAttribute() }}
+                                        </div>
+                                        <div class="mr-3" style="width: 230px;">
+                                            {{ $item->getReminderDaysFormattedAttribute() }}
                                         </div>
                                     @endif
                                 </div>
@@ -137,7 +156,6 @@
                                     @endif
 
                                     @if($item->project && $type != config('task_type.TYPE_PROJECT'))
-
                                         <span class="kt-todo__label kt-badge kt-badge--unified-success kt-badge--bold kt-badge--inline">{{ $item->project->DESCRIPTION? $item->project->DESCRIPTION: $item->project->getTitleAttribute() }}</span>
                                     @endif
                                 @endif

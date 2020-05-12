@@ -24,7 +24,9 @@ array_push($alt_langs, '');
 foreach($alt_langs as $langCode) {
 
     //ALLEEN BACKEND (voorlopig)
-    Route::get('/', function () {return redirect('/admin/login');});
+    Route::get('/', function () {
+        return redirect('/admin');
+    });
 
     Route::prefix(strtolower($langCode))->group(function () {
         //ALLEEN BACKEND (voorlopig)

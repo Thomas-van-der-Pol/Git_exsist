@@ -10,13 +10,13 @@
 {{--    --}}{{--Required--}}{{-- {{ KJField::date('DATE',KJLocalization::translate('Admin - Dossiers', 'Dagen tellen tot facturatie datum', 'Dagen tellen tot facturatie datum'), $item ? $item->DAYS : 0, true, ['required', 'min' => 0, 'steps' => 1]) }}--}}
     {{--Required--}} {{ KJField::number('PERCENTAGE',KJLocalization::translate('Admin - Dossiers', 'Percentage', 'Percentage'), $item ? number_format($item->PERCENTAGE,2) : 0, true, ['required', 'max'=> 100, 'min' => 0, 'steps' => 1]) }}
         @if(!$item)
-            {{ KJField::select('FK_ASSORTMENT_PRODUCT', KJLocalization::translate('Admin - Dossiers', 'Interventie', 'Interventie'), $products, ( $item ? $item->product->title : '' ), true, 0, []) }}
+            {{ KJField::select('FK_ASSORTMENT_PRODUCT', KJLocalization::translate('Admin - Dossiers', 'Interventie', 'Interventie'), $products, ( $item ? $item->product->title : '' ), true, 0, ['required']) }}
         @else
             {{ KJField::text('FK_ASSORTMENT_PRODUCT', KJLocalization::translate('Admin - Dossiers', 'Interventie', 'Interventie'), ( $item ? $item->product->title : '' ), true, ['readonly', 'disabled']) }}
+            {{ KJField::text('INTERVENTION_PRICE', KJLocalization::translate('Admin - Dossiers', 'Stukprijs interventie', 'Stukprijs interventie'), ( $item ? $item->product->getPriceFormattedAttribute() : '' ), true, ['readonly', 'disabled']) }}
+            {{ KJField::text('SUBTOTAL_PERCENTAGE', KJLocalization::translate('Admin - Dossiers', 'Subtotaal', 'Subtotaal'), ( $item ? $item->getPricePercentageFormattedAttribute() : '' ), true, ['readonly', 'disabled']) }}
+            {{ KJField::text('INVOICE_NUMBER', KJLocalization::translate('Admin - Dossiers', 'Factuurnummer', 'Factuurnummer'), ( $item ? ($item->invoiceLine? $item->invoiceLine->invoice->NUMBER : ''):'' ), true, ['readonly', 'disabled']) }}
         @endif
-        {{ KJField::text('INTERVENTION_PRICE', KJLocalization::translate('Admin - Dossiers', 'Stukprijs interventie', 'Stukprijs interventie'), ( $item ? $item->product->getPriceFormattedAttribute() : '' ), true, ['readonly', 'disabled']) }}
-        {{ KJField::text('SUBTOTAL_PERCENTAGE', KJLocalization::translate('Admin - Dossiers', 'Subtotaal', 'Subtotaal'), ( $item ? $item->getPricePercentageFormattedAttribute() : '' ), true, ['readonly', 'disabled']) }}
-        {{ KJField::text('INVOICE_NUMBER', KJLocalization::translate('Admin - Dossiers', 'Factuurnummer', 'Factuurnummer'), ( $item ? ($item->invoiceLine? $item->invoiceLine->invoice->NUMBER : ''):'' ), true, ['readonly', 'disabled']) }}
 
     </div>
     @if(!$item)

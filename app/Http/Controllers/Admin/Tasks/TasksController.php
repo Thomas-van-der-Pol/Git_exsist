@@ -14,6 +14,8 @@ use App\Models\Admin\Task\TaskCustomMap;
 use App\Models\Admin\Task\TaskList;
 use App\Models\Admin\Task\TaskSubsription;
 use App\Models\Admin\User;
+use App\Models\Core\DropdownValue;
+use App\Models\Core\Translation;
 use Cassandra\Custom;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -69,14 +71,11 @@ class TasksController extends AdminBaseController {
         $projects = null;
         switch ($type) {
             case config('task_type.TYPE_RELATION'):
-//                @TODO DOMINIQUE: HAAL PROJECTEN (DOSSIERS) VAN DE HUIDIGE RELATIE OP
-//                $projectsOri = Project::where([
-//                    'ACTIVE' => true,
-//                    'FK_CRM_RELATION_REFERRER' => $pid
-//                ])->pluck('DESCRIPTION', 'ID');
-//                $projects = $none + $projectsOri->toArray();
-                $projects = $none;
-
+                $projectsOri = Project::where([
+                    'ACTIVE' => true,
+                    'FK_CRM_RELATION_EMPLOYER' => $pid
+                ])->pluck('DESCRIPTION', 'ID');
+                $projects = $none + $projectsOri->toArray();
                 break;
 
             case config('task_type.TYPE_PROJECT'):
@@ -122,7 +121,6 @@ class TasksController extends AdminBaseController {
             ]);
         }
         else{
-            //@todo: melding veranderen
             return response()->json(['error' => 'Unauthenticated.'], 401);
         }
 
@@ -195,7 +193,6 @@ class TasksController extends AdminBaseController {
 
     public function beforeDetailScreen(int $id, $item, $screen)
     {
-
         $bindings = [];
         $none = ['' => KJLocalization::translate('Algemeen', 'Niets geselecteerd', 'Niets geselecteerd') . '..'];
 
@@ -220,11 +217,13 @@ class TasksController extends AdminBaseController {
         return $bindings;
     }
 
-    protected function beforeRetrieveTasks($type, $pid, $page, $assignee,$category, $filter, $beginDate, $endDate) {
+    protected function beforeRetrieveTasks($type, $pid, $page, $assignee,$category, $filter, $beginDate, $endDate, $active) {
         $pageSize = 10;
+        $status = DropdownvalueUtils::getStatusDropdown(false);
         $bindings = [
             ['type', $type],
-            ['pid', $pid]
+            ['pid', $pid],
+            ['status', $status],
         ];
 
         $forcedUser = 0;
@@ -238,9 +237,10 @@ class TasksController extends AdminBaseController {
             case config('task_type.TYPE_OPEN'):
                 $items = Task::where([
                     'FK_TASK_LIST' => null,
-                    'ACTIVE' => true,
+                    'ACTIVE' => $active,
                     'DONE' => false
-                ]);
+                ])
+                ->orderBy('DEADLINE', 'ASC');
 
                 if (($assignee > 0) && ($forcedUser == 0)) {
                     $items->where([
@@ -252,9 +252,10 @@ class TasksController extends AdminBaseController {
             case config('task_type.TYPE_DONE'):
                 $items = Task::where([
                     'FK_TASK_LIST' => null,
-                    'ACTIVE' => true,
+                    'ACTIVE' => $active,
                     'DONE' => true
-                ]);
+                ])
+                ->orderBy('DEADLINE', 'ASC');
 
                 if (($assignee > 0) && ($forcedUser == 0)) {
                     $items->where([
@@ -271,7 +272,7 @@ class TasksController extends AdminBaseController {
                 $date = date('Y-m-d');
 
                 $items = Task::where([
-                    'ACTIVE' => true,
+                    'ACTIVE' => $active,
                     'FK_TASK_LIST' => null,
                     'DEADLINE' => $date,
                     'DONE' => false
@@ -290,7 +291,7 @@ class TasksController extends AdminBaseController {
                 $end_week = date('Y-m-d', strtotime('first sunday'));
 
                 $items = Task::whereBetween('DEADLINE', [$begin_week, $end_week])->where([
-                    'ACTIVE' => true,
+                    'ACTIVE' => $active,
                     'FK_TASK_LIST' => null,
                     'DONE' => false
                 ])
@@ -308,7 +309,7 @@ class TasksController extends AdminBaseController {
                 $end_month = date('Y-m-d', strtotime('last day of this month'));
 
                 $items = Task::whereBetween('DEADLINE', [$begin_month, $end_month])->where([
-                    'ACTIVE' => true,
+                    'ACTIVE' => $active,
                     'FK_TASK_LIST' => null,
                     'DONE' => false
                 ])
@@ -332,51 +333,59 @@ class TasksController extends AdminBaseController {
 
             case config('task_type.TYPE_RELATION'):
                 $items = Task::where([
-                    'ACTIVE' => true,
+                    'ACTIVE' => $active,
                     'DONE' => false,
-                    'FK_CRM_RELATION' => $pid
                 ])
+                ->where(function($filter) use ($pid) {
+                    $filter->where('FK_CRM_RELATION', $pid)
+                        ->orWhereHas('project', function ($projectFilter) use ($pid) {
+                            $projectFilter->where('FK_CRM_RELATION_EMPLOYER', $pid);
+                        });
+                })
                 ->orderBy('DEADLINE', 'ASC');
                 break;
 
             case config('task_type.TYPE_PROJECT'):
                 $items = Task::where([
-                    'ACTIVE' => true,
+                    'ACTIVE' => $active,
                     'DONE' => false,
-                    'FK_PROJECT' => $pid
+                    'FK_PROJECT' => $pid,
                 ])
                 ->orderBy('DEADLINE', 'ASC');
 
-                $project = Project::find($pid);
-                $blockEdit = (($project->INVOICING_COMPLETE ?? false) == true);
+//                $project = Project::find($pid);
+//                $blockEdit = (($project->INVOICING_COMPLETE ?? false) == true);
                 break;
 
             case config('task_type.TYPE_PRODUCT'):
                 $items = Task::where([
-                    'ACTIVE' => true,
+                    'ACTIVE' => $active,
                     'DONE' => false,
-                    'FK_ASSORTMENT_PRODUCT' => $pid
+                    'FK_ASSORTMENT_PRODUCT' => $pid,
+                    'FK_TASK_LIST' => null,
+                    'FK_CRM_RELATION' => null,
+                    'FK_PROJECT' => null,
                 ])
-                    ->orderBy('DEADLINE', 'ASC');
-
-                $project = Project::find($pid);
-                $blockEdit = (($project->INVOICING_COMPLETE ?? false) == true);
+                ->orderBy('DEADLINE', 'ASC');
                 break;
 
             case config('task_type.TYPE_TASKLIST'):
                 $items = Task::where([
-                    'ACTIVE' => true,
+                    'ACTIVE' => $active,
                     'DONE' => false,
-                    'FK_TASK_LIST' => $pid
+                    'FK_TASK_LIST' => $pid,
+                    'FK_ASSORTMENT_PRODUCT' => null,
+                    'FK_CRM_RELATION' => null,
+                    'FK_PROJECT' => null,
                 ])
                 ->orderBy('EXPIRATION_DATES', 'ASC');
                 break;
-            default:
 
+            default:
                 $customMap = CustomMap::where('NAME', $type)->first();
 
                 $items = Task::where([
-                    'ACTIVE' => true,
+                    'ACTIVE' => $active,
                     'DONE' => false,
                 ]);
 
@@ -456,6 +465,7 @@ class TasksController extends AdminBaseController {
     public function retrieveTasks(Request $request)
     {
         $type = ( $request->get('TYPE') ?? 0 );
+        $active = ( $request->get('STATUS') ?? true );
         $pid = ( $request->get('PID') ?? 0 );
         $screen = ( $request->get('SCREEN') ?? 0 );
         $assignee = ( $request->get('ASSIGNEE') ?? 0 );
@@ -464,7 +474,6 @@ class TasksController extends AdminBaseController {
         $page = ( $request->get('PAGE') ?? 0 );
         $beginDate = ( $request->get('BEGINDATE') ?? 0 );
         $endDate = ( $request->get('ENDDATE') ?? 0 );
-//        dd($beginDate, $endDate);
 
         $tasksSubs = TaskSubsription::where('ACTIVE', true)
             ->where('FK_CORE_USER', Auth::guard()->user()->ID)
@@ -476,7 +485,7 @@ class TasksController extends AdminBaseController {
             ->with('assignee', $assignee)
             ->with('tasksSubs', $tasksSubs);
 
-        $extraBindings = $this->beforeRetrieveTasks($type, $pid, $page, $assignee,$category, $filter, $beginDate, $endDate);
+        $extraBindings = $this->beforeRetrieveTasks($type, $pid, $page, $assignee,$category, $filter, $beginDate, $endDate, $active);
         if ($extraBindings != []) {
             foreach ($extraBindings as $binding) {
                 $view->with($binding[0], $binding[1]);
@@ -492,6 +501,37 @@ class TasksController extends AdminBaseController {
     protected function afterSave($item, $originalItem, Request $request, &$response)
     {
         $categoriesInput = json_decode($request->get('CATEGORIES'));
+        $localeId = config('app.locale_id') ? config('app.locale_id') : config('language.defaultLangID');
+
+        // Get values or create values for categories
+        $categories = collect($categoriesInput)->map(function($item) use ($localeId) {
+            $dropdownValue = DropdownValue::where('ACTIVE', true)->where('FK_CORE_DROPDOWNTYPE', config('dropdown_type.TYPE_TASK_CATEGORY'))
+                ->whereHas('translations', function($filter) use ($localeId, $item) {
+                    $filter->where([
+                        'FK_CORE_LANGUAGE' => $localeId,
+                        'TEXT' => $item->value
+                    ]);
+                })->first();
+
+            if (!$dropdownValue) {
+                // Add new
+                $dropdownValue = new DropdownValue([
+                    'ACTIVE' => true,
+                    'FK_CORE_DROPDOWNTYPE' => config('dropdown_type.TYPE_TASK_CATEGORY')
+                ]);
+                $dropdownValue->save();
+
+                // Refresh for translation key
+                $dropdownValue->refresh();
+
+                // Update translations
+                Translation::where('FK_CORE_TRANSLATION_KEY', $dropdownValue->TL_VALUE)
+                    ->update(['TEXT' => $item->value]);
+            }
+
+            return (object)['id' => ($dropdownValue->ID ?? null)];
+        });
+
         $progress = $request->get('PROGRESS');
         // Check if done
 
@@ -523,22 +563,20 @@ class TasksController extends AdminBaseController {
         $item->save();
 
         if($categoriesInput) {
-            if (count($categoriesInput) > 0) {
-                foreach ($categoriesInput as $categoryInput) {
-                    $categories = DropdownvalueUtils::getDropdown(config('dropdown_type.TYPE_TASK_CATEGORY'));
-                    $taskCategoryID = array_search($categoryInput->value, $categories);
-                    foreach ($item->categories as $category) {
-                        $category->delete();
-                    }
-                    if ($taskCategoryID != null && $taskCategoryID > 0) {
-                        $category = new Filter([
-                            'FK_CORE_DROPDOWNVALUE' => $taskCategoryID
-                        ]);
-                        $item->categories()->save($category);
-                    }
+            // Delete unused categories from task
+            Filter::where('FK_TASK', $item->ID)->whereNotIn('FK_CORE_DROPDOWNVALUE', $categories->pluck('id')->toArray())->delete();
+
+            // Add new categories
+            foreach ($categories as $category) {
+                if (($category->id ?? 0) > 0) {
+                    Filter::firstOrCreate([
+                        'FK_TASK' => $item->ID,
+                        'FK_CORE_DROPDOWNVALUE' => $category->id
+                    ]);
                 }
             }
         }
+
         // Check if assignee has been changed
         if (($item->FK_CORE_USER_ASSIGNEE) && ($item->FK_CORE_USER_ASSIGNEE != ($originalItem->FK_CORE_USER_ASSIGNEE ?? null))) {
             // Insert notification

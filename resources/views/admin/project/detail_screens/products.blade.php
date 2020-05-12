@@ -1,50 +1,28 @@
+{{--@todo: Wanneer BenFit add button in column row klaar is, hier toepassen wanneer akkoord in overleg.--}}
 <div class="kt-portlet__body">
     <div class="kt-form kt-form--label-right">
         <div class="row align-items-center">
-            <div class="col-auto order-2 order-xl-1">
-                <div class="row align-items-center">
-                    <div class="col-auto">
-                        <div class="form-inline md-form filter-icon">
-                            {{ Form::text(
-                                'ADM_PROJECT_PRODUCT_FILTER_SEARCH',
-                                '',
-                                array(
-                                    'class'         => 'form-control filter',
-                                    'placeholder'   => KJLocalization::translate('Algemeen', 'Zoeken', 'Zoeken').'...',
-                                    'id'            => 'ADM_PROJECT_PRODUCT_FILTER_SEARCH',
-                                )
-                            ) }}
-                        </div>
-                    </div>
-                </div>
+            <div class="col order-2 order-xl-2">
+                <a href="javascript:;" id="addProducts" class="btn btn-success btn-sm btn-upper pull-right" data-id="{{ $item->ID }}">
+                    <i class="fa fa-plus-square"></i>
+                    {{ KJLocalization::translate('Admin - CRM', 'Interventies', 'Interventies')}}
+                </a>
             </div>
-
-            @if(($item->INVOICING_COMPLETE ?? false) == false)
-                <div class="col order-2 order-xl-2">
-                    <a href="javascript:;" id="addProducts" class="btn btn-success btn-sm btn-upper pull-right" data-id="{{ $item->ID }}" data-type="{{ config('product_type.TYPE_PRODUCT') }}">
-                        <i class="fa fa-plus-square"></i>
-                        {{ KJLocalization::translate('Admin - CRM', 'Interventies', 'Interventies')}}
-                    </a>
-                </div>
-            @endif
         </div>
     </div>
 </div>
 
 <div class="kt-separator m-0"></div>
 
-@php
-    $customEditButton = [];
 
-    if (($item->INVOICING_COMPLETE ?? false) == false) {
-        $customEditButton = array(
-            'end' => [
-                [
-                    'HTML'  => '<a href="javascript:;" data-id="{idField}" data-type="'.config('product_type.TYPE_PRODUCT').'" class="btn btn-bold btn-label-danger btn-sm btn-icon deleteProduct" title="' . KJLocalization::translate("Algemeen", "Verwijderen", "Verwijderen") . '" ><i class="la la-close""></i></a>'
-                ]
+@php
+    $customEditButton = array(
+        'end' => [
+            [
+                'HTML'  => '<a href="javascript:;" data-id="{idField}" class="btn btn-bold btn-label-danger btn-sm btn-icon deleteProduct" title="' . KJLocalization::translate("Algemeen", "Verwijderen", "Verwijderen") . '" ><i class="la la-close""></i></a>'
             ]
-        );
-    }
+        ]
+    );
 @endphp
 
 {{ KJDatatable::create(
@@ -52,10 +30,9 @@
     array (
         'method' => 'GET',
         'url' => '/admin/project/product/allByProjectProductDatatable/' . $item->ID,
-        'editable' => (($item->INVOICING_COMPLETE ?? false) == false),
+        'editable' => true,
         'editURL' => '/admin/project/product/detailRendered/',
         'saveURL' => '/admin/project/product/save',
-        'searchinput' => '#ADM_PROJECT_PRODUCT_FILTER_SEARCH',
         'parentid' => $item->ID,
         'blockEditColumn' => 'BLOCKED',
         'pagination' => false,
@@ -101,3 +78,4 @@
         </div>
     </div>
 </div>
+

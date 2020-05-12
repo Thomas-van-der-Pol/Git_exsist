@@ -27,12 +27,12 @@
         'columns' => array(
             array(
                 'field' => 'DAYS',
-                'title' => KJLocalization::translate('Admin - Dossiers', 'Dagen tellen tot facturatie datum', 'Dagen tellen tot facturatie datum'),
+                'title' => KJLocalization::translate('Admin - Interventies', 'Dagen tellen tot facturatie datum', 'Dagen tellen tot facturatie datum'),
 
             ),
             array(
                 'field' => 'PERCENTAGE',
-                'title' => KJLocalization::translate('Admin - Dossiers', 'Percentage', 'Percentage')
+                'title' => KJLocalization::translate('Admin - Interventies', 'Percentage', 'Percentage')
             )
         ),
         'customEditButtons' => array(

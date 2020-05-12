@@ -8,6 +8,7 @@ $(document).ready(function() {
         {'Geen regels geselecteerd': 'Geen regels geselecteerd'},
         {'Bericht selectie factureren': 'Weet je zeker dat je deze facturen definitief wil versturen? Dit actie is niet ongedaan te maken.'},
         {'Bericht selectie herinnering': 'Weet je zeker dat je deze facturen een herinnering wil versturen? Dit actie is niet ongedaan te maken.'},
+        {'Bericht selectie printen': 'Let op: enkele facturen worden geprint omdat digitaal factureren niet is ingeschakeld. Wilt u doorgaan met printen?'},
     ]);
 
     // Load active sub screen
@@ -68,14 +69,96 @@ $(document).ready(function() {
                         if (data.success === true)
                         {
                             stopKJLoader();
-                            swal.fire({
-                                text: data.message,
-                                type: "success",
-                                timer: 1500
-                            }).then(function(result) {
-                                var configuration = window['ADM_INVOICE_TABLE_' + loadedType + '_configuration'];
-                                configuration.datatableSelector.reload(null, false);
-                            });
+
+                            // Check printable invoices
+                            if (data.print_invoices.length > 0)
+                            {
+                                setTimeout(function () {
+                                    // Confirmation vragen
+                                    swal.fire({
+                                        text: kjlocalization.get('admin_-_facturen', 'bericht_selectie_printen'),
+                                        type: 'warning',
+                                        showCancelButton: true,
+                                        confirmButtonText: kjlocalization.get('algemeen', 'doorgaan'),
+                                        cancelButtonText: kjlocalization.get('algemeen', 'annuleren')
+                                    }).then(function(result) {
+                                        if (result.value) {
+                                            if (kjcommunicator.installed === true) {
+                                                kjcommunicator.getComputer(function (communicatorData) {
+                                                    if ((communicatorData.name !== '') && (communicatorData.name !== undefined)) {
+                                                        var subFormData = new FormData();
+                                                        subFormData.append('name', communicatorData.name);
+                                                        subFormData.append('mac', communicatorData.macAddress);
+
+                                                        // Juiste printer ophalen
+                                                        kjrequest('POST', '/admin/settings/host/getPrintersByHost', subFormData, true,
+                                                            function(printerData) {
+                                                                var printer = printerData.host.PRINTER_INVOICE;
+
+                                                                // Loading
+                                                                startKJLoader({
+                                                                    funVersion: true,
+                                                                    CrazyLoader: true,
+                                                                    customContent: kjlocalization.get('erp_communicator', 'melding_genereren')
+                                                                });
+
+                                                                if ((printer !== '') && (printer !== undefined)) {
+
+                                                                    $.each(data.print_invoices, function(index, document) {
+                                                                        kjcommunicator.printDocument(
+                                                                            printer,
+                                                                            document.url,
+                                                                            document.fileRequest.TOKEN,
+                                                                            1
+                                                                        );
+                                                                    });
+                                                                } else {
+                                                                    swal.fire({
+                                                                        text: kjlocalization.get('erp_facturen', 'printer_niet_ingesteld'),
+                                                                        type: 'error'
+                                                                    }).then(function() {
+                                                                        $.each(data.print_invoices, function(index, document) {
+                                                                            downloadFileAjax('GET', '/document/download?token=' + document.fileRequest.TOKEN);
+                                                                        });
+                                                                    });
+                                                                }
+
+                                                                stopKJLoader();
+                                                            },
+                                                            null
+                                                        );
+                                                    } else {
+                                                        swal.fire({
+                                                            text: kjlocalization.get('erp_communicator', 'bericht_communicator_fout'),
+                                                            type: 'error'
+                                                        });
+                                                    }
+                                                });
+                                            } else {
+                                                $.each(data.print_invoices, function(index, document) {
+                                                    downloadFileAjax('GET', '/document/download?token=' + document.fileRequest.TOKEN);
+                                                });
+                                            }
+                                        } else if (result.dismiss === 'cancel') {
+                                            // return false;
+                                        }
+
+                                        // Refresh table
+                                        var configuration = window['ADM_INVOICE_TABLE_' + loadedType + '_configuration'];
+                                        configuration.datatableSelector.reload(null, false);
+                                    });
+                                }, 500);
+                            } else {
+                                // Refresh table
+                                swal.fire({
+                                    text: data.message,
+                                    type: "success",
+                                    timer: 1500
+                                }).then(function (result) {
+                                    var configuration = window['ADM_INVOICE_TABLE_' + loadedType + '_configuration'];
+                                    configuration.datatableSelector.reload(null, false);
+                                });
+                            }
                         }
                         else
                         {

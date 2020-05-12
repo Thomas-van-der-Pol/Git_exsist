@@ -12,7 +12,8 @@ return [
     'TAKEN_INZIEN'                  => 5,
     'FACTURATIE'                    => 6,
     'CRM'                           => 7,
-    'PRODUCTEN_DIENSTEN'            => 8,
+    'INTERVENTIES'                  => 8,
     'DOSSIERS'                      => 9,
     'TAKEN'                         => 12,
+    'FACTURATIE_BOEKHOUDING'        => 14,
 ];

@@ -4,24 +4,22 @@
             <a href="{{ \KJ\Localization\libraries\LanguageUtils::getUrl('admin/project') }}" class="back-button"></a>
             <h4>
                 {{ ($item ? ($item->DESCRIPTION? $item->DESCRIPTION : $item->getTitleAttribute()) : KJLocalization::translate('Admin - Dossiers', 'Nieuw dossier', 'Nieuw dossier')) }}
-                @if(($item->INVOICING_COMPLETE ?? false) == false)
-                    <button type="button" class="btn btn-sm btn-icon setEditMode" data-target="default"><i class="fa fa-pen"></i></button>
-                @endif
+                <button type="button" class="btn btn-sm btn-icon setEditMode" data-target="default"><i class="fa fa-pen"></i></button>
             </h4>
 
             <div class="kt-widget__action">
-                @if($item && (($item->INVOICING_COMPLETE ?? false) == false))
-                    {{-- STATUS --}}
-                    <div class="btn-group btn-group" role="group">
-                        @if($previousWorkflowstate)
-                            <button type="button" class="btn btn-group-item btn-secondary btn-sm btn-upper processWorkflowstate kt-margin-b-5-tablet-and-mobile" data-id="{{ $item->ID }}" data-state="{{ $previousWorkflowstate->ID }}">{{ KJLocalization::translate('Admin - Dossiers', 'Terug naar', 'Terug naar') }}: {{ $previousWorkflowstate->DESCRIPTION }}</button>
-                        @endif
+                {{-- STATUS --}}
+                <div class="btn-group btn-group" role="group">
+                    @if($previousWorkflowstate)
+                        <button type="button" class="btn btn-group-item btn-secondary btn-sm btn-upper processWorkflowstate kt-margin-b-5-tablet-and-mobile" data-id="{{ $item->ID }}" data-state="{{ $previousWorkflowstate->ID }}">{{ KJLocalization::translate('Admin - Dossiers', 'Terug naar', 'Terug naar') }}: {{ $previousWorkflowstate->DESCRIPTION }}</button>
+                    @endif
 
-                        @if($nextWorkflowstate)
-                            <button type="button" class="btn btn-group-item btn-secondary btn-sm btn-upper processWorkflowstate kt-margin-b-5-tablet-and-mobile" data-id="{{ $item->ID }}" data-state="{{ $nextWorkflowstate->ID }}">{{ $item->workflowstate->ACTION_DESCRIPTION }}</button>
-                        @endif
-                    </div>
+                    @if($nextWorkflowstate)
+                        <button type="button" class="btn btn-group-item btn-secondary btn-sm btn-upper processWorkflowstate kt-margin-b-5-tablet-and-mobile" data-id="{{ $item->ID }}" data-state="{{ $nextWorkflowstate->ID }}">{{ $item->workflowstate->ACTION_DESCRIPTION }}</button>
+                    @endif
+                </div>
 
+                @if($item)
                     @if($item->ACTIVE ?? true)
                         <button type="button" class="btn btn-danger btn-sm btn-upper activateItem" data-id="{{ $item->ID }}">{{ KJLocalization::translate('Algemeen', 'Archiveren', 'Archiveren') }}</button>
                     @else
@@ -73,7 +71,7 @@
                                     $relationButtons[] = ['type' => 'button', 'caption' => KJLocalization::translate('Algemeen', 'Openen', 'Openen'), 'class' => 'btn btn-dark btn-sm openRelation'];
                                 }
                             @endphp
-                            {{--Required--}} {{ KJField::text('REFERRER_NAME', KJLocalization::translate('Admin - Dossiers', 'Verwijzer', 'Verwijzer'), $item ? ($item->referrer ? $item->referrer->title : '') : '-', true, ['readonly', 'required', 'data-screen-mode' => 'edit', 'data-update' => 'FK_CRM_CONTACT_REFERRER'], [
+                            {{--Required--}} {{ KJField::text('REFERRER_NAME', KJLocalization::translate('Admin - Dossiers', 'Verwijzer', 'Verwijzer'), $item ? ($item->referrer ? $item->referrer->title : '') : '-', true, ['readonly', 'required', 'data-screen-mode' => 'read, edit', 'data-update' => 'FK_CRM_CONTACT_REFERRER'], [
                                  'right' => $relationButtons
                             ]) }}
                             {{ Form::hidden('FK_CRM_RELATION_REFERRER', $item ? $item->FK_CRM_RELATION_REFERRER : null, ['required']) }}
@@ -97,10 +95,11 @@
                         </div>
 
                         <div class="col-xl-4 col-lg-6">
-                            {{ KJField::checkbox('COMPENSATED', KJLocalization::translate('Admin - Dossiers', 'Wordt vergoed', 'Wordt vergoed'), true, ( $item ? $item->COMPENSATED : false ), true, ['data-screen-mode' => 'read, edit']) }}
+
+                            {{ KJField::checkbox('COMPENSATED', KJLocalization::translate('Admin - Dossiers', 'Wordt vergoed', 'Wordt vergoed'), true, ( $item ? $item->COMPENSATED : false ), true, ['data-screen-mode' => 'read '.($item && (($item->INVOICING_COMPLETE ?? false) == false) ? ', edit' : '')]) }}
 
                             {{ KJField::text('COMPENSATION_PERCENTAGE_READ', KJLocalization::translate('Admin - Dossiers', 'Vergoedingspercentage', 'Vergoedingspercentage'), $item ? $item->getCompensationPercentageFormattedAttribute() : '', true, ['data-screen-mode' => 'read']) }}
-                            {{ KJField::number('COMPENSATION_PERCENTAGE', KJLocalization::translate('Admin - Dossiers', 'Vergoedingspercentage', 'Vergoedingspercentage'), $item ? $item->getCompensationPercentageDecimalAttribute() : '', true, ['data-screen-mode' => 'edit'], [
+                            {{ KJField::number('COMPENSATION_PERCENTAGE', KJLocalization::translate('Admin - Dossiers', 'Vergoedingspercentage', 'Vergoedingspercentage'), $item ? $item->getCompensationPercentageDecimalAttribute() : '', true, ['data-screen-mode' => ($item && (($item->INVOICING_COMPLETE ?? false) == false) ? 'edit': '')], [
                                 'right' => [['type' => 'text', 'caption' => '%']]]
                             ) }}
 

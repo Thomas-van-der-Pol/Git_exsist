@@ -272,7 +272,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-4">
+                                        <div class="col-4 filterDeadline">
                                             <div class="kt-form__group kt-form__group--inline">
                                                 <div class="kt-form__label">
                                                     {{ Form::label('ADM_FILTER_LBL_TASK_DATE', KJLocalization::translate('Admin - Taken', 'Deadline', 'Deadline'). ':') }}

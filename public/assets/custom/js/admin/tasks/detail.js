@@ -6,11 +6,24 @@ $(document).ready(function() {
         afterLoad: afterLoadScreen
     });
 
+    // Edit action
+    $('body').on('click', '.setEditMode', function(e) {
+        e.preventDefault();
+
+        var target = $(this).data('target');
+        setScreenMode($('#' + target), 'edit');
+    });
+
     // Cancel action
     $('body').on('click', '#btnCancelTask', function(e) {
         e.preventDefault();
 
-        window.location = '/admin/tasks';
+        var container = $(this).closest('.tab-pane');
+        if (!container.length) {
+            container = $(this).closest('.kt-widget');
+        }
+
+        setScreenMode(container, 'read');
     });
 
     $('body').on('click', '#btnSaveTask', function(e) {
