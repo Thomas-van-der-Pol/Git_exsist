@@ -75,14 +75,15 @@ return [
             'root'     => env('FTP_ROOT')
         ],
 
-        'publicftp' => [
+        'ftp_docservice' => [
             'driver'   => 'ftp',
-            'host'     => env('FTP_PUBLIC_HOST'),
-            'port'     => env('FTP_PUBLIC_PORT'),
-            'username' => env('FTP_PUBLIC_USERNAME'),
-            'password' => env('FTP_PUBLIC_PASSWORD'),
+            'host'     => env('FTP_DOCSERVICE_HOST'),
+            'port'     => env('FTP_DOCSERVICE_PORT'),
+            'username' => env('FTP_DOCSERVICE_USERNAME'),
+            'password' => env('FTP_DOCSERVICE_PASSWORD'),
             'passive'  => true,
-            'root'     => env('FTP_PUBLIC_ROOT')
+            'ssl'      => env('FTP_DOCSERVICE_SSL'),
+            'root'     => env('FTP_DOCSERVICE_ROOT')
         ],
 
     ],

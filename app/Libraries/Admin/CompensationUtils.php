@@ -80,6 +80,14 @@ class CompensationUtils
         $resultArray = is_array($result) ? $result : json_decode($result->getContent(), true);
 
         if ($resultArray['statusCode'] == 200) {
+            // Move file from storage ftp to private ftp
+            if (config('filesystems.disks.ftp.host') != config('filesystems.disks.ftp_docservice.host')) {
+                Storage::disk('ftp')->put($resultArray['filename'], Storage::disk('ftp_docservice')->get($resultArray['filename']));
+
+                // Delete file from storage ftp
+                Storage::disk('ftp_docservice')->delete($resultArray['filename']);
+            }
+
             // Get file info
             $documentInfo = pathinfo($resultArray['filename']);
 
