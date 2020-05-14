@@ -357,3 +357,17 @@
 #breadcrumb-dropzone .breadcrumb_item.ui-droppable-hover a:after {
     border-left-color: var(--kj-fris-blauw);
 }
+
+/* Datatable fix heights */
+@-moz-document url-prefix() {
+    td[data-field='Actions'] span {
+        width: 36px !important;
+        margin-right: -16px;
+    }
+}
+td[data-field='Actions']{
+    padding-left: 10px !important;
+}
+th[data-field='Actions']{
+    padding-left: 10px !important;
+}
