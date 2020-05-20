@@ -53,8 +53,8 @@
                                 {{ KJField::date('DEADLINE', KJLocalization::translate('Admin - Taken', 'Deadline', 'Deadline'), ($item ? $item->getDeadlineDatePickerFormattedAttribute() : ''), ['data-date-start-date' => '-0d', 'data-locale-format' => \KJ\Localization\libraries\LanguageUtils::getJSDatePickerFormat()]) }}
                                 {{ KJField::date('REMINDER_DATE', KJLocalization::translate('Admin - Taken', 'Herinneringsdatum', 'Herinneringsdatum'), ($item ? $item->getReminderDateDatePickerFormattedAttribute() : ''), ['data-date-start-date' => '-0d', 'data-locale-format' => \KJ\Localization\libraries\LanguageUtils::getJSDatePickerFormat()]) }}
                             @else
-                                {{-- Required --}} {{ KJField::number('REMEMBER_DATES',KJLocalization::translate('Admin - Taken', 'Herinneringsdagen', 'Herinneringsdagen'), $item ? $item->REMEMBER_DATES : 0, true, ['required', 'min' => 0, 'steps' => 1]) }}
-                                {{-- Required --}} {{ KJField::number('EXPIRATION_DATES',KJLocalization::translate('Admin - Taken', 'Vervaldagen', 'Vervaldagen'), $item ? $item->EXPIRATION_DATES : 0, true, ['required', 'min' => 0, 'steps' => 1]) }}
+                                {{-- Required --}} {{ KJField::number('REMEMBER_DATES',KJLocalization::translate('Admin - Taken', 'Herinneringsdagen', 'Herinneringsdagen'), $item ? $item->REMEMBER_DATES : 0, true, ['required', 'min' => 0, 'step' => 1]) }}
+                                {{-- Required --}} {{ KJField::number('EXPIRATION_DATES',KJLocalization::translate('Admin - Taken', 'Vervaldagen', 'Vervaldagen'), $item ? $item->EXPIRATION_DATES : 0, true, ['required', 'min' => 0, 'step' => 1]) }}
                             @endif
                         </div>
 

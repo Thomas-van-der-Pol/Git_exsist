@@ -147,7 +147,7 @@ class InvoiceUtils
                     'Query' => "SELECT " .
                         " '" . $title . "' AS TITLE, " .
                         " CAST(".$is_anonymized." AS BIT) AS IS_ANONYMIZED, " .
-                        " '" . KJLocalization::translate('Admin - Facturen', 'Prijs', 'Prijs', [], $locale) . "' AS PRIJS, " .
+                        " '" . KJLocalization::translate('Admin - Facturen', 'Stukprijs', 'Stukprijs', [], $locale) . "' AS PRIJS, " .
                         " '" . KJLocalization::translate('Admin - Facturen', 'Aantal', 'Aantal', [], $locale) . "' AS AANTAL, " .
                         " '" . KJLocalization::translate('Admin - Facturen', 'Totaal', 'Totaal', [], $locale) . "' AS TOTAAL, " .
                         " '" . KJLocalization::translate('Admin - Facturen', 'Omschrijving', 'Omschrijving', [], $locale) . "' AS OMSCHRIJVING, " .

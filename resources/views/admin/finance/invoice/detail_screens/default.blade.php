@@ -89,7 +89,7 @@
                             <div class="md-form">
                                 <p data-screen-mode="read">
                                     <label class="active" style="top: -12px;">{{ KJLocalization::translate('Admin - Facturen', 'Adres', 'Adres') }}</label>
-                                    {!! ($item && $item->address) ? nl2br($item->address->fullAddress) : '' !!}
+                                    {!! ($item && $item->address) ? nl2br($item->address->fullAddress) : '-' !!}
                                 </p>
                             </div>
 

@@ -105,7 +105,7 @@ class TasksController extends AdminBaseController {
             $none = ['' => KJLocalization::translate('Algemeen', 'Niets geselecteerd', 'Niets geselecteerd') . '..'];
             $project = Project::find(( $request->get('pid') ?? 0 ));
 
-            $taskListsOri = TaskList::all()->pluck('NAME', 'ID');
+            $taskListsOri = TaskList::all()->sortBy('NAME')->pluck('NAME', 'ID');
             $contactsOri = User::all()->where('ACTIVE',true)->pluck('FULLNAME', 'ID');
             $contacts = $none + $contactsOri->toArray();
             $taskLists = $none + $taskListsOri->toArray();
@@ -172,7 +172,7 @@ class TasksController extends AdminBaseController {
         $projectID = $request->get('FK_PROJECT');
         $startDate = $request->get('STARTDATE');
         $taskListID = $request->get('FK_TASK_LIST');
-        $tasks = TaskList::find($taskListID)->tasks;
+        $tasks = TaskList::find($taskListID)->tasks->where('ACTIVE', true);
         foreach ($tasks as $task){
             $newTask = $task->replicate();
             $newTask->FK_TASK_LIST = null;
