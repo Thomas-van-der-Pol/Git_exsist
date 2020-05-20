@@ -102,6 +102,14 @@
                             array(
                                 'field' => 'EMAILADDRESS',
                                 'title' => KJLocalization::translate('Admin - Werknemers', 'E-mailadres', 'E-mailadres')
+                            ),
+                            array(
+                                'field' => 'PHONE_MOBILE',
+                                'title' => KJLocalization::translate('Admin - Werknemers', 'Mobiel', 'Mobiel')
+                            ),
+                            array(
+                                'field' => 'PHONE_EMERGENCY',
+                                'title' => KJLocalization::translate('Admin - Werknemers', 'Telefoon noodgeval', 'Telefoon noodgeval')
                             )
                         ),
                         'filters' => array(

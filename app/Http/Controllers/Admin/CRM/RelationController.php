@@ -7,6 +7,8 @@ use App\Models\Admin\Core\Label;
 use App\Models\Admin\CRM\Contact;
 use App\Models\Admin\CRM\Relation;
 use App\Models\Admin\Finance\CollectInterval;
+use App\Models\Admin\Project\Product;
+use App\Models\Admin\Project\Project;
 use Illuminate\Support\Facades\Auth;
 use KJ\Core\controllers\AdminBaseController;
 use Illuminate\Http\Request;
@@ -18,7 +20,21 @@ class RelationController extends AdminBaseController {
 
     protected $mainViewName = 'admin.crm.relation.main';
 
-    protected $allColumns = ['ID', 'ACTIVE', 'NAME', 'EMAILADDRESS', 'FK_CORE_DROPDOWNVALUE_RELATIONTYPE'];
+    protected $allColumns = ['ID', 'ACTIVE', 'NAME', 'EMAILADDRESS', 'PHONENUMBER', 'FK_CORE_DROPDOWNVALUE_RELATIONTYPE'];
+
+    protected $joinClause = [
+        [
+            'TABLE' => 'CORE_DROPDOWNVALUE',
+            'PRIMARY_FIELD' => 'ID',
+            'FOREIGN_FIELD' => 'FK_CORE_DROPDOWNVALUE_RELATIONTYPE'
+        ],
+        [
+            'TABLE' => 'CORE_TRANSLATION',
+            'PRIMARY_FIELD' => 'FK_CORE_TRANSLATION_KEY',
+            'FOREIGN_FIELD' => 'CORE_DROPDOWNVALUE.TL_VALUE',
+            'TYPE' => 'LEFT'
+        ]
+    ];
 
     protected $datatableDefaultSort = array(
         [
@@ -54,6 +70,15 @@ class RelationController extends AdminBaseController {
         return $bindings;
     }
 
+    protected function getSortField($sortField)
+    {
+        if ($sortField === 'RELATION_TYPE') {
+            return 'CORE_TRANSLATION.TEXT';
+        } else {
+            return parent::getSortField($sortField);
+        }
+    }
+
     protected function beforeDatatable($datatable)
     {
         $datatable->addColumn('RELATION_TYPE', function(Relation $relation) {
@@ -77,6 +102,11 @@ class RelationController extends AdminBaseController {
     public function allDatatable(Request $request)
     {
         $type = request('type');
+        $localeId = config('app.locale_id') ? config('app.locale_id') : config('language.defaultLangID');
+
+        $this->whereClause = [
+            ['CORE_TRANSLATION.FK_CORE_LANGUAGE', $localeId]
+        ];
 
         $this->datatableFilter = array(
             ['ID, NAME, EMAILADDRESS ', array(
@@ -86,7 +116,7 @@ class RelationController extends AdminBaseController {
             )],
             ['ACTIVE', array(
                 'param' => 'ACTIVE',
-                'default' => true
+                'default' => \KJ\Core\libraries\SessionUtils::getSession('ADM_RELATION', 'ADM_FILTER_RELATION_STATUS', 1)
             )],
             ['FK_CORE_DROPDOWNVALUE_RELATIONTYPE', array(
                 'param' => 'FK_CORE_DROPDOWNVALUE_RELATIONTYPE',
@@ -98,9 +128,6 @@ class RelationController extends AdminBaseController {
         return parent::allDatatable($request);
     }
 
-    /**
-     * MATERIAL THEME UITBREIDING
-     */
     public function beforeDetailScreen(int $id, $item, $screen)
     {
         $none = ['' => KJLocalization::translate('Algemeen', 'Niets geselecteerd', 'Niets geselecteerd') . '..'];
@@ -148,6 +175,37 @@ class RelationController extends AdminBaseController {
         }
 
         return $bindings;
+    }
+
+    public function save(Request $request)
+    {
+        // Validate if relation isn't linked at a project
+        if ($request->get('ID') != $this->newRecordID) {
+            $relation = $this->find($request->get('ID'));
+
+            // Relation type changed
+            if (($request->get('FK_CORE_DROPDOWNVALUE_RELATIONTYPE') != null) && ($relation->FK_CORE_DROPDOWNVALUE_RELATIONTYPE != $request->get('FK_CORE_DROPDOWNVALUE_RELATIONTYPE'))) {
+                // Linked at project
+                $linked = (Project::where('FK_CRM_RELATION_REFERRER', $relation->ID)
+                        ->orWhere('FK_CRM_RELATION_EMPLOYER', $relation->ID)
+                        ->count() > 0);
+
+                // Linked at project products
+                if (!$linked) {
+                    $linked = (Product::where('FK_CRM_RELATION', $relation->ID)->count() > 0);
+                }
+
+                // Result
+                if ($linked) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => KJLocalization::translate('Admin - CRM', 'Type relatie kan niet aangepast worden omdat deze relatie al in een dossier is gekoppeld', 'Type relatie kan niet aangepast worden omdat deze relatie al in een dossier is gekoppeld')
+                    ]);
+                }
+            }
+        }
+
+        return parent::save($request);
     }
 
     protected function afterSave($item, $originalItem, Request $request, &$response)

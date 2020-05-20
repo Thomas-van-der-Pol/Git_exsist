@@ -6,12 +6,12 @@
                     <div class="col-auto">
                         <div class="form-inline md-form filter-icon">
                             {{ Form::text(
-                                'ADM_CONTACT_FILTER_SEARCH',
+                                'ADM_ADDRESS_FILTER_SEARCH',
                                 '',
                                 array(
                                     'class'         => 'form-control filter',
                                     'placeholder'   => KJLocalization::translate('Algemeen', 'Zoeken', 'Zoeken').'...',
-                                    'id'            => 'ADM_CONTACT_FILTER_SEARCH',
+                                    'id'            => 'ADM_ADDRESS_FILTER_SEARCH',
                                 )
                             ) }}
                         </div>
@@ -42,6 +42,7 @@
         'addable' => true,
         'addButton' => '#addAddress',
         'saveURL' => '/admin/crm/address',
+        'searchinput' => '#ADM_ADDRESS_FILTER_SEARCH',
         'columns' => array(
             array(
                 'field' => 'ADDRESS_TYPE',
@@ -62,13 +63,6 @@
                     'HTML' => '<a href="javascript:;" data-id="{idField}" class="btn btn-bold btn-label-danger btn-sm btn-icon deleteAddress" title="'.KJLocalization::translate('Algemeen', 'Verwijderen', 'Verwijderen').'" ><i class="la la-close""></i></a>'
                 ]
             ]
-        ),
-        'filters' => array(
-            array(
-                'input' => '#ADM_FILTER_ADRES_STATUS',
-                'queryParam' => 'ACTIVE',
-                'default' => \KJ\Core\libraries\SessionUtils::getSession('ADM_RELATION', 'ADM_FILTER_ADRES_STATUS', 1)
-            )
         )
     )
 ) }}

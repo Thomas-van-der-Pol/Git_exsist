@@ -65,7 +65,7 @@
             ];
             $breadCrumsTaskList[] = [
                 'title' => KJLocalization::translate('Admin - Menu', 'Taken', 'Taken'),
-                'URL' => ltrim(\KJ\Localization\libraries\LanguageUtils::getUrl('admin/crm/relation/detail/' . ($item->relation->ID)), '/')
+                'URL' => ltrim(\KJ\Localization\libraries\LanguageUtils::getUrl('admin/crm/relation/detail/' . ($item->relation->ID) . '?tab=tasks'), '/')
             ];
         }
         else {

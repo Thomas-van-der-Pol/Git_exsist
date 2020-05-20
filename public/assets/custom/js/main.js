@@ -256,6 +256,21 @@ $('body').on('submit', 'form', function(e) {
     }
 });
 
+$('body').on('reset', 'form', function(e) {
+    var form = $(this).closest('form');
+    if (form.length) {
+        // Reset validation
+        form.validate().resetForm();
+        form.find('.is-invalid').removeClass('is-invalid');
+
+        // Executes after the form has been reset
+        setTimeout(function() {
+            // Refresh select pickers
+            form.find('select').selectpicker('refresh');
+        }, 1);
+    }
+});
+
 $(document).ready(function() {
     $('.readedNotification').on('click', function (e) {
         e.preventDefault();

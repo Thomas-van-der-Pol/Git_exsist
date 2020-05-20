@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use KJ\Core\controllers\AdminBaseController;
 use Illuminate\Http\Request;
+use KJ\Core\libraries\SessionUtils;
 use KJLocalization;
 
 class UserController extends AdminBaseController
@@ -21,19 +22,7 @@ class UserController extends AdminBaseController
 
     protected $mainViewName = 'admin.settings.user.main';
 
-    protected $allColumns = ['ID', 'FULLNAME','ACTIVE','EMAILADDRESS', 'FK_CORE_ADDRESS'];
-
-    protected $datatableFilter = array(
-        ['ACTIVE', array(
-            'param' => 'ACTIVE',
-            'default' => ''
-        )],
-        ['FULLNAME, EMAILADDRESS', array(
-            'param' => 'ADM_FILTER_USER',
-            'operation' => 'like',
-            'default' => ''
-        )]
-    );
+    protected $allColumns = ['ID', 'FULLNAME','ACTIVE','EMAILADDRESS', 'FK_CORE_ADDRESS', 'PHONE_MOBILE', 'PHONE_EMERGENCY'];
 
     protected $datatableDefaultSort = array(
         [
@@ -80,13 +69,30 @@ class UserController extends AdminBaseController
 
     protected function beforeIndex()
     {
-        $status = DropdownvalueUtils::getStatusDropdown();
+        $status = DropdownvalueUtils::getStatusDropdown(false);
 
         $bindings = array(
             ['status', $status]
         );
 
         return $bindings;
+    }
+
+    public function allDatatable(Request $request)
+    {
+        $this->datatableFilter = array(
+            ['ACTIVE', array(
+                'param' => 'ACTIVE',
+                'default' => SessionUtils::getSession('ADM_USER', 'ADM_FILTER_USER_STATUS', 1)
+            )],
+            ['FULLNAME, EMAILADDRESS', array(
+                'param' => 'ADM_FILTER_USER',
+                'operation' => 'like',
+                'default' => SessionUtils::getSession('ADM_USER', 'ADM_FILTER_USER', '')
+            )]
+        );
+
+        return parent::allDatatable($request);
     }
 
     public function beforeDetailScreen(int $id, $item, $screen)

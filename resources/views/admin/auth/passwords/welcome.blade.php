@@ -1,5 +1,5 @@
 @component('mail::message', [
-'title' => KJLocalization::translate('E-mails', 'Welcome bij Emma Handson', 'Welcome to Emma Handson', [], $language),
+'title' => KJLocalization::translate('E-mails', 'Welcome bij Exsist', 'Welcome to Exsist', [], $language),
 'logo' => $logo,
 'language' => $language
 ])

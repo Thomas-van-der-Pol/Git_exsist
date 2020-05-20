@@ -4,7 +4,6 @@ namespace App\Models\Admin;
 
 use App\Models\Admin\Core\Address;
 use App\Models\Admin\Core\Role;
-use App\Models\Admin\Core\UserContract;
 use App\Notifications\Admin\Auth\WelcomePassword;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Notifications\Notifiable;
@@ -144,11 +143,6 @@ class User extends Authenticatable implements CanResetPassword
         $this->notify(new WelcomePassword($token));
     }
 
-    public function contracts()
-    {
-        return $this->hasMany(UserContract::class, 'FK_CORE_USER', 'ID');
-    }
-
     public function roles()
     {
         return $this->belongsToMany(Role::class, 'CORE_USER_ROLE', 'FK_CORE_USER', 'FK_CORE_ROLE')->where('ACTIVE', true);
@@ -194,15 +188,5 @@ class User extends Authenticatable implements CanResetPassword
         }
 
         return $result;
-    }
-
-    public function activeContract()
-    {
-        $activeContract = $this->contracts->where('ACTIVE', true)
-            ->where('DATE_START', '<=', date('Y-m-d'))
-            ->sortBy('DATE_START')
-            ->first();
-
-        return $activeContract;
     }
 }

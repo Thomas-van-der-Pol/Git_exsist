@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Admin\Settings\TaskList;
 
 use App\Libraries\Core\DropdownvalueUtils;
+use Illuminate\Http\Request;
 use KJ\Core\controllers\AdminBaseController;
+use KJ\Core\libraries\SessionUtils;
 use KJLocalization;
 
 class TaskListController extends AdminBaseController
@@ -15,12 +17,6 @@ class TaskListController extends AdminBaseController
     protected $detailScreenFolder = 'admin.settings.tasklist.detail_screens';
 
     protected $allColumns = ['ID', 'NAME', 'ACTIVE'];
-    protected $datatableFilter = array(
-        ['ACTIVE', array(
-            'param' => 'ACTIVE',
-            'default' => true
-        )]
-    );
 
     protected $datatableDefaultSort = array(
         [
@@ -42,6 +38,18 @@ class TaskListController extends AdminBaseController
         );
 
         return $bindings;
+    }
+
+    public function allDatatable(Request $request)
+    {
+        $this->datatableFilter = array(
+            ['ACTIVE', array(
+                'param' => 'ACTIVE',
+                'default' => SessionUtils::getSession('ADM_TASKLIST', 'ADM_FILTER_TASKLIST_STATUS', 1)
+            )]
+        );
+
+        return parent::allDatatable($request);
     }
 
     protected function beforeDetail(int $ID, $item)

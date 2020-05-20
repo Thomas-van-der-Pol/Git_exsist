@@ -131,6 +131,10 @@
                                 'title' => KJLocalization::translate('Admin - CRM', 'Type', 'Type')
                             ),
                             array(
+                                'field' => 'PHONENUMBER',
+                                'title' => KJLocalization::translate('Admin - CRM', 'Telefoonnummer', 'Telefoonnummer')
+                            ),
+                            array(
                                 'field' => 'EMAILADDRESS',
                                 'title' => KJLocalization::translate('Admin - CRM', 'E-mailadres', 'E-mailadres')
                             )

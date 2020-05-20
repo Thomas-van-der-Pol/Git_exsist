@@ -100,15 +100,16 @@
                         'editURL' => \KJ\Localization\libraries\LanguageUtils::getUrl('admin/crm/relation/detail/'),
                         'addable' => false,
                         'pagination' => true,
+                        'sortable' => true,
                         'searchinput' => '#ADM_CRM_CONTACT_FILTER_SEARCH',
                         'columns' => array(
                             array(
-                                'field' => 'RELATION',
-                                'title' => KJLocalization::translate('Admin - CRM', 'Relatie', 'Relatie')
-                            ),
-                            array(
                                 'field' => 'FULLNAME',
                                 'title' => KJLocalization::translate('Admin - CRM', 'Naam', 'Naam')
+                            ),
+                            array(
+                                'field' => 'RELATION',
+                                'title' => KJLocalization::translate('Admin - CRM', 'Relatie', 'Relatie')
                             ),
                             array(
                                 'field' => 'EMAILADDRESS',

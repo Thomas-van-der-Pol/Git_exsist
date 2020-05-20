@@ -43,8 +43,6 @@ $(document).ready(function() {
 
     // Cancel action
     $('body').on('click', '#btnCancelRelation, #btnCancelFinancialDetails', function(e) {
-        e.preventDefault();
-
         var container = $(this).closest('.tab-pane');
         if (!container.length) {
             container = $(this).closest('.kt-widget');

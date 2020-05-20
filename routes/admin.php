@@ -283,14 +283,6 @@ foreach($alt_langs as $langCode) {
                     Route::post('/resetPassword', 'Admin\Settings\User\UserController@resetPassword');
                     Route::delete('/{ID}', 'Admin\Settings\User\UserController@delete');
                     Route::get('/currentUser', 'Admin\Settings\User\UserController@currentUser');
-
-
-                    Route::prefix('contract')->group(function () {
-                        Route::get('/allByUserDatatable/{ID}', 'Admin\Settings\User\ContractController@allByUserDatatable');
-                        Route::get('/detailRendered/{ID}', 'Admin\Settings\User\ContractController@detailAsJSON');
-                        Route::post('/', 'Admin\Settings\User\ContractController@save');
-                    });
-
                 });
 
                 // Financieel

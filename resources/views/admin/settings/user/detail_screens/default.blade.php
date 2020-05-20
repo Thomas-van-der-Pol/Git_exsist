@@ -99,9 +99,6 @@
                                         <div class="col-6">
                                             {{ KJField::select('FK_CORE_DROPDOWNVALUE_DEPARTMENT', KJLocalization::translate('Admin - Werknemers', 'Afdeling', 'Afdeling'), $departments, $item ? $item->FK_CORE_DROPDOWNVALUE_DEPARTMENT : '', true, config('dropdown_type.TYPE_DEPARTMENTS'), ['data-screen-mode' => 'read, edit']) }}
                                             {{ KJField::select('FK_CORE_DROPDOWNVALUE_POSITION', KJLocalization::translate('Admin - Werknemers', 'Functie', 'Functie'), $positions, $item ? $item->FK_CORE_DROPDOWNVALUE_POSITION : '', true, config('dropdown_type.TYPE_POSITIONS'), ['data-screen-mode' => 'read, edit']) }}
-
-                                            {{ KJField::checkbox('EXCLUDE_PAYMENT', KJLocalization::translate('Admin - Werknemers', 'Uitsluiten van verloning', 'Uitsluiten van verloning'), true, $item ? $item->EXCLUDE_PAYMENT : false, true, ['data-screen-mode' => 'read, edit']) }}
-                                            {{ KJField::checkbox('ZZP', KJLocalization::translate('Admin - Werknemers', 'ZZPer', 'ZZP\'er'), true, $item ? $item->ZZP : false, true, ['data-screen-mode' => 'read, edit']) }}
                                         </div>
 
                                         <div class="col-6">

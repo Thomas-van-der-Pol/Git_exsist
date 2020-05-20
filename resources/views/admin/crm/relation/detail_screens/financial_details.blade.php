@@ -20,13 +20,13 @@
 
         <div class="row">
             <div class="col-xl-4 col-lg-6">
-                {{ KJField::number('NUMBER_DEBTOR', KJLocalization::translate('Admin - CRM', 'Debiteurnummer', 'Debiteurnummer'), $item ? $item->NUMBER_DEBTOR : '', true, ['data-screen-mode' => 'read, edit'], [
+                {{ KJField::number('NUMBER_DEBTOR', KJLocalization::translate('Admin - CRM', 'Debiteurnummer', 'Debiteurnummer'), $item ? $item->NUMBER_DEBTOR : '', true, ['data-screen-mode' => 'read, edit', 'readonly'], [
                      'right' => [
                           ['type' => 'button', 'caption' => '<i class="la la-refresh"></i>', 'class' => 'btn btn btn-label-brand btn-square btn-bold btn-upper btn-sm btn-icon generateDebtornumber', 'options' => ['data-id' => $item->ID]]
                      ]
                 ]) }}
 
-                {{ KJField::number('NUMBER_CREDITOR', KJLocalization::translate('Admin - CRM', 'Crediteurnummer', 'Crediteurnummer'), $item ? $item->NUMBER_CREDITOR : '', true, ['data-screen-mode' => 'read, edit'], [
+                {{ KJField::number('NUMBER_CREDITOR', KJLocalization::translate('Admin - CRM', 'Crediteurnummer', 'Crediteurnummer'), $item ? $item->NUMBER_CREDITOR : '', true, ['data-screen-mode' => 'read, edit', 'readonly'], [
                      'right' => [
                           ['type' => 'button', 'caption' => '<i class="la la-refresh"></i>', 'class' => 'btn btn btn-label-brand btn-square btn-bold btn-upper btn-sm btn-icon generateCreditornumber', 'options' => ['data-id' => $item->ID]]
                      ]
@@ -39,13 +39,10 @@
                 @endif
 
                 {{ KJField::text('NUMBER_BANK', KJLocalization::translate('Admin - CRM', 'Bankrekeningnummer', 'Bankrekeningnummer'), $item ? $item->NUMBER_BANK : '', true, ['data-screen-mode' => 'read, edit']) }}
-                {{ KJField::number('PAYMENTTERM_DAY', KJLocalization::translate('Admin - CRM', 'Betalingstermijn', 'Betalingstermijn'), $item ? $item->PAYMENTTERM_DAY : '', true, ['data-screen-mode' => 'read, edit']) }}
-                {{--{{ KJField::text('RATE_KM_READ', KJLocalization::translate('Admin - CRM', 'Tarief per km', 'Tarief per km'), $item ? $item->getRateKmFormattedAttribute() : '', true, ['data-screen-mode' => 'read']) }}--}}
-                {{--{{ KJField::number('RATE_KM', KJLocalization::translate('Admin - CRM', 'Tarief per km', 'Tarief per km'), $item ? number_format((float)$item->RATE_KM,2, '.', '') : '', true, ['data-screen-mode' => 'edit']) }}--}}
+                {{ KJField::number('PAYMENTTERM_DAY', KJLocalization::translate('Admin - CRM', 'Betalingstermijn', 'Betalingstermijn'), $item ? $item->PAYMENTTERM_DAY : '', true, ['data-screen-mode' => 'read, edit', 'step' => 1, 'min' => 1]) }}
             </div>
 
             <div class="col-xl-4 col-lg-6">
-{{--                {{ KJField::select('FK_FINANCE_INVOICE_COLLECT_INTERVAL', KJLocalization::translate('Admin - CRM', 'Facturen verzamelen', 'Facturen verzamelen'), $collectInterval ,$item ? $item->FK_FINANCE_INVOICE_COLLECT_INTERVAL : '', true, 0, ['data-screen-mode' => 'read, edit']) }}--}}
                 {{ KJField::checkbox('INVOICE_ELECTRONIC', KJLocalization::translate('Admin - CRM', 'Digitaal factureren', 'Digitaal factureren'), true, $item ? $item->INVOICE_ELECTRONIC : '', ['data-screen-mode' => 'read, edit']) }}
             </div>
         </div>

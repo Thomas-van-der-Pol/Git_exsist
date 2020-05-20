@@ -170,7 +170,7 @@ class InvoiceOverviewController extends AdminBaseController {
             ['CRM_RELATION.NAME, NUMBER, DATE', array(
                 'param' => 'ADM_INVOICE_FILTER_SEARCH',
                 'operation' => 'like',
-                'default' => ''
+                'default' => SessionUtils::getSession('ADM_INVOICE', 'ADM_INVOICE_FILTER_SEARCH', '')
             )],
         );
 

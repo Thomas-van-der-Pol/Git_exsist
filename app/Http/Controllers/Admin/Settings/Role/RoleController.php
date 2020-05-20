@@ -8,6 +8,7 @@ use KJ\Core\controllers\AdminBaseController;
 use App\Models\Core\Role;
 use App\Models\Core\RolePermission;
 use Illuminate\Http\Request;
+use KJ\Core\libraries\SessionUtils;
 use KJLocalization;
 
 class RoleController extends AdminBaseController
@@ -21,18 +22,6 @@ class RoleController extends AdminBaseController
         'ACTIVE',
         'DESCRIPTION'
     ];
-
-    protected $datatableFilter = array(
-        ['ACTIVE', array(
-            'param' => 'ACTIVE',
-            'default' => true
-        )],
-        ['DESCRIPTION', array(
-            'param' => 'ADM_FILTER_ROLE',
-            'operation' => 'like',
-            'default' => ''
-        )]
-    );
 
     protected $datatableDefaultSort = array(
         [
@@ -54,13 +43,30 @@ class RoleController extends AdminBaseController
 
     protected function beforeIndex()
     {
-        $status = DropdownvalueUtils::getStatusDropdown();
+        $status = DropdownvalueUtils::getStatusDropdown(false);
 
         $bindings = array(
             ['status', $status]
         );
 
         return $bindings;
+    }
+
+    public function allDatatable(Request $request)
+    {
+        $this->datatableFilter = array(
+            ['ACTIVE', array(
+                'param' => 'ACTIVE',
+                'default' => SessionUtils::getSession('ADM_ROLE', 'ADM_FILTER_ROLE_STATUS', 1)
+            )],
+            ['DESCRIPTION', array(
+                'param' => 'ADM_FILTER_ROLE',
+                'operation' => 'like',
+                'default' => SessionUtils::getSession('ADM_ROLE', 'ADM_FILTER_ROLE', '')
+            )]
+        );
+
+        return parent::allDatatable($request);
     }
 
     protected function beforeDetail(int $ID, $item)

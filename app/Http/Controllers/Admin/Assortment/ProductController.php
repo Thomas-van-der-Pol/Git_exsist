@@ -138,11 +138,11 @@ class ProductController extends AdminBaseController
             ['DESCRIPTION_INT, DESCRIPTION_EXT', array(
                 'param' => 'ADM_FILTER_PRODUCT',
                 'operation' => 'like',
-                'default' => ''
+                'default' => SessionUtils::getSession('ADM_ASSORTMENT', 'ADM_FILTER_PRODUCT', '')
             )],
             ['ACTIVE', array(
                 'param' => 'ACTIVE',
-                'default' => true
+                'default' => SessionUtils::getSession('ADM_ASSORTMENT', 'ADM_FILTER_PRODUCT_STATUS', 1)
             )]
         ];
 

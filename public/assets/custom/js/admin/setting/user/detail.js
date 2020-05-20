@@ -43,8 +43,6 @@ $(document).ready(function() {
 
     // Cancel action
     $('body').on('click', '#btnCancelUser, #btnCancelUserPermission', function(e) {
-        e.preventDefault();
-
         var container = $(this).closest('.tab-pane');
         if (!container.length) {
             container = $(this).closest('.kt-widget');
@@ -200,7 +198,5 @@ function afterLoadScreen(id, screen, data) {
     if (screen === 'default') {
         logo_user_select = new KTAvatar('LOGO_USER_SELECT');
         $('#RECEIVE_NOTIFICATION').trigger('change');
-    } else if (screen === 'contracts') {
-        loadDatatable($('#ADM_USER_CONTRACT_TABLE'));
     }
 }

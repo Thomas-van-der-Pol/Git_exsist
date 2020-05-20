@@ -32,8 +32,6 @@ $(document).ready(function() {
 
     // Cancel action
     $('body').on('click', '#btnCancelProduct', function(e) {
-        e.preventDefault();
-
         setScreenMode($('#default'), 'read');
     });
 

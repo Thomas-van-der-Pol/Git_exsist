@@ -50,6 +50,15 @@ class ContactController extends AdminBaseController {
         return $bindings;
     }
 
+    protected function getSortField($sortField)
+    {
+        if ($sortField === 'RELATION') {
+            return 'CRM_RELATION.NAME';
+        } else {
+            return parent::getSortField($sortField);
+        }
+    }
+
     protected function beforeDatatable($datatable)
     {
         $datatable->addColumn('RELATION', function($item) {

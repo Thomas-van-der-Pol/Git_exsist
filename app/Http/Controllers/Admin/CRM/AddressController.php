@@ -41,8 +41,8 @@ class AddressController extends AdminBaseController {
     ];
 
     protected $datatableFilter = [
-        ['ADDRESSLINE, ZIPCODE, CITY, HOUSENUMBER', array(
-            'param' => 'ADM_FILTER_ADRES_STATUS',
+        ['CORE_ADDRESS.ADDRESSLINE, CORE_ADDRESS.ZIPCODE, CORE_ADDRESS.CITY, CORE_ADDRESS.HOUSENUMBER', array(
+            'param' => 'ADM_ADDRESS_FILTER_SEARCH',
             'operation' => 'like',
             'default' => ''
         )]
@@ -70,9 +70,7 @@ class AddressController extends AdminBaseController {
 
     protected function beforeDetail(int $ID, $item)
     {
-        $none           = ['' => KJLocalization::translate('Algemeen', 'Niets geselecteerd', 'Niets geselecteerd') . '..'];
-        $countriesOri   = Country::all()->where('ACTIVE', true)->sortBy('country_name')->pluck('country_name', 'ID');
-        $countries      = $none + $countriesOri->toArray();
+        $countries   = Country::all()->where('ACTIVE', true)->sortBy('country_name')->pluck('country_name', 'ID')->toArray();
         $addresstypes   = DropdownvalueUtils::getDropdown(config('dropdown_type.TYPE_ADDRESSTYPE'),FALSE);
 
         $bindings = array(

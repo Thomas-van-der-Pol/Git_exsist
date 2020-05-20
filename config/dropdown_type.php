@@ -8,7 +8,6 @@ return [
     'TYPE_RELATIONTYPE'         => 6,
     'TYPE_SALUTATION'           => 11,
     'TYPE_ATTN'                 => 12,
-    'TYPE_USERCONTRACTTYPE'     => 13,
     'TYPE_PROJECTTYPE'          => 17,
     'TYPE_INVOICE'              => 19,
     'TYPE_TASK_CATEGORY'        => 20,

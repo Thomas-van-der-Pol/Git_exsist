@@ -103,13 +103,13 @@
                             array(
                                 'input' => '#ADM_FILTER_ROLE_STATUS',
                                 'queryParam' => 'ACTIVE',
-                                'default' => \KJ\Core\libraries\SessionUtils::getSession('ADM_RELATION', 'ADM_FILTER_CLIENT_STATUS', 1)
+                                'default' => \KJ\Core\libraries\SessionUtils::getSession('ADM_ROLE', 'ADM_FILTER_ROLE_STATUS', 1)
                             )
                         ),
                         'customEditButtons' => array(
                             'end' => [
                                 [
-                                    'HTML'  => '<a href="javascript:;" data-id="{idField}" class="btn btn-bold btn-label-danger btn-sm btn-icon deleteRole" title="' . KJLocalization::translate("Algemeen", "Archiveren", "Archiveren") . '" ><i class="la la-close""></i></a>'
+                                    'HTML'  => '<a href="javascript:;" data-id="{idField}" class="btn btn-bold btn-label-danger btn-sm btn-icon deleteRole" title="' . KJLocalization::translate("Algemeen", "Archiveren", "Archiveren") . '/' . KJLocalization::translate("Algemeen", "Activeren", "Activeren") . '" ><i class="la la-close""></i></a>'
                                 ]
                             ]
                         )

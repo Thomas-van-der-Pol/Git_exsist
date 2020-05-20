@@ -83,11 +83,15 @@
                             {{ Form::hidden('FK_CRM_RELATION_EMPLOYER', $item ? $item->FK_CRM_RELATION_EMPLOYER : null, ['required']) }}
                             {{ KJField::select('FK_CRM_CONTACT_EMPLOYER', KJLocalization::translate('Admin - Dossiers', 'Contactpersoon werkgever', 'Contactpersoon werkgever'), $contacts_employer, $item ? $item->FK_CRM_CONTACT_EMPLOYER : '', true, 0, ['data-screen-mode' => 'read, edit']) }}
 
+                            @php
+                                $contactButtons = [];
+                                $contactButtons[] = ['type' => 'button', 'caption' => KJLocalization::translate('Admin - Dossiers', 'Contactpersoon', 'Contactpersoon'), 'class' => 'btn btn-primary btn-sm selectContact'];
+                                if (Auth::guard()->user()->hasPermission(config('permission.CRM'))) {
+                                    $contactButtons[] = ['type' => 'button', 'caption' => KJLocalization::translate('Algemeen', 'Openen', 'Openen'), 'class' => 'btn btn-dark btn-sm openContact'];
+                                }
+                            @endphp
                             {{--Required--}} {{ KJField::text('EMPLOYEE_NAME', KJLocalization::translate('Admin - Dossiers', 'Werknemer', 'Werknemer'), $item ? ($item->employee ? $item->employee->title : '') : '-', true, ['readonly', 'required', 'data-screen-mode' => 'read, edit'], [
-                                 'right' => [
-                                    ['type' => 'button', 'caption' => KJLocalization::translate('Admin - Dossiers', 'Contactpersoon', 'Contactpersoon'), 'class' => 'btn btn-primary btn-sm selectContact'],
-                                    ['type' => 'button', 'caption' => KJLocalization::translate('Algemeen', 'Openen', 'Openen'), 'class' => 'btn btn-dark btn-sm openContact'],
-                                 ]
+                                 'right' => $contactButtons
                             ]) }}
                             {{ Form::hidden('FK_CRM_CONTACT_EMPLOYEE', $item ? $item->FK_CRM_CONTACT_EMPLOYEE : null, ['required']) }}
 

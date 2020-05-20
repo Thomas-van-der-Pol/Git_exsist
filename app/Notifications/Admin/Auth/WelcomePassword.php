@@ -52,7 +52,7 @@ class WelcomePassword extends Notification implements ShouldQueue
     {
         return (
             new Mailable($this->token, $notifiable))
-            ->subject(KJLocalization::translate('E-mails', 'Welkom bij Emma Handson', 'Welkom bij Emma Handson', [], $this->language))
+            ->subject(KJLocalization::translate('E-mails', 'Welkom bij Exsist', 'Welkom bij Exsist', [], $this->language))
             ->to($notifiable->routeNotificationForMail());
     }
 }

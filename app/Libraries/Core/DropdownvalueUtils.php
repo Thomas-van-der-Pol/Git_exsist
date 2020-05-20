@@ -19,7 +19,6 @@ class DropdownvalueUtils
             ->sortBy('SEQUENCE')
             ->pluck('value', 'ID');
 
-
         $values = ($showNone ? ($values = $none + $valuesOri->toArray()) : ($valuesOri->toArray()) );
 
         return $values;
