@@ -19,6 +19,7 @@
         <a href="javascript:;" id="addMap" class="btn btn-success btn-sm">
             <i class="la la-plus"></i>
             {{ KJLocalization::translate('Admin - Taken', 'Map aanmaken', 'Map aanmaken')}}
+            {{ KJLocalization::translate('Admin - Taken', 'Map aanpassen', 'Map aanpassen')}}
         </a>
     @endslot
     @endcomponent
@@ -197,27 +198,57 @@
                             {{--</span>--}}
                         </a>
                         @foreach($customMaps as $customMap)
-                            <a href="#{{$customMap->NAME}}" class="kt-widget__item {{ ($currentTab == $customMap->NAME) ? 'kt-widget__item--active' : '' }}" data-toggle="tab" role="tab">
-                            <span class="kt-widget__section">
-                                <span class="kt-widget__icon">
-                                   <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="kt-svg-icon">
-                                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                            <rect x="0" y="0" width="24" height="24"/>
-                                            <path d="M3.5,21 L20.5,21 C21.3284271,21 22,20.3284271 22,19.5 L22,8.5 C22,7.67157288 21.3284271,7 20.5,7 L10,7 L7.43933983,4.43933983 C7.15803526,4.15803526 6.77650439,4 6.37867966,4 L3.5,4 C2.67157288,4 2,4.67157288 2,5.5 L2,19.5 C2,20.3284271 2.67157288,21 3.5,21 Z" fill="#000000" opacity="0.3"/>
-                                            <path d="M11.9999651,17.2276651 L9.80187391,18.4352848 C9.53879239,18.5798204 9.21340017,18.4741205 9.07509004,18.1991974 C9.02001422,18.0897216 9.00100892,17.9643258 9.02101638,17.8424227 L9.44081443,15.2846431 L7.66252134,13.4732136 C7.44968392,13.2564102 7.44532889,12.9003514 7.65279409,12.677934 C7.73540782,12.5893662 7.84365664,12.5317281 7.96078237,12.5139426 L10.418323,12.1407676 L11.5173686,9.81362288 C11.6489093,9.53509542 11.97161,9.42073887 12.2381407,9.5582004 C12.3442746,9.6129383 12.4301813,9.70271178 12.4825615,9.81362288 L13.5816071,12.1407676 L16.0391477,12.5139426 C16.3332818,12.5586066 16.5370768,12.8439892 16.4943366,13.1513625 C16.4773173,13.2737601 16.4221618,13.3868813 16.3374088,13.4732136 L14.5591157,15.2846431 L14.9789137,17.8424227 C15.0291578,18.148554 14.8324094,18.4392867 14.5394638,18.4917923 C14.4228114,18.5127004 14.3028166,18.4928396 14.1980562,18.4352848 L11.9999651,17.2276651 Z" fill="#000000" opacity="0.3"/>
-                                        </g>
-                                    </svg>
-                                </span>
-                                <span class="kt-widget__desc">
-                                    {{$customMap->NAME}}
-                                </span>
-                            </span>
-                                {{--<span class="kt-nav__link-badge">--}}
-                                {{--<span class="kt-badge kt-badge--unified-success kt-badge--md kt-badge--rounded kt-badge--boldest">--}}
-                                {{--TODO::3--}}
-                                {{--</span>--}}
-                                {{--</span>--}}
-                            </a>
+                            <div class="row">
+                                <div class="col-8">
+                                    <a href="#{{$customMap->nameUnderScored()}}" class="kt-widget__item {{ ($currentTab == $customMap->NAME) ? 'kt-widget__item--active' : '' }}" data-toggle="tab" role="tab">
+                                        <span class="kt-widget__section" style="width:100%;">
+                                            <span class="kt-widget__icon">
+                                               <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="kt-svg-icon">
+                                                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                        <rect x="0" y="0" width="24" height="24"/>
+                                                        <path d="M3.5,21 L20.5,21 C21.3284271,21 22,20.3284271 22,19.5 L22,8.5 C22,7.67157288 21.3284271,7 20.5,7 L10,7 L7.43933983,4.43933983 C7.15803526,4.15803526 6.77650439,4 6.37867966,4 L3.5,4 C2.67157288,4 2,4.67157288 2,5.5 L2,19.5 C2,20.3284271 2.67157288,21 3.5,21 Z" fill="#000000" opacity="0.3"/>
+                                                        <path d="M11.9999651,17.2276651 L9.80187391,18.4352848 C9.53879239,18.5798204 9.21340017,18.4741205 9.07509004,18.1991974 C9.02001422,18.0897216 9.00100892,17.9643258 9.02101638,17.8424227 L9.44081443,15.2846431 L7.66252134,13.4732136 C7.44968392,13.2564102 7.44532889,12.9003514 7.65279409,12.677934 C7.73540782,12.5893662 7.84365664,12.5317281 7.96078237,12.5139426 L10.418323,12.1407676 L11.5173686,9.81362288 C11.6489093,9.53509542 11.97161,9.42073887 12.2381407,9.5582004 C12.3442746,9.6129383 12.4301813,9.70271178 12.4825615,9.81362288 L13.5816071,12.1407676 L16.0391477,12.5139426 C16.3332818,12.5586066 16.5370768,12.8439892 16.4943366,13.1513625 C16.4773173,13.2737601 16.4221618,13.3868813 16.3374088,13.4732136 L14.5591157,15.2846431 L14.9789137,17.8424227 C15.0291578,18.148554 14.8324094,18.4392867 14.5394638,18.4917923 C14.4228114,18.5127004 14.3028166,18.4928396 14.1980562,18.4352848 L11.9999651,17.2276651 Z" fill="#000000" opacity="0.3"/>
+                                                    </g>
+                                                </svg>
+                                            </span>
+                                            <span class="kt-widget__desc">
+                                                {{$customMap->NAME}}
+
+                                            </span>
+                                        </span>
+                                    </a>
+                                </div>
+                                <div class="col-2" style="padding-right: 5px; padding-left: 10px;">
+                                    <a href="#" class="kt-widget__item" data-toggle="tab" role="tab">
+                                        <span class="kt-widget__section" style="width:100%;">
+                                            <span class="kt-widget__icon editCustomMap" data-id="{{$customMap->ID}}">
+                                                 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="kt-svg-icon">
+                                                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                        <rect x="0" y="0" width="24" height="24"/>
+                                                        <path d="M8,17.9148182 L8,5.96685884 C8,5.56391781 8.16211443,5.17792052 8.44982609,4.89581508 L10.965708,2.42895648 C11.5426798,1.86322723 12.4640974,1.85620921 13.0496196,2.41308426 L15.5337377,4.77566479 C15.8314604,5.0588212 16,5.45170806 16,5.86258077 L16,17.9148182 C16,18.7432453 15.3284271,19.4148182 14.5,19.4148182 L9.5,19.4148182 C8.67157288,19.4148182 8,18.7432453 8,17.9148182 Z" fill="#000000" fill-rule="nonzero" transform="translate(12.000000, 10.707409) rotate(-135.000000) translate(-12.000000, -10.707409) "/>
+                                                        <rect fill="#000000" opacity="0.3" x="5" y="20" width="15" height="2" rx="1"/>
+                                                    </g>
+                                                </svg>
+                                            </span>
+                                        </span>
+                                    </a>
+                                </div>
+                                <div class="col-2" style="padding-right: 5px ">
+                                    <a href="#" class="kt-widget__item " data-toggle="tab" role="tab">
+                                        <span class="kt-widget__section" style="width:100%;">
+                                            <span class="kt-widget__icon deleteCustomMap">
+                                               <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="kt-svg-icon">
+                                                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                        <rect x="0" y="0" width="24" height="24"/>
+                                                        <path d="M3.5,21 L20.5,21 C21.3284271,21 22,20.3284271 22,19.5 L22,8.5 C22,7.67157288 21.3284271,7 20.5,7 L10,7 L7.43933983,4.43933983 C7.15803526,4.15803526 6.77650439,4 6.37867966,4 L3.5,4 C2.67157288,4 2,4.67157288 2,5.5 L2,19.5 C2,20.3284271 2.67157288,21 3.5,21 Z" fill="#000000" opacity="0.3"/>
+                                                        <path d="M11.9999651,17.2276651 L9.80187391,18.4352848 C9.53879239,18.5798204 9.21340017,18.4741205 9.07509004,18.1991974 C9.02001422,18.0897216 9.00100892,17.9643258 9.02101638,17.8424227 L9.44081443,15.2846431 L7.66252134,13.4732136 C7.44968392,13.2564102 7.44532889,12.9003514 7.65279409,12.677934 C7.73540782,12.5893662 7.84365664,12.5317281 7.96078237,12.5139426 L10.418323,12.1407676 L11.5173686,9.81362288 C11.6489093,9.53509542 11.97161,9.42073887 12.2381407,9.5582004 C12.3442746,9.6129383 12.4301813,9.70271178 12.4825615,9.81362288 L13.5816071,12.1407676 L16.0391477,12.5139426 C16.3332818,12.5586066 16.5370768,12.8439892 16.4943366,13.1513625 C16.4773173,13.2737601 16.4221618,13.3868813 16.3374088,13.4732136 L14.5591157,15.2846431 L14.9789137,17.8424227 C15.0291578,18.148554 14.8324094,18.4392867 14.5394638,18.4917923 C14.4228114,18.5127004 14.3028166,18.4928396 14.1980562,18.4352848 L11.9999651,17.2276651 Z" fill="#000000" opacity="0.3"/>
+                                                    </g>
+                                                </svg>
+                                            </span>
+                                        </span>
+                                    </a>
+                                </div>
+                            </div>
                         @endforeach
                     </div>
                 </div>
@@ -313,7 +344,7 @@
                         <div class="tab-pane {{ ($currentTab == config('task_type.TYPE_ALL')) ? 'active' : '' }}" id="all_tasks" data-type="{{ config('task_type.TYPE_ALL') }}" role="tabpanel"></div>
                         <div class="tab-pane {{ ($currentTab == config('task_type.TYPE_DONE')) ? 'active' : '' }}" id="closed_tasks" data-type="{{ config('task_type.TYPE_DONE') }}" role="tabpanel"></div>
                         @foreach($customMaps as $customMap)
-                            <div class="tab-pane {{ ($currentTab == $customMap->NAME) ? 'active' : '' }}" id="{{$customMap->NAME}}" data-type="{{$customMap->NAME}}" role="tabpanel"></div>
+                            <div class="tab-pane {{ ($currentTab == $customMap->NAME) ? 'active' : '' }}" id="{{$customMap->nameUnderScored()}}" data-type="{{$customMap->NAME}}" role="tabpanel"></div>
                         @endforeach
                     </div>
                 </div>

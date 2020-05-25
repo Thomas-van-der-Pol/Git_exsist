@@ -80,14 +80,11 @@ class ProductController extends AdminBaseController
     {
         $view = view('admin.assortment.product.modal');
 
-        $id = request('id');
-        $project = Project::find($id);
         $extraBindings = $this->beforeIndex();
         if ($extraBindings != []) {
             foreach ($extraBindings as $binding) {
                 $view->with($binding[0], $binding[1]);
             }
-            $view->with('project', $project);
         }
 
         return response()->json([
@@ -162,16 +159,6 @@ class ProductController extends AdminBaseController
             ]);
             $invoiceScheme->save();
         }
-    }
-
-    public function allByProjectDatatable(Request $request, int $ID)
-    {
-        $items  = \App\Models\Admin\Project\Product::all()->where('FK_PROJECT',  $ID);
-        $products = Product::all()->whereNotIn('ID', $items->pluck('FK_ASSORTMENT_PRODUCT'))->where('ACTIVE', true);
-
-        $datatable = Datatables::of($products);
-        $this->beforeDatatable($datatable);
-        return $datatable->make(true);
     }
 
     public function delete(int $id)

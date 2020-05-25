@@ -10,7 +10,7 @@
 
         <div class="row">
             <div class="col-xl-12 col-lg-6">
-                {{ KJField::text('NAME', KJLocalization::translate('Admin - Taken', 'Naam map', 'Naam map'), $item ?  $item->NAME : '' , true, ['data-screen-mode' => 'read, edit']) }}
+                {{ KJField::text('NAME', KJLocalization::translate('Admin - Taken', 'Naam map', 'Naam map'), $item ?  $item->NAME : '' , true, ['required', 'data-screen-mode' => 'read, edit']) }}
             </div>
         </div>
     </div>

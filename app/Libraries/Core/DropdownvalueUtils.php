@@ -39,4 +39,15 @@ class DropdownvalueUtils
 
         return $values;
     }
+    public static function getStatusDropdownTask($showNone = false)
+    {
+        $values = [
+            0 => KJLocalization::translate('Algemeen', 'Niets geselecteerd', 'Niets geselecteerd') . '..',
+            1 => KJLocalization::translate('Admin - Taken', 'Niet gestart', 'Niet gestart'),
+            2 => KJLocalization::translate('Admin - Taken', 'Gestart', 'Gestart'),
+            3 => KJLocalization::translate('Admin - Taken', 'Voltooid', 'Voltooid')
+        ];
+
+        return $values;
+    }
 }

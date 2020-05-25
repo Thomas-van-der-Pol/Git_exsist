@@ -144,7 +144,6 @@ foreach($alt_langs as $langCode) {
             Route::prefix('product')->group(function() {
                 Route::get('/', 'Admin\Assortment\ProductController@index');
                 Route::get('/allDatatable', 'Admin\Assortment\ProductController@allDefaultDatatable');
-                Route::get('/allByProjectDatatable/{ID}', 'Admin\Assortment\ProductController@allByProjectDatatable');
                 Route::get('/detail/{ID}', 'Admin\Assortment\ProductController@detail');
                 Route::post('/detailScreen', 'Admin\Assortment\ProductController@detailScreen');
                 Route::post('/', 'Admin\Assortment\ProductController@save');
@@ -225,7 +224,7 @@ foreach($alt_langs as $langCode) {
 
                     Route::prefix('project')->group(function () {
                         Route::get('/allByProductDatatable/{ID}', 'Admin\Project\Product\InvoiceSchemeController@allByProjectProductDatatable');
-                        Route::get('/detailRendered/{ID}', 'Admin\Project\Product\InvoiceSchemeController@DetailAsJSON');
+                        Route::get('/detailRendered/{ID}', 'Admin\Project\Product\InvoiceSchemeController@detailAsJSON');
                         Route::post('/', 'Admin\Project\Product\InvoiceSchemeController@save');
                         Route::delete('/{ID}', 'Admin\Project\Product\InvoiceSchemeController@delete');
                     });

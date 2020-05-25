@@ -44,12 +44,12 @@ class ProjectController extends AdminBaseController {
         ]
     ];
 
-//        $this->datatableDefaultSort = array(
-//            [
-//                'field' => 'DESCRIPTION',
-//                'sort'  => 'ASC'
-//            ]
-//        );
+    protected $datatableDefaultSort = array(
+        [
+            'field' => 'TS_CREATED',
+            'sort'  => 'DESC'
+        ]
+    );
 
     protected $detailScreenFolder = 'admin.project.detail_screens';
 

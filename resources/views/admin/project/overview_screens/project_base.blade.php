@@ -15,6 +15,41 @@
                 </div>
             </div>
 
+            @php
+                $columns = array(
+                    array(
+                        'field' => 'DESCRIPTION',
+                        'title' => KJLocalization::translate('Admin - Dossiers', 'Dossiernaam', 'Dossiernaam')
+                    ),
+                    array(
+                        'field' => 'WORKFLOWSTATE',
+                        'title' => KJLocalization::translate('Admin - Dossiers', 'Status', 'Status'),
+                        'sortable' => false
+                    ),
+                    array(
+                        'field' => 'LASTMODIFIED_STATE_FORMATTED',
+                        'title' => KJLocalization::translate('Admin - Dossiers', 'Status sinds', 'Status sinds')
+                    )
+                );
+
+                if ($type == 0) {
+                    $columns[] = array(
+                        'field' => 'PROJECTTYPE',
+                        'title' => KJLocalization::translate('Admin - Dossiers', 'Soort traject', 'Soort traject'),
+                        'sortable' => false
+                    );
+                }
+
+                $columns[] = array(
+                    'field' => 'START_DATE_FORMATTED',
+                    'title' => KJLocalization::translate('Admin - Dossiers', 'Eerste ziektedag', 'Eerste ziektedag')
+                );
+                $columns[] = array(
+                    'field' => 'CREATED_DATE_FORMATTED',
+                    'title' => KJLocalization::translate('Admin - Dossiers', 'Aanmaakdatum', 'Aanmaakdatum')
+                );
+            @endphp
+
             <div class="kt-portlet__body kt-portlet__body--fit">
                 <div class="tab-content">
                     @foreach($workflowStates as $workflowState)
@@ -31,29 +66,7 @@
                                     'pagination' => true,
                                     'sortable' => true,
                                     'searchinput' => '#ADM_PROJECT_FILTER_SEARCH',
-                                    'columns' => array(
-                                        array(
-                                            'field' => 'DESCRIPTION',
-                                            'title' => KJLocalization::translate('Admin - Dossiers', 'Dossiernaam', 'Dossiernaam')
-                                        ),
-                                        array(
-                                            'field' => 'WORKFLOWSTATE',
-                                            'title' => KJLocalization::translate('Admin - Dossiers', 'Status', 'Status'),
-                                            'sortable' => false
-                                        ),
-                                        array(
-                                            'field' => 'LASTMODIFIED_STATE_FORMATTED',
-                                            'title' => KJLocalization::translate('Admin - Dossiers', 'Status sinds', 'Status sinds')
-                                        ),
-                                        array(
-                                            'field' => 'START_DATE_FORMATTED',
-                                            'title' => KJLocalization::translate('Admin - Dossiers', 'Eerste ziektedag', 'Eerste ziektedag')
-                                        ),
-                                        array(
-                                            'field' => 'CREATED_DATE_FORMATTED',
-                                            'title' => KJLocalization::translate('Admin - Dossiers', 'Aanmaakdatum', 'Aanmaakdatum')
-                                        )
-                                    ),
+                                    'columns' => $columns,
                                     'filters' => array(
                                         array(
                                             'input' => '#ADM_FILTER_PROJECT_STATUS',

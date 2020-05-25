@@ -165,11 +165,33 @@ $(document).ready(function() {
         }
     });
 
-    //Enter zoeken
+
+    $('body').on('change', '#ADM_TASK_FILTER_ACTIVE', function() {
+        // Store session
+        var value = $(this).val();
+        storeSession('ADM_TASK', 'ADM_TASK_FILTER_ACTIVE', value);
+
+        // Load items
+        var container = $(this).closest('.tab-pane');
+        loadTaskScreen(container);
+
+    });
+
     $('body').on('change', '#ADM_TASK_FILTER_STATUS', function() {
         // Store session
         var value = $(this).val();
         storeSession('ADM_TASK', 'ADM_TASK_FILTER_STATUS', value);
+
+        // Load items
+        var container = $(this).closest('.tab-pane');
+        loadTaskScreen(container);
+
+    });
+
+    $('body').on('change', '#ADM_FILTER_TASK_FILTERS', function() {
+        // Store session
+        var value = $(this).val();
+        storeSession('ADM_TASK', 'ADM_FILTER_TASK_FILTERS', value);
 
         // Load items
         var container = $(this).closest('.tab-pane');
@@ -214,11 +236,9 @@ $(document).ready(function() {
     });
 });
 
-function loadTaskFunctionModal(type, taskIds, subject = null, container)
-{
+function loadTaskFunctionModal(type, taskIds, subject = null, container) {
     var url = '/admin/tasks/functions/modal/?type=' + type;
-    if(type)
-
+    if (type) {
         $.ajax({
             url: url,
             type: 'GET',
@@ -238,7 +258,7 @@ function loadTaskFunctionModal(type, taskIds, subject = null, container)
                 loadDatePickers();
                 loadDropdowns();
 
-                $('.kj_field_modal').off('hidden.bs.modal').on('hidden.bs.modal', function() {
+                $('.kj_field_modal').off('hidden.bs.modal').on('hidden.bs.modal', function () {
                     $('.kj_field_modal .modal-lg').css('max-width', '');
                 });
 
@@ -256,7 +276,7 @@ function loadTaskFunctionModal(type, taskIds, subject = null, container)
                     var formData = new FormData();
 
                     //Alle velden
-                    rawData.forEach(function(data, index, form) {
+                    rawData.forEach(function (data, index, form) {
                         formData.append(data.name, data.value);
                     });
                     formData.append('task', JSON.stringify(taskIds));
@@ -266,8 +286,17 @@ function loadTaskFunctionModal(type, taskIds, subject = null, container)
                         }
                     });
                 });
+
+                $('.kj_field_modal').find('.modal-body').find('form').find('.kt-portlet__body').find('input').keypress(function (e) {
+                    var key = e.which;
+                    if (key == 13) {
+                        e.preventDefault();// the enter key code
+                        $('.kj_field_modal').find('.modal-footer').find('.kjclosemodal').click();
+                    }
+                });
             }
         });
+    }
 }
 
 function loadTaskScreen(object, beginDate = null, endDate = null)
@@ -331,7 +360,8 @@ function loadTaskScreen(object, beginDate = null, endDate = null)
     }
 
     var filter = ($('#ADM_TASK_FILTER_SEARCH').val() || '');
-    var active = ($('#ADM_TASK_FILTER_STATUS').val() || '');
+    var active = ($('#ADM_TASK_FILTER_ACTIVE').val() || '');
+    var status = ($('#ADM_TASK_FILTER_STATUS').val() || '');
 
     var formData = new FormData();
     formData.append('SCREEN', screen);
@@ -340,7 +370,8 @@ function loadTaskScreen(object, beginDate = null, endDate = null)
     formData.append('ASSIGNEE', assignee);
     formData.append('CATEGORY', category);
     formData.append('FILTER', filter);
-    formData.append('STATUS', active);
+    formData.append('ACTIVE', active);
+    formData.append('STATUS', status);
     formData.append('PAGE', page);
     formData.append('BEGINDATE', beginDate);
     formData.append('ENDDATE', endDate);
@@ -400,6 +431,25 @@ function loadTaskModal(id, type, pid, subject = null, container)
                 if (id == -1) {
                     $('input[name=SUBJECT]').focus();
                 }
+                var input = document.getElementById('CATEGORIES');
+                var wl =  $(input).data('wl');
+                // Tagify voor filter velden
+                var tagify = new Tagify(input, {
+                    whitelist: Object.values(wl),
+                    dropdown: {
+                        enabled: 1
+                    }
+                });
+
+                tagify.on('add', function(e, tagName){
+                    $(input).change();
+                });
+                tagify.on('remove', function(e, tagName){
+                    $(input).change();
+                });
+
+                tagify.DOM.scope.parentNode.insertBefore(tagify.DOM.input, tagify.DOM.scope);
+                $('.kjtagify').next().addClass('active');
             });
 
             $('.kj_field_modal').off('hidden.bs.modal').on('hidden.bs.modal', function() {
@@ -536,7 +586,7 @@ function LoadCustomMapModal(id)
         success: function (data) {
             // Load detail form
             $('.kj_field_modal').find('.modal-footer').find('.kjclosemodal').text(kjlocalization.get('algemeen', 'opslaan'));
-            $('.kj_field_modal .modal-title').text(kjlocalization.get('admin_-_taken', 'map_aanmaken'));
+            $('.kj_field_modal .modal-title').text(id === -1? kjlocalization.get('admin_-_taken', 'map_aanmaken'): kjlocalization.get('admin_-_taken', 'map_aanpassen') );
 
             $('.kj_field_modal .modal-lg').css('max-width', '500px');
             $('.kj_field_modal .modal-body').html(data.viewDetail);

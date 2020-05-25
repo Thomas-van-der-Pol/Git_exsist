@@ -14,7 +14,7 @@ class ProductProjectController extends AdminBaseController
 {
     protected $model = 'App\Models\Admin\Project\Product';
 
-    protected $allColumns = ['ID', 'ACTIVE', 'FK_PROJECT', 'FK_ASSORTMENT_PRODUCT', 'FK_CRM_RELATION', 'QUANTITY', 'PRICE'];
+    protected $allColumns = ['ID', 'ACTIVE', 'FK_PROJECT', 'FK_ASSORTMENT_PRODUCT', 'FK_CRM_RELATION', 'QUANTITY', 'PRICE', 'DESCRIPTION_EXT'];
 
     protected $detailViewName = 'admin.project.product.detail';
 

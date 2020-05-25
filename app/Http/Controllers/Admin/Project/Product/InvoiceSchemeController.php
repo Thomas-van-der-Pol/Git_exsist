@@ -51,7 +51,10 @@ class InvoiceSchemeController extends AdminBaseController {
 
         })
         ->addColumn('INTERVENTION', function(InvoiceScheme $invoiceScheme) {
-            return $invoiceScheme->product->title;
+            return $invoiceScheme->project_product->product->title;
+        })
+        ->addColumn('INTERVENTION_EXT', function(InvoiceScheme $invoiceScheme) {
+            return $invoiceScheme->project_product->DESCRIPTION_EXT;
         })
         ->addColumn('PERCENTAGE', function(InvoiceScheme $invoiceScheme) {
             return $invoiceScheme->getPercentageFormattedAttribute();
@@ -202,6 +205,7 @@ class InvoiceSchemeController extends AdminBaseController {
             if($item->invoiceLine){
                 $item->invoiceLine->delete();
             }
+
             // Delete invoice moment
             $item->delete();
 

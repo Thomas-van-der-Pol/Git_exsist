@@ -63,7 +63,7 @@
                                 {{--Required--}} {{ KJField::select('FK_CORE_LABEL', KJLocalization::translate('Admin - Dossiers', 'Administratie', 'Administratie'), $labels, $item ? $item->FK_CORE_LABEL : '', true, 0, ['required', 'data-screen-mode' => 'read, edit']) }}
                             @endif
 
-                            {{ KJField::select('FK_CORE_DROPDOWNVALUE_PROJECTTYPE', KJLocalization::translate('Admin - Dossiers', 'Soort traject', 'Soort traject'), $project_types, $item ? $item->FK_CORE_DROPDOWNVALUE_PROJECTTYPE : '', true, config('dropdown_type.TYPE_PROJECTTYPE'), ['data-screen-mode' => 'read, edit']) }}
+                            {{--Required--}} {{ KJField::select('FK_CORE_DROPDOWNVALUE_PROJECTTYPE', KJLocalization::translate('Admin - Dossiers', 'Soort traject', 'Soort traject'), $project_types, $item ? $item->FK_CORE_DROPDOWNVALUE_PROJECTTYPE : '', true, config('dropdown_type.TYPE_PROJECTTYPE'), ['required', 'data-screen-mode' => 'read, edit']) }}
                             @php
                                 $relationButtons = [];
                                 $relationButtons[] = ['type' => 'button', 'caption' => KJLocalization::translate('Admin - Dossiers', 'Relatie', 'Relatie'), 'class' => 'btn btn-primary btn-sm selectRelation'];
@@ -103,7 +103,7 @@
                             {{ KJField::checkbox('COMPENSATED', KJLocalization::translate('Admin - Dossiers', 'Wordt vergoed', 'Wordt vergoed'), true, ( $item ? $item->COMPENSATED : false ), true, ['data-screen-mode' => 'read '.($item && (($item->INVOICING_COMPLETE ?? false) == false) ? ', edit' : '')]) }}
 
                             {{ KJField::text('COMPENSATION_PERCENTAGE_READ', KJLocalization::translate('Admin - Dossiers', 'Vergoedingspercentage', 'Vergoedingspercentage'), $item ? $item->getCompensationPercentageFormattedAttribute() : '', true, ['data-screen-mode' => 'read']) }}
-                            {{ KJField::number('COMPENSATION_PERCENTAGE', KJLocalization::translate('Admin - Dossiers', 'Vergoedingspercentage', 'Vergoedingspercentage'), $item ? $item->getCompensationPercentageDecimalAttribute() : '', true, ['data-screen-mode' => ($item && (($item->INVOICING_COMPLETE ?? false) == false) ? 'edit': '')], [
+                            {{ KJField::number('COMPENSATION_PERCENTAGE', KJLocalization::translate('Admin - Dossiers', 'Vergoedingspercentage', 'Vergoedingspercentage'), $item ? $item->getCompensationPercentageDecimalAttribute() : '', true, ['data-screen-mode' => ($item && (($item->INVOICING_COMPLETE ?? false) == false) ? 'edit': ''), 'min' => 0], [
                                 'right' => [['type' => 'text', 'caption' => '%']]]
                             ) }}
 

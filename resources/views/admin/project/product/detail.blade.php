@@ -9,6 +9,7 @@
 
     <div class="row">
         <div class="col-xl-4 col-lg-6">
+            {{ KJField::text('DESCRIPTION_EXT', KJLocalization::translate('Admin - Dossiers', 'Omschrijving extern', 'Omschrijving extern'), $item ? $item->DESCRIPTION_EXT : '') }}
             {{ KJField::number('QUANTITY', KJLocalization::translate('Admin - Dossiers', 'Aantal', 'Aantal'), $item ? $item->QUANTITY : '') }}
 
             @php

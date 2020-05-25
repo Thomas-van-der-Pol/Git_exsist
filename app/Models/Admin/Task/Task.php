@@ -78,6 +78,11 @@ class Task extends Model
         return $this->hasOne(Project::class, 'ID', 'FK_PROJECT');
     }
 
+    public function project_product()
+    {
+        return $this->hasOne(\App\Models\Admin\Project\Product::class, 'ID', 'FK_PROJECT_ASSORTMENT_PRODUCT');
+    }
+
     public function product()
     {
         return $this->hasOne(Product::class, 'ID', 'FK_ASSORTMENT_PRODUCT');

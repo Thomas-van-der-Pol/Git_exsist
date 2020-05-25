@@ -220,7 +220,7 @@ $(document).ready(function() {
         var text = kjlocalization.get('admin_-_dossiers', 'selecteer_product');
 
         $.ajax({
-            url: '/admin/product/modal?checkable=1&id=' + id,
+            url: '/admin/product/modal?checkable=1&show_options=1',
             type: 'GET',
             dataType: 'JSON',
 
@@ -231,6 +231,7 @@ $(document).ready(function() {
                 $('.kj_field_modal .modal-body').html(data.viewDetail);
                 loadDatatable($('#ADM_PRODUCT_MODAL_TABLE'));
                 loadDropdowns();
+                loadDatePickers();
 
                 $('.kj_field_modal').modal('show');
 
@@ -440,6 +441,13 @@ function afterLoadScreen(id, screen, data) {
     }
     else if (screen === 'products') {
         loadDatatable($('#ADM_PROJECT_PRODUCTS_TABLE'));
+
+        $(document).on('ADM_PROJECT_PRODUCTS_TABLEAfterLoad', function(e, detailDiv) {
+            var relationValue = $('input[name="FK_CRM_RELATION"]').val();
+            $('#btnCancelQuantity').on('click', function(e) {
+                $('input[name="FK_CRM_RELATION"]').val(relationValue);
+            });
+        });
     }
     else if (screen === 'documents') {
         loadDropzone();

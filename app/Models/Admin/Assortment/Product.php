@@ -51,6 +51,7 @@ class Product extends Model {
 
     public function checkRemnant()
     {
+        $this->load('invoiceSchemes');
         $total = $this->invoiceSchemes->where('FK_PROJECT_ASSORTMENT_PRODUCT',null)->where('AUTOMATIC_REMNANT', false)->sum('PERCENTAGE');
         $remnant = (100 - $total);
 

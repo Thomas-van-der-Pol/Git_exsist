@@ -49,12 +49,13 @@
                         <div class="col-xl-4 col-lg-6">
                             {{ KJField::text('SUBJECT', KJLocalization::translate('Admin - Taken', 'Onderwerp', 'Onderwerp'), ( $item ? $item->SUBJECT : '' ), true, ['required']) }}
                             {{ KJField::textarea('CONTENT', KJLocalization::translate('Admin - Taken', 'Inhoud taak', 'Inhoud taak'), ( $item ? $item->CONTENT : '' ), 3) }}
-                            @if(!$item->FK_TASK_LIST && !$item->FK_ASSORTMENT_PRODUCT)
-                                {{ KJField::date('DEADLINE', KJLocalization::translate('Admin - Taken', 'Deadline', 'Deadline'), ($item ? $item->getDeadlineDatePickerFormattedAttribute() : ''), ['data-date-start-date' => '-0d', 'data-locale-format' => \KJ\Localization\libraries\LanguageUtils::getJSDatePickerFormat()]) }}
-                                {{ KJField::date('REMINDER_DATE', KJLocalization::translate('Admin - Taken', 'Herinneringsdatum', 'Herinneringsdatum'), ($item ? $item->getReminderDateDatePickerFormattedAttribute() : ''), ['data-date-start-date' => '-0d', 'data-locale-format' => \KJ\Localization\libraries\LanguageUtils::getJSDatePickerFormat()]) }}
+
+                            @if($item->FK_TASK_LIST || ($item->FK_ASSORTMENT_PRODUCT && !$item->FK_PROJECT))
+                                {{-- Required --}} {{ KJField::number('REMEMBER_DATES',KJLocalization::translate('Admin - Taken', 'Herinneringsdagen', 'Herinneringsdagen'), $item ? $item->REMEMBER_DATES : '', true, ['required', 'min' => 0, 'step' => 1]) }}
+                                {{-- Required --}} {{ KJField::number('EXPIRATION_DATES',KJLocalization::translate('Admin - Taken', 'Vervaldagen', 'Vervaldagen'), $item ? $item->EXPIRATION_DATES : '', true, ['required', 'min' => 0, 'step' => 1]) }}
                             @else
-                                {{-- Required --}} {{ KJField::number('REMEMBER_DATES',KJLocalization::translate('Admin - Taken', 'Herinneringsdagen', 'Herinneringsdagen'), $item ? $item->REMEMBER_DATES : 0, true, ['required', 'min' => 0, 'step' => 1]) }}
-                                {{-- Required --}} {{ KJField::number('EXPIRATION_DATES',KJLocalization::translate('Admin - Taken', 'Vervaldagen', 'Vervaldagen'), $item ? $item->EXPIRATION_DATES : 0, true, ['required', 'min' => 0, 'step' => 1]) }}
+                                {{ KJField::date('DEADLINE', KJLocalization::translate('Admin - Taken', 'Deadline', 'Deadline'), ($item ? $item->getDeadlineDatePickerFormattedAttribute() : ''), ['required', 'data-date-start-date' => '-0d', 'data-locale-format' => \KJ\Localization\libraries\LanguageUtils::getJSDatePickerFormat()]) }}
+                                {{ KJField::date('REMINDER_DATE', KJLocalization::translate('Admin - Taken', 'Herinneringsdatum', 'Herinneringsdatum'), ($item ? $item->getReminderDateDatePickerFormattedAttribute() : ''), ['required', 'data-date-start-date' => '-0d', 'data-locale-format' => \KJ\Localization\libraries\LanguageUtils::getJSDatePickerFormat()]) }}
                             @endif
                         </div>
 
@@ -102,15 +103,9 @@
                                          ]
                                     ]) }}
                                     {{ Form::hidden('FK_PROJECT', $item ? $item->FK_PROJECT : null) }}
-                                @endif
 
-                                {{ KJField::text('RELATION_PRODUCT', KJLocalization::translate('Admin - Taken', 'Interventie', 'Interventie'), $item ? ($item->product ? $item->product->title : '') : '-', true, ['readonly'], [
-                                        'right' => [
-                                             ['type' => 'button', 'caption' => KJLocalization::translate('Algemeen', 'Interventie', 'Interventie'), 'class' => 'btn btn-primary btn-sm selectProduct'],
-                                             ['type' => 'button', 'caption' => KJLocalization::translate('Algemeen', 'Openen', 'Openen'), 'class' => 'btn btn-dark btn-sm openProduct']
-                                        ]
-                                   ]) }}
-                                {{ Form::hidden('FK_ASSORTMENT_PRODUCT', $item ? $item->FK_ASSORTMENT_PRODUCT : null) }}
+                                    {{ KJField::select('FK_PROJECT_ASSORTMENT_PRODUCT', KJLocalization::translate('Admin - Taken', 'Interventie', 'Interventie'), $products, $item ? $item->FK_PROJECT_ASSORTMENT_PRODUCT : '', true, 0, ['data-screen-mode' => 'read, edit']) }}
+                                @endif
                             </div>
                         </div>
                     @endif

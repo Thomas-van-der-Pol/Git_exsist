@@ -76,6 +76,7 @@ class Product extends Model
 
     public function checkRemnant()
     {
+        $this->load('invoiceSchemes');
         $total = $this->invoiceSchemes->where('AUTOMATIC_REMNANT', false)->sum('PERCENTAGE');
         $remnant = (100 - $total);
 

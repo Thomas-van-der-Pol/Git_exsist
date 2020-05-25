@@ -91,51 +91,6 @@ $(document).ready(function() {
             return false;
         }
     });
-
-    // Line detail
-    $('body').on('click', '.selectProduct', function(e) {
-        e.preventDefault();
-
-        LastButton = $(this);
-
-        $.ajax({
-            url: '/admin/product/modal?selectable=1',
-            type: 'GET',
-            dataType: 'JSON',
-
-            success: function (data) {
-                // Load detail form
-                $('.kj_field_modal .modal-title').text(kjlocalization.get('admin_-_dossiers', 'selecteer_product'));
-                $('.kj_field_modal .modal-body').html(data.viewDetail);
-                loadDatatable($('#ADM_PRODUCT_MODAL_TABLE'));
-                loadDropdowns();
-
-                $('.kj_field_modal').modal('show');
-
-                $('.kj_field_modal').off('shown.bs.modal').on('shown.bs.modal', function() {
-                    ADM_PRODUCT_MODAL_TABLE_configuration.datatableSelector.redraw();
-                });
-            }
-        });
-    });
-
-    $('body').on('click', '.openProduct', function(e) {
-        e.preventDefault();
-
-        var id = $(this).closest('.md-form').next('input[type="hidden"]').val();
-        if (id > 0) {
-            // Open client in new window
-            var win = window.open('/admin/product/detail/' + id, '_blank');
-            if (win) {
-                // Browser has allowed it to be opened
-                win.focus();
-            } else {
-                // Browser has blocked it
-            }
-
-            return false;
-        }
-    });
 });
 
 function afterLoadScreen(id, screen, data) {
@@ -161,17 +116,3 @@ function afterLoadScreen(id, screen, data) {
         $('.kjtagify').next().addClass('active');
     }
 }
-$(document).on('ADM_PRODUCT_MODAL_TABLEAfterSelect', function(e, selectedId, linkObj) {
-    // Waardes opzoeken
-    var name = linkObj.closest('tr').find('[data-field=DESCRIPTION_INT]').find('span').text();
-
-    var id_input = LastButton.closest('form').find('input[name=FK_ASSORTMENT_PRODUCT]');
-    id_input.val(selectedId);
-
-    var text_input = LastButton.closest('div.form-group').find('input[type=text]');
-    text_input.val(name);
-
-    setMaterialActiveLabels(LastButton.closest('div.kt-portlet__body'));
-    // Modal hidden
-    $('.kj_field_modal').modal('hide');
-});

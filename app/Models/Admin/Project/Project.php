@@ -90,7 +90,7 @@ class Project extends Model
 
     public function products()
     {
-        return $this->hasMany(\App\Models\Admin\Project\Product::class, 'FK_PROJECT', 'ID');
+        return $this->hasMany(Product::class, 'FK_PROJECT', 'ID');
     }
 
     public function progress()
@@ -173,6 +173,7 @@ class Project extends Model
             ]);
             $productProject->PRICE = $product->PRICE;
             $productProject->QUANTITY = ($productProject->QUANTITY ?? 0) + 1;
+            $productProject->DESCRIPTION_EXT = $product->DESCRIPTION_EXT;
             $productProject->save();
 
             if($productProject) {
@@ -180,16 +181,16 @@ class Project extends Model
                 if($product) {
                     //find standard invoice schemes of intervention
                     //copy standard invoice schemes and change some values.
-                    foreach ($product->invoiceSchemes->where('FK_PROJECT_ASSORTMENT_PRODUCT', null) as $invoiceScheme) {
+                    foreach ($product->invoiceSchemes->where('FK_PROJECT_ASSORTMENT_PRODUCT', null)->where('ACTIVE', true) as $invoiceScheme) {
                         $newInvoiceScheme = $invoiceScheme->replicate();
                         $newInvoiceScheme->FK_PROJECT_ASSORTMENT_PRODUCT = $productProject->ID;
                         $newInvoiceScheme->DATE = date('Y-m-d', strtotime($startDate . ' + ' . $invoiceScheme->DAYS . ' days'));
                         $newInvoiceScheme->save();
                     }
+
                     //find standard tasks of intervention
                     //copy standard tasks and change some values.
-                    foreach ($product->tasks->where('FK_PROJECT_ASSORTMENT_PRODUCT', null) as $task) {
-//                        dd(date('Y-m-d', strtotime($startDate . ' + ' . $task->REMEMBER_DATES . ' days')), date('Y-m-d', strtotime($startDate . ' + ' . $task->EXPIRATION_DATES . ' days')));
+                    foreach ($product->tasks->where('FK_PROJECT_ASSORTMENT_PRODUCT', null)->where('ACTIVE', true) as $task) {
                         $task = $task->replicate();
                         $task->FK_PROJECT_ASSORTMENT_PRODUCT = $productProject->ID;
                         $task->FK_CORE_USER_ASSIGNEE = $assignee->ID;

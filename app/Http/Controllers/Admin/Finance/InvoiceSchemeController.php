@@ -22,7 +22,7 @@ class InvoiceSchemeController extends AdminBaseController {
 
     protected $datatableDefaultSort = array(
         [
-            'field' => 'DATE',
+            'field' => 'DAYS',
             'sort'  => 'ASC'
         ]
     );

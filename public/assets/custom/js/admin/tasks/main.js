@@ -54,3 +54,8 @@ function loadTaskItemActive(beginDate = null, endDate = null) {
         });
     }
 }
+
+$('.editCustomMap').on('click', function () {
+    var id = $(this).data('id');
+    LoadCustomMapModal(id);
+});

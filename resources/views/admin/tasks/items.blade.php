@@ -46,7 +46,7 @@
                         <div class="form-inline md-form filter-icon">
                             {{ Form::text(
                                 'ADM_TASK_FILTER_SEARCH',
-                                \KJ\Core\libraries\SessionUtils::getSession('ADM_TASK', 'ADM_TASK_FILTER_SEARCH', ($filter ?? '')),
+                                ($filter ?? ''),
                                 array(
                                     'class'         => 'form-control filter',
                                     'placeholder'   => KJLocalization::translate('Algemeen', 'Zoeken', 'Zoeken') . '..',
@@ -55,24 +55,55 @@
                             ) }}
                         </div>
 
-                        <div class="form-inline md-form ml-3">
-                            {{ Form::select(
-                               'ADM_TASK_FILTER_STATUS',
-                                    $status,
-                                    \KJ\Core\libraries\SessionUtils::getSession('ADM_TASK', 'ADM_TASK_FILTER_STATUS', 1),
+                            <div class="form-inline md-form ml-3">
+                                {{ Form::select(
+                                   'ADM_TASK_FILTER_ACTIVE',
+                                        $status,
+                                        ($filter_active ?? 1),
+                                        [
+                                            'class' => 'form-control filter kt-bootstrap-select',
+                                            'id'            => 'ADM_TASK_FILTER_ACTIVE',
+                                        ]
+                                ) }}
+                            </div>
+                        @if($type == config('task_type.TYPE_PROJECT') || $type == config('task_type.TYPE_RELATION'))
+                            <div class="kt-form__label" style=" margin-top: 7px; margin-left: 5px">
+                                {{ Form::label('ADM_FILTER_PRODUCT_STATUS', KJLocalization::translate('Algemeen', 'Status', 'Status'). ':') }}
+                            </div>
+                            <div class="form-inline md-form ml-3">
+
+                                {{ Form::select(
+                                    'ADM_TASK_FILTER_STATUS',
+                                    $taskStatus,
+                                    ($filter_status ?? 1),
+                                    [
+                                        'class' => 'form-control filter kt-bootstrap-select',
+                                        'id'            => 'ADM_TASK_FILTER_STATUS',
+                                    ]
+                                ) }}
+                            </div>
+                            <div class="kt-form__label" style=" margin-top: 7px; margin-left: 5px">
+                                {{ Form::label('ADM_FILTER_TASK_FILTERS', KJLocalization::translate('Admin - Taken', 'Categorie', 'Categorie'). ':') }}
+                            </div>
+                            <div class="form-inline md-form ml-3">
+                                {{ Form::select(
+                                    'ADM_FILTER_TASK_FILTERS',
+                                    $categories,
+                                    \KJ\Core\libraries\SessionUtils::getSession('ADM_TASK', 'ADM_FILTER_TASK_FILTERS', 1),
                                     [
                                         'class' => 'form-control filter kt-bootstrap-select hasSessionState',
-                                        'id'            => 'ADM_TASK_FILTER_STATUS',
+                                        'id'            => 'ADM_FILTER_TASK_FILTERS',
                                         'data-module'   => 'ADM_TASK',
-                                        'data-key'      => 'ADM_TASK_FILTER_STATUS'
+                                        'data-key'      => 'ADM_FILTER_TASK_FILTERS'
                                     ]
-                            ) }}
-                        </div>
+                                ) }}
+                            </div>
+                        @endif
                     </div>
                 </div>
                 <div>
                     @if(!$blockEdit)
-                        @if($type == config('task_type.TYPE_PROJECT'))
+                        @if($type == config('task_type.TYPE_PROJECT') || $type == config('task_type.TYPE_PRODUCT'))
                             <a href="javascript:;" class="btn btn-success btn-sm btn-upper newStandardTaskList" data-id="-1" data-type="{{ $type }}" data-pid="{{ $pid }}" >
                                 <i class="fa fa-plus-square"></i>
                                 {{ KJLocalization::translate('Admin - Taken', 'Toevoegen uit standaard takenlijst', 'Toevoegen uit standaard takenlijst') }}
@@ -145,8 +176,8 @@
                             </div>
                             <div class="kt-todo__labels">
                                 @if($type != config('task_type.TYPE_TASKLIST') && $type != config('task_type.TYPE_PRODUCT'))
-                                    @if($item && $item->product)
-                                        <span class="kt-todo__label kt-badge kt-badge--unified-warning kt-badge--bold kt-badge--inline">{{ $item->product->title }}</span>
+                                    @if($item && $item->project_product)
+                                        <span class="kt-todo__label kt-badge kt-badge--unified-warning kt-badge--bold kt-badge--inline">{{ $item->project_product->product->title }}</span>
                                     @endif
 
                                     @if($item && $item->assignee)

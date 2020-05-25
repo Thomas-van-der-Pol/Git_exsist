@@ -10,10 +10,9 @@
             </div>
         </div>
     </div>
-</div>a
+</div>
 
 <div class="kt-separator m-0"></div>
-
 
 @php
     $customEditButton = array(
@@ -46,6 +45,10 @@
             array(
                 'field' => 'FULL_PRODUCT',
                 'title' => KJLocalization::translate('Admin - Dossiers', 'Omschrijving intern', 'Omschrijving intern')
+            ),
+            array(
+                'field' => 'DESCRIPTION_EXT',
+                'title' => KJLocalization::translate('Admin - Dossiers', 'Omschrijving extern', 'Omschrijving extern')
             ),
             array(
                 'field' => 'RELATION',

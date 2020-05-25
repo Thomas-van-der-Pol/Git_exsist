@@ -172,6 +172,7 @@ class RelationController extends AdminBaseController {
                     ['status', $status]
                 ]);
                 break;
+
         }
 
         return $bindings;

@@ -35,5 +35,10 @@ class CustomMap extends Model
         return $this->belongsToMany(Task::class, 'TASK_USER_CUSTOM_MAP', 'FK_USER_CUSTOM_MAP', 'FK_TASK');
 
     }
+    public function nameUnderScored(){
+        if($this->NAME){
+            return str_replace(' ', '_', $this->NAME);
+        }
+    }
 
 }

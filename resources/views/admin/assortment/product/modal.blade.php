@@ -2,7 +2,7 @@
     'ADM_PRODUCT_MODAL_TABLE',
     [
         'method' => 'GET',
-        'url' => '/admin/product/allByProjectDatatable/' . $project->ID ?? 0,
+        'url' => '/admin/product/allDatatable',
         'checkable' => ((request('checkable') ?? 0) == 1),
         'checkableDescriptionColumn' => 'DESCRIPTION_INT',
         'selectable' => ((request('selectable') ?? 0) == 1),
@@ -15,7 +15,7 @@
     ]
 ) }}
 
-@if($project)
+@if(((request('show_options') ?? 0) == 1))
     {{ KJField::date('STARTDATE', KJLocalization::translate('Admin - Taken', 'Start datum', 'Start datum'), (date(KJ\Localization\libraries\LanguageUtils::getDateFormat(), strtotime(date("D M d")))), ['required', 'data-date-start-date' => '-0d', 'data-locale-format' => \KJ\Localization\libraries\LanguageUtils::getJSDatePickerFormat()]) }}
     {{ KJField::select('FK_CORE_USER_ASSIGNEE', KJLocalization::translate('Admin - Taken', 'Standaard taken interventie toewijzen aan', 'Standaard taken interventie toewijzen aan'), $contacts, '', true, 0, ['required']) }}
 @endif

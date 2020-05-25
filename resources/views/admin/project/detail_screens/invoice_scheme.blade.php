@@ -32,8 +32,11 @@
             ),
             array(
                 'field' => 'INTERVENTION',
-                'title' => KJLocalization::translate('Admin - Dossiers', 'Interventie', 'Interventie'),
-                'width' => 300,
+                'title' => KJLocalization::translate('Admin - Dossiers', 'Omschrijving intern', 'Omschrijving intern'),
+            ),
+            array(
+                'field' => 'INTERVENTION_EXT',
+                'title' => KJLocalization::translate('Admin - Dossiers', 'Omschrijving extern', 'Omschrijving extern'),
             ),
             array(
                 'field' => 'PERCENTAGE',
