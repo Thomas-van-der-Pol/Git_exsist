@@ -19,7 +19,6 @@
         <a href="javascript:;" id="addMap" class="btn btn-success btn-sm">
             <i class="la la-plus"></i>
             {{ KJLocalization::translate('Admin - Taken', 'Map aanmaken', 'Map aanmaken')}}
-            {{ KJLocalization::translate('Admin - Taken', 'Map aanpassen', 'Map aanpassen')}}
         </a>
     @endslot
     @endcomponent
