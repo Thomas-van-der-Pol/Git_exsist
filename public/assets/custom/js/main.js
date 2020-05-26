@@ -267,6 +267,9 @@ $('body').on('reset', 'form', function(e) {
         setTimeout(function() {
             // Refresh select pickers
             form.find('select').selectpicker('refresh');
+
+            // Set material active labels
+            setMaterialActiveLabels(form);
         }, 1);
     }
 });

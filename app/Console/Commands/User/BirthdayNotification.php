@@ -9,7 +9,7 @@ use KJLocalization;
 
 class BirthdayNotification extends Command {
 
-    protected $name = 'emma:birthday_notifications';
+    protected $name = 'exsist:birthday_notifications';
 
     protected $description = 'Automatically notify about birthdays';
 

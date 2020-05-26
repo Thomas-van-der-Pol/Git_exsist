@@ -92,17 +92,13 @@
 
 @php
     $today = date('Y-m-d');
-    $afterTomorrow = date('Y-m-d', strtotime('+2 day'));
 
-    $count = \App\Models\Admin\Task\Task::where([
+    $count =  \App\Models\Admin\Task\Task::whereDate('DEADLINE', '<=', $today)->where([
         'ACTIVE' => true,
-        'FK_CORE_USER_ASSIGNEE' => Auth::guard()->user()->ID,
-        'DONE' => false
+        'FK_TASK_LIST' => null,
+        'DONE' => false,
+        'FK_CORE_USER_ASSIGNEE' => Auth::guard()->user()->ID
     ])
-    ->where(function($filter) use ($today, $afterTomorrow) {
-        $filter->whereBetween('DEADLINE', [$today, $afterTomorrow]);
-        $filter->orWhere('DEADLINE', '<', $today);
-    })
     ->count();
 @endphp
 

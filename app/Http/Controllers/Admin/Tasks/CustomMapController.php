@@ -24,12 +24,19 @@ class CustomMapController extends AdminBaseController {
             'viewDetail' => $view->render()
         ]);
     }
-//
-//    public function saveMap(Request $request){
-//        $mapName = $request->get('MAP_NAME');
-//        $userCreated = Auth::guard()->user()->ID;
-//        CustomMap::
-//    }
+
+    public function deleteMap($ID){
+        $customMap = CustomMap::find($ID);
+        $taskslink = $customMap->taskLink;
+
+        foreach($taskslink as $tasklink){
+            $tasklink->delete();
+        }
+        $result = $customMap->delete();
+        return response()->json([
+            'success' => $result
+        ]);
+    }
 
 
 }

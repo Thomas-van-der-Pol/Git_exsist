@@ -8,7 +8,7 @@
             'URL' => ltrim(\KJ\Localization\libraries\LanguageUtils::getUrl('admin'), '/')
         ];
 
-        if($item->FK_TASK_LIST) {
+        if($type == config('task_type.TYPE_TASKLIST')) {
             $breadCrumsTaskList[] = [
                 'title' => KJLocalization::translate('Admin - Menu', 'Instellingen', 'Instellingen'),
                 'URL' => ltrim(\KJ\Localization\libraries\LanguageUtils::getUrl('admin/settings/group/1'), '/')
@@ -26,7 +26,7 @@
                 'URL' => ltrim(\KJ\Localization\libraries\LanguageUtils::getUrl('admin/settings/tasklist/detail/' . ($item->taskList->ID)), '/')
             ];
         }
-        else if ($item->FK_PROJECT) {
+        else if($type == config('task_type.TYPE_PROJECT')) {
             $breadCrumsTaskList[] = [
                 'title' => KJLocalization::translate('Admin - Menu', 'Dossiers', 'Dossiers'),
                 'URL' => ltrim(\KJ\Localization\libraries\LanguageUtils::getUrl('admin/project'), '/')
@@ -40,7 +40,7 @@
                 'URL' => ltrim(\KJ\Localization\libraries\LanguageUtils::getUrl('admin/project/detail/' . ($item->project->ID)), '/')
             ];
         }
-         else if ($item->FK_ASSORTMENT_PRODUCT) {
+        else if($type == config('task_type.TYPE_PRODUCT')) {
             $breadCrumsTaskList[] = [
                 'title' => KJLocalization::translate('Admin - Menu', 'Interventies', 'Interventies'),
                 'URL' => ltrim(\KJ\Localization\libraries\LanguageUtils::getUrl('admin/product'), '/')
@@ -54,7 +54,7 @@
                 'URL' => ltrim(\KJ\Localization\libraries\LanguageUtils::getUrl('admin/product/detail/' . ($item->product->ID)), '/')
             ];
         }
-        else if ($item->FK_CRM_RELATION) {
+        else if($type == config('task_type.TYPE_RELATION')) {
             $breadCrumsTaskList[] = [
                 'title' => KJLocalization::translate('Admin - Menu', 'CRM Relaties', 'CRM Relaties'),
                 'URL' => ltrim(\KJ\Localization\libraries\LanguageUtils::getUrl('admin/crm/relation'), '/')
@@ -100,4 +100,7 @@
 
 @section('page-resources')
     {!! Html::script('/assets/custom/js/admin/tasks/detail.js?v='.Cache::get('cache_version_number')) !!}
+    <script>
+    var type = {type: "{{$type}}"};
+    </script>
 @endsection

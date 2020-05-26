@@ -245,11 +245,21 @@ class TasksController extends AdminBaseController {
         ]);
     }
 
+    protected function beforeDetail(int $ID, $item)
+    {
+
+        $type = request('type');
+        $bindings = [
+          ['type', $type]
+        ];
+        return $bindings;
+    }
+
     public function beforeDetailScreen(int $id, $item, $screen)
     {
         $bindings = [];
         $none = ['' => KJLocalization::translate('Algemeen', 'Niets geselecteerd', 'Niets geselecteerd') . '..'];
-
+        $type = request('type');
         switch ($screen) {
             case 'default':
                 $categories = DropdownvalueUtils::getDropdown(config('dropdown_type.TYPE_TASK_CATEGORY'));
@@ -279,7 +289,8 @@ class TasksController extends AdminBaseController {
                     ['users', $users],
                     ['categories', $categories],
                     ['progressOptions', $progressOptions],
-                    ['products', $products]
+                    ['products', $products],
+                    ['type', $type]
                 ]);
                 break;
         }
@@ -304,7 +315,6 @@ class TasksController extends AdminBaseController {
         if (!Auth::guard()->user()->hasPermission(config('permission.TAKEN_INZIEN'))) {
             $forcedUser = Auth::guard()->user()->ID;
         }
-
         $items = [];
         $blockEdit = false;
         switch ($type) {
@@ -343,12 +353,10 @@ class TasksController extends AdminBaseController {
                 break;
 
             case config('task_type.TYPE_TODAY'):
-                $date = date('Y-m-d');
-
-                $items = Task::where([
+                $today = date('Y-m-d');
+                $items = Task::where('DEADLINE', $today)->where([
                     'ACTIVE' => $active,
                     'FK_TASK_LIST' => null,
-                    'DEADLINE' => $date,
                     'DONE' => false
                 ])
                 ->orderBy('DEADLINE', 'ASC');
@@ -364,7 +372,7 @@ class TasksController extends AdminBaseController {
                 $begin_week = date('Y-m-d', strtotime('this week'));
                 $end_week = date('Y-m-d', strtotime('first sunday'));
 
-                $items = Task::whereBetween('DEADLINE', [$begin_week, $end_week])->where([
+                $items = Task::whereBetween('DEADLINE', [$begin_week,$end_week])->where([
                     'ACTIVE' => $active,
                     'FK_TASK_LIST' => null,
                     'DONE' => false
@@ -382,7 +390,7 @@ class TasksController extends AdminBaseController {
                 $begin_month = date('Y-m-d', strtotime('first day of this month'));
                 $end_month = date('Y-m-d', strtotime('last day of this month'));
 
-                $items = Task::whereBetween('DEADLINE', [$begin_month, $end_month])->where([
+                $items = Task::whereBetween('DEADLINE', [$begin_month,$end_month])->where([
                     'ACTIVE' => $active,
                     'FK_TASK_LIST' => null,
                     'DONE' => false
@@ -497,14 +505,50 @@ class TasksController extends AdminBaseController {
 
             });
         }
+
+        // Apply date filter
         if($type != config('task_type.TYPE_TODAY') && $type != config('task_type.TYPE_WEEK') && $type != config('task_type.TYPE_MONTH')){
             if ($beginDate && $endDate) {
                 $begin = date('Y-m-d H:i:s', strtotime($beginDate));
                 $end = date('Y-m-d H:i:s', strtotime($endDate));
-
                 $items->whereBetween('DEADLINE', [$begin, $end]);
             }
         }
+
+        // Show expired items
+        if (!in_array($type, [config('task_type.TYPE_DONE'), config('task_type.TYPE_SUBSCRIBED')])) {
+            $today = date('Y-m-d');
+            $items->orWhere(function ($query) use ($today, $forcedUser, $type, $assignee, $filter) {
+                $query->where('DEADLINE', '<', $today)
+                    ->where('DONE', false)
+                    ->where('ACTIVE', true);
+
+
+                if (($assignee > 0) && ($forcedUser == 0)) {
+                    $query->where([
+                        'FK_CORE_USER_ASSIGNEE' => $assignee
+                    ]);
+                }
+                if (($forcedUser > 0) && ($type != config('task_type.TYPE_SUBSCRIBED'))) {
+                    $query->where(function ($query) use ($forcedUser) {
+                        $query->where('FK_CORE_USER_ASSIGNEE', $forcedUser)
+                            ->orWhere('FK_CORE_USER_CREATED', $forcedUser);
+                    });
+                }
+
+                // Apply filter
+                if ($filter != '') {
+                    $query->where(function ($whereFilter) use ($filter) {
+                        $whereFilter->where('SUBJECT', 'like', '%' . $filter . '%');
+                        $whereFilter->orWhere('CONTENT', 'like', '%' . $filter . '%');
+                        $whereFilter->orWhereHas('project', function ($whereFilter) use ($filter) {
+                            $whereFilter->where('DESCRIPTION', 'like', '%' . $filter . '%');
+                        });
+                    });
+                }
+            });
+        }
+
         // Apply forced user
         if (($forcedUser > 0) && ($type != config('task_type.TYPE_SUBSCRIBED'))) {
             $items->where(function($query) use ($forcedUser) {

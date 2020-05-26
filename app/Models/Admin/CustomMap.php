@@ -3,6 +3,7 @@
 namespace App\Models\Admin;
 
 use App\Models\Admin\Task\Task;
+use App\Models\Admin\Task\TaskCustomMap;
 use Illuminate\Database\Eloquent\Model;
 use KJLocalization;
 
@@ -35,6 +36,12 @@ class CustomMap extends Model
         return $this->belongsToMany(Task::class, 'TASK_USER_CUSTOM_MAP', 'FK_USER_CUSTOM_MAP', 'FK_TASK');
 
     }
+
+    public function taskLink()
+    {
+        return $this->hasMany(TaskCustomMap::class, 'FK_USER_CUSTOM_MAP', 'ID');
+    }
+
     public function nameUnderScored(){
         if($this->NAME){
             return str_replace(' ', '_', $this->NAME);

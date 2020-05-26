@@ -67,10 +67,13 @@ class InvoiceUtils
         $locale = App::getLocale();
         $localeId = config('language.langs')[array_search(strtoupper($locale), array_column(config('language.langs'), 'CODE'))]['ID'];
 
-        $paymentText = KJLocalization::translate('Admin - Facturen', 'Betalingstekst', 'Wij verzoeken u deze factuur voor :TODAY te voldoen op bankrekening :IBAN_NUMBER ten name van Exsist B.V. te Doetinchem, onder vermelding van het factuurnummer en uw debiteurnummer', [
-            'TODAY' => date('Y-m-d'),
-            'IBAN_NUMBER' => $invoice->label->IBAN_NUMBER
+        $paymentText = KJLocalization::translate('Admin - Facturen', 'Betalingstekst', 'Wij verzoeken u deze factuur voor :EXPIRATION_DATE te voldoen op bankrekening :IBAN_NUMBER ten name van Exsist B.V. te Doetinchem, onder vermelding van het factuurnummer en uw debiteurnummer (:INVOICE_NUMBER, :NUMBER_DEBTOR)', [
+            'EXPIRATION_DATE' => $invoice->getExpirationDateFormattedAttribute() ?? 'Vervaldatum (concept)',
+            'IBAN_NUMBER' => $invoice->label->IBAN_NUMBER,
+            'INVOICE_NUMBER' => $invoice->NUMBER ?? KJLocalization::translate('Admin - Facturen', 'Concept', 'Concept', [], $locale),
+            'NUMBER_DEBTOR' => $invoice->relation->NUMBER_DEBTOR
         ], $locale);
+
         $title = KJLocalization::translate('Admin - Facturen', 'Factuur', 'Factuur', [], $locale);
         if ($invoice->IS_ADVANCE) {
             $title = KJLocalization::translate('Admin - Facturen', 'Voorschotfactuur', 'Voorschotfactuur', [], $locale);

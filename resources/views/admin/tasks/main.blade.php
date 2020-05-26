@@ -50,9 +50,9 @@
                                 </span>
                             </span>
                             {{--<span class="kt-nav__link-badge">--}}
-                                {{--<span class="kt-badge kt-badge--unified-success kt-badge--md kt-badge--rounded kt-badge--boldest">--}}
-                                    {{--TODO::3--}}
-                                {{--</span>--}}
+                            {{--<span class="kt-badge kt-badge--unified-success kt-badge--md kt-badge--rounded kt-badge--boldest">--}}
+                            {{--TODO::3--}}
+                            {{--</span>--}}
                             {{--</span>--}}
                         </a>
 
@@ -235,12 +235,12 @@
                                 <div class="col-2" style="padding-right: 5px ">
                                     <a href="#" class="kt-widget__item " data-toggle="tab" role="tab">
                                         <span class="kt-widget__section" style="width:100%;">
-                                            <span class="kt-widget__icon deleteCustomMap">
-                                               <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="kt-svg-icon">
+                                            <span class="kt-widget__icon deleteCustomMap" data-id="{{$customMap->ID}}">
+                                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="kt-svg-icon">
                                                     <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                                                         <rect x="0" y="0" width="24" height="24"/>
                                                         <path d="M3.5,21 L20.5,21 C21.3284271,21 22,20.3284271 22,19.5 L22,8.5 C22,7.67157288 21.3284271,7 20.5,7 L10,7 L7.43933983,4.43933983 C7.15803526,4.15803526 6.77650439,4 6.37867966,4 L3.5,4 C2.67157288,4 2,4.67157288 2,5.5 L2,19.5 C2,20.3284271 2.67157288,21 3.5,21 Z" fill="#000000" opacity="0.3"/>
-                                                        <path d="M11.9999651,17.2276651 L9.80187391,18.4352848 C9.53879239,18.5798204 9.21340017,18.4741205 9.07509004,18.1991974 C9.02001422,18.0897216 9.00100892,17.9643258 9.02101638,17.8424227 L9.44081443,15.2846431 L7.66252134,13.4732136 C7.44968392,13.2564102 7.44532889,12.9003514 7.65279409,12.677934 C7.73540782,12.5893662 7.84365664,12.5317281 7.96078237,12.5139426 L10.418323,12.1407676 L11.5173686,9.81362288 C11.6489093,9.53509542 11.97161,9.42073887 12.2381407,9.5582004 C12.3442746,9.6129383 12.4301813,9.70271178 12.4825615,9.81362288 L13.5816071,12.1407676 L16.0391477,12.5139426 C16.3332818,12.5586066 16.5370768,12.8439892 16.4943366,13.1513625 C16.4773173,13.2737601 16.4221618,13.3868813 16.3374088,13.4732136 L14.5591157,15.2846431 L14.9789137,17.8424227 C15.0291578,18.148554 14.8324094,18.4392867 14.5394638,18.4917923 C14.4228114,18.5127004 14.3028166,18.4928396 14.1980562,18.4352848 L11.9999651,17.2276651 Z" fill="#000000" opacity="0.3"/>
+                                                        <path d="M10.5857864,14 L9.17157288,12.5857864 C8.78104858,12.1952621 8.78104858,11.5620972 9.17157288,11.1715729 C9.56209717,10.7810486 10.1952621,10.7810486 10.5857864,11.1715729 L12,12.5857864 L13.4142136,11.1715729 C13.8047379,10.7810486 14.4379028,10.7810486 14.8284271,11.1715729 C15.2189514,11.5620972 15.2189514,12.1952621 14.8284271,12.5857864 L13.4142136,14 L14.8284271,15.4142136 C15.2189514,15.8047379 15.2189514,16.4379028 14.8284271,16.8284271 C14.4379028,17.2189514 13.8047379,17.2189514 13.4142136,16.8284271 L12,15.4142136 L10.5857864,16.8284271 C10.1952621,17.2189514 9.56209717,17.2189514 9.17157288,16.8284271 C8.78104858,16.4379028 8.78104858,15.8047379 9.17157288,15.4142136 L10.5857864,14 Z" fill="#000000"/>
                                                     </g>
                                                 </svg>
                                             </span>
@@ -271,7 +271,7 @@
                                                     {{ Form::select(
                                                         'ADM_FILTER_TASK_ASSIGNEE',
                                                         $users,
-                                                        \KJ\Core\libraries\SessionUtils::getSession('ADM_TASK', 'ADM_FILTER_TASK_ASSIGNEE', 1),
+                                                        \KJ\Core\libraries\SessionUtils::getSession('ADM_TASK', 'ADM_FILTER_TASK_ASSIGNEE', auth()->user()->ID),
                                                         [
                                                             'class' => 'form-control filter kt-bootstrap-select hasSessionState',
                                                             'id'            => 'ADM_FILTER_TASK_ASSIGNEE',

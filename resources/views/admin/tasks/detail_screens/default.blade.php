@@ -4,16 +4,16 @@
             @php
             $backURL = null;
 
-            if($item->FK_PROJECT){
+            if($type == config('task_type.TYPE_PROJECT')) {
                 $backURL = 'admin/project/detail/'.$item->project->ID;
             }
-            else if($item->FK_CRM_RELATION){
+            else if($type == config('task_type.TYPE_RELATION')) {
                 $backURL = 'admin/crm/relation/detail/'.$item->relation->ID;
             }
-            else if($item->FK_TASK_LIST){
+            else if($type == config('task_type.TYPE_TASKLIST')) {
                 $backURL = 'admin/settings/tasklist/detail/'.$item->taskList->ID;
             }
-            else if($item->FK_ASSORTMENT_PRODUCT){
+            else if($type == config('task_type.TYPE_PRODUCT')) {
                 $backURL = 'admin/product/detail/'.$item->product->ID;
             }
             else {

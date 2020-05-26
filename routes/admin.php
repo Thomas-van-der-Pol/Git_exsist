@@ -167,7 +167,7 @@ foreach($alt_langs as $langCode) {
                 Route::post('/retrieveTasks', 'Admin\Tasks\TasksController@retrieveTasks');
                 Route::get('/modal/{ID}', 'Admin\Tasks\TasksController@modal');
                 Route::get('/functions/modal', 'Admin\Tasks\TasksController@functionsModal');
-                Route::get('/custommap/modal/{ID}', 'Admin\Tasks\CustomMapController@modal');
+
                 Route::post('/saveMap', 'Admin\Tasks\CustomMapController@save');
 
                 Route::post('/setSubscription', 'Admin\Tasks\TasksController@setSubscription');
@@ -180,6 +180,10 @@ foreach($alt_langs as $langCode) {
                 Route::prefix('list')->group(function() {
                     Route::get('/modal/{ID}', 'Admin\Tasks\TasksController@taskListModal');
                     Route::post('/', 'Admin\Tasks\TasksController@saveTaskList');
+                });
+                Route::prefix('custommap')->group(function() {
+                    Route::get('/modal/{ID}', 'Admin\Tasks\CustomMapController@modal');
+                    Route::delete('/{ID}', 'Admin\Tasks\CustomMapController@deleteMap');
                 });
             });
 

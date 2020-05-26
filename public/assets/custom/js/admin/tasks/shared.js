@@ -97,7 +97,8 @@ $(document).ready(function() {
         e.preventDefault();
 
         var id = $(this).data('id');
-        window.location = '/admin/tasks/detail/' + id;
+        var type = $(this).data('type');
+        window.location = '/admin/tasks/detail/' + id + '?type=' + type;
     });
 
     $('body').on('click', '.kt-star', function(e) {

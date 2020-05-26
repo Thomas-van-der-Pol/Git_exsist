@@ -19,6 +19,7 @@
 @slot('subcopy')
 # {{ KJLocalization::translate('E-mails', 'Werkt de link niet?', 'Werkt de link niet?', [], $language) }}
 {{ KJLocalization::translate('E-mails', 'Werkt de link niet text uitleg', 'Kopieer en plak onderstaande link in het adresvak van je browser.', [], $language) }}<br/>
-[{{ $url}}]({{ $url}})
+[{{ substr($url,0,strlen($url) / 2) }}]({{ $url  }})
+[{{ substr($url,strlen($url) / 2, strlen($url)) }}]({{ $url }})
 @endslot
 @endcomponent

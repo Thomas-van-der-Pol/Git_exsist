@@ -1,5 +1,8 @@
 $(document).ready(function() {
-
+    kjlocalization.create('Admin - Taken', [
+        {'Map verwijderen titel': 'Weet je het zeker'},
+        {'Map verwijderen tekst': 'Alle taken in deze map worden ontkoppeld van deze map.'}
+    ]);
     // Load active tab
     loadTaskItemActive();
 
@@ -58,4 +61,25 @@ function loadTaskItemActive(beginDate = null, endDate = null) {
 $('.editCustomMap').on('click', function () {
     var id = $(this).data('id');
     LoadCustomMapModal(id);
+});
+
+$('.deleteCustomMap').on('click', function () {
+    var id = $(this).data('id');
+    // Wel bereikbaar, maar verkeerde versie
+    swal.fire({
+        title: kjlocalization.get('admin_-_taken', 'map_verwijderen_titel'),
+        text: kjlocalization.get('admin_-_taken', 'map_verwijderen_tekst'),
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonText: kjlocalization.get('algemeen', 'doorgaan'),
+        cancelButtonText: kjlocalization.get('algemeen', 'annuleren')
+    }).then(function(result) {
+        if (result.value) {
+            kjrequest('DELETE', '/admin/tasks/custommap/' + id, null, true, function (data) {
+                if(data.success){
+                    location.reload();
+                }
+            })
+        }
+    });
 });

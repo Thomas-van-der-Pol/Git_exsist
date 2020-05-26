@@ -1,7 +1,7 @@
 $(document).ready(function() {
     // Load screen
     loadScreen($('#default'), {
-        url: '/admin/tasks/detailScreen',
+        url: '/admin/tasks/detailScreen?type=' + type.type,
         mode: 'edit',
         afterLoad: afterLoadScreen
     });
@@ -22,6 +22,7 @@ $(document).ready(function() {
         }
 
         setScreenMode(container, 'read');
+
     });
 
     $('body').on('click', '#btnSaveTask', function(e) {
@@ -31,7 +32,7 @@ $(document).ready(function() {
             if (data.success === true) {
                 // When inserted then reload
                 loadScreen($('#default'), {
-                    url: '/admin/tasks/detailScreen',
+                    url: '/admin/tasks/detailScreen?type=' + type.type,
                     mode: 'edit',
                     afterLoad: afterLoadScreen
                 });
@@ -47,7 +48,7 @@ $(document).ready(function() {
             function(result) {
                 if (result.success) {
                     loadScreen($('#default'), {
-                        url: '/admin/tasks/detailScreen',
+                        url: '/admin/tasks/detailScreen?type=' + type.type,
                         mode: 'edit',
                         afterLoad: afterLoadScreen
                     });

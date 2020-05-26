@@ -142,7 +142,7 @@
                                 </div>
                             </div>
                         @endif
-                        <div class="kt-todo__details" data-id="{{ $item ? $item->ID : 0 }}" data-toggle="view">
+                        <div class="kt-todo__details" data-id="{{ $item ? $item->ID : 0 }}" data-toggle="view" data-type="{{$type}}">
                             <div class="kt-todo__message">
                                 <div class="row">
                                     <div class="col mr-3">
