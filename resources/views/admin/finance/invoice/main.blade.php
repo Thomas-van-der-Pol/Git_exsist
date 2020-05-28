@@ -141,7 +141,7 @@
 
                                 <a href="javascript:;" id="sendBulkReminder" class="btn btn-warning btn-sm btn-upper ml-2 pull-right" style="display: none;">
                                     <i class="fa fa-bell"></i>
-                                    {{ KJLocalization::translate('Admin - Facturen', 'Selectie herrinnering versturen', 'Selectie herrinnering versturen')}}
+                                    {{ KJLocalization::translate('Admin - Facturen', 'Selectie herinnering versturen', 'Selectie herinnering versturen')}}
                                 </a>
                             </div>
                         </div>

@@ -124,7 +124,7 @@ class TasksController extends AdminBaseController {
             $project = Project::find(( $request->get('pid') ?? 0 ));
             $product = Product::find(( $request->get('pid') ?? 0 ));
 
-            $taskListsOri = TaskList::all()->sortBy('NAME')->pluck('NAME', 'ID');
+            $taskListsOri = TaskList::where('ACTIVE', true)->orderBy('NAME')->pluck('NAME', 'ID');
             $contactsOri = User::all()->where('ACTIVE',true)->pluck('FULLNAME', 'ID');
             $contacts = $none + $contactsOri->toArray();
             $taskLists = $none + $taskListsOri->toArray();

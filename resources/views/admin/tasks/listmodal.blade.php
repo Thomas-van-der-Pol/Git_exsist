@@ -15,7 +15,7 @@
                 @if($type == config('task_type.TYPE_PROJECT'))
                     {{ KJField::select('FK_CORE_USER_ASSIGNEE', KJLocalization::translate('Admin - Taken', 'Toegewezen aan', 'Toegewezen aan'), $contacts, ($item ? $item->FK_CORE_USER_ASSIGNEE : ''), true, 0, ['required']) }}
                 @endif
-                {{ KJField::select('FK_TASK_LIST', KJLocalization::translate('Admin - Taken', 'Standaard takenlijst', 'Standaard takenlijst'), $taskLists, ($item ? $item->FK_TASK_LIST : ''), true, 0, ['required']) }}
+                {{ KJField::select('FK_TASK_LIST', KJLocalization::translate('Admin - Taken', 'Standaard takenlijst', 'Standaard takenlijst'), $taskLists, ($item ? $item->FK_TASK_LIST : ''), true, 0, ['required', 'data-live-search' => 1, 'data-size' => 5]) }}
                 @if($type == config('task_type.TYPE_PROJECT'))
                     {{ KJField::date('STARTDATE', KJLocalization::translate('Admin - Taken', 'Start datum', 'Start datum'), (date(KJ\Localization\libraries\LanguageUtils::getDateFormat(), strtotime(date("D M d")))), ['required', 'data-date-start-date' => '-0d', 'data-locale-format' => \KJ\Localization\libraries\LanguageUtils::getJSDatePickerFormat()]) }}
                 @endif

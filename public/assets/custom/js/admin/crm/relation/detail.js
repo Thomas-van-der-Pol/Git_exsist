@@ -55,15 +55,6 @@ $(document).ready(function() {
     $('body').on('click', '#btnSaveRelation, #btnSaveRelationNew, #btnSaveFinancialDetails', function(e) {
         e.preventDefault();
 
-        var isValid = false;
-        var regex = /^[0-9-+()\s]*$/;
-        isValid = regex.test($("#PHONENUMBER").val());
-        if(!isValid) {
-            $("#PHONENUMBER-error").css("display", !isValid ? "block" : "none");
-            return ;
-        }
-
-
         var container = $(this).closest('.tab-pane');
         if (!container.length) {
             container = $(this).closest('.kt-widget');

@@ -31,8 +31,7 @@
                     <div class="row">
                         <div class="col-xl-4 col-lg-6">
                             {{--Required--}} {{ KJField::text('NAME', KJLocalization::translate('Admin - CRM', 'Naam', 'Naam'), $item ? $item->NAME : '', true, ['required', 'data-screen-mode' => 'edit']) }}
-                            {{ KJField::text('PHONENUMBER', KJLocalization::translate('Admin - CRM', 'Telefoonnummer', 'Telefoonnummer'), $item ? $item->PHONENUMBER : '', true, ['data-screen-mode' => 'read, edit']) }}
-                            <div style="margin-top: -0.75rem; margin-bottom: 10px" id="PHONENUMBER-error" class="error invalid-feedback">{{KJLocalization::translate('Admin - CRM', 'Gebruik alleen nummers en speciale tekens', 'Gebruik alleen nummers en speciale tekens')}}</div>
+                            {{ KJField::text('PHONENUMBER', KJLocalization::translate('Admin - CRM', 'Telefoonnummer', 'Telefoonnummer'), $item ? $item->PHONENUMBER : '', true, ['data-screen-mode' => 'read, edit', 'pattern' => '^[0-9-+()\s]*$', 'title' => KJLocalization::translate('Algemeen', 'Gebruik alleen nummers en speciale tekens', 'Gebruik alleen nummers en speciale tekens')]) }}
                             {{ KJField::email('EMAILADDRESS', KJLocalization::translate('Admin - CRM', 'E-mailadres', 'E-mailadres'), $item ? $item->EMAILADDRESS : '', ['data-screen-mode' => 'read, edit']) }}
                             {{ KJField::text('WEBSITE', KJLocalization::translate('Admin - CRM', 'Website', 'Website'), $item ? $item->WEBSITE : '', true, ['data-screen-mode' => 'read, edit']) }}
                         </div>

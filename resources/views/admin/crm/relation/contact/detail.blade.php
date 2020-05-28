@@ -27,8 +27,8 @@
             {{ KJField::text('FIRSTNAME', KJLocalization::translate('Admin - CRM', 'Voornaam', 'Voornaam'), $item ? $item->FIRSTNAME : '') }}
             {{ KJField::text('PREPOSITION', KJLocalization::translate('Admin - CRM', 'Tussenvoegsel', 'Tussenvoegsel'), $item ? $item->PREPOSITION : '') }}
             {{--Required--}} {{ KJField::text('LASTNAME', KJLocalization::translate('Admin - CRM', 'Achternaam', 'Achternaam'), $item ? $item->LASTNAME : '', true, ['required']) }}
-            {{ KJField::text('PHONENUMBER', KJLocalization::translate('Admin - CRM', 'Telefoonnummer', 'Telefoonnummer'), $item ? $item->PHONENUMBER : '') }}
-            {{ KJField::text('CELLPHONENUMBER', KJLocalization::translate('Admin - CRM', 'Mobiel', 'Mobiel'), $item ? $item->CELLPHONENUMBER : '') }}
+            {{ KJField::text('PHONENUMBER', KJLocalization::translate('Admin - CRM', 'Telefoonnummer', 'Telefoonnummer'), $item ? $item->PHONENUMBER : '', true, ['pattern' => '^[0-9-+()\s]*$', 'title' => KJLocalization::translate('Algemeen', 'Gebruik alleen nummers en speciale tekens', 'Gebruik alleen nummers en speciale tekens')]) }}
+            {{ KJField::text('CELLPHONENUMBER', KJLocalization::translate('Admin - CRM', 'Mobiel', 'Mobiel'), $item ? $item->CELLPHONENUMBER : '', true, ['pattern' => '^[0-9-+()\s]*$', 'title' => KJLocalization::translate('Algemeen', 'Gebruik alleen nummers en speciale tekens', 'Gebruik alleen nummers en speciale tekens')]) }}
             {{--Required--}} {{ KJField::email('EMAILADDRESS', KJLocalization::translate('Admin - CRM', 'E-mailadres', 'E-mailadres'), $item ? $item->EMAILADDRESS : '', ['required'], []) }}
             @if($item && $item->NEW_PASSWORD)
                 <span class="form-text text-muted mb-2 pb-2">Verzonden op: {{ $item ? date('d-m-Y H:i', strtotime($item->NEW_PASSWORD)) : '' }}</span>

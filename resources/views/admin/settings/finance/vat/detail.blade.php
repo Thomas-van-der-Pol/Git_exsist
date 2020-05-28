@@ -10,12 +10,12 @@
     <div class="row">
         <div class="col-xl-4 col-lg-6">
             {{-- Required --}} {{ KJField::text('DESCRIPTION', KJLocalization::translate('Admin - Financieel', 'Omschrijving', 'Omschrijving'), $item ? $item->DESCRIPTION : '', true, ['required']) }}
-            {{-- Required --}} {{ KJField::number('PERCENTAGE',KJLocalization::translate('Admin - Financieel', 'Percentage', 'Percentage'), $item ? number_format((float)$item->PERCENTAGE,0) : '', true, ['required', 'min' => 0, 'steps' => 1], [
+            {{-- Required --}} {{ KJField::number('PERCENTAGE',KJLocalization::translate('Admin - Financieel', 'Percentage', 'Percentage'), $item ? number_format((float)$item->PERCENTAGE,0) : '', true, ['required', 'min' => 0, 'step' => 1], [
                 'right' => [
                     ['type' => 'text', 'caption' => '&percnt;']
                 ]
             ]) }}
-            {{-- Required --}} {{ KJField::number('VATCODE',KJLocalization::translate('Admin - Financieel', 'Btw code', 'Btw code'), $item ? $item->VATCODE : '', true, ['required', 'min' => 0, 'steps' => 1]) }}
+            {{-- Required --}} {{ KJField::number('VATCODE',KJLocalization::translate('Admin - Financieel', 'Btw code', 'Btw code'), $item ? $item->VATCODE : '', true, ['required', 'min' => 0, 'step' => 1]) }}
         </div>
     </div>
 

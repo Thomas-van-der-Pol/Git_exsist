@@ -10,7 +10,7 @@
     <div class="row">
         <div class="col-xl-4 col-lg-6">
             {{-- Required --}} {{ KJField::text('DESCRIPTION', KJLocalization::translate('Admin - Financieel', 'Omschrijving', 'Omschrijving'), $item ? $item->DESCRIPTION : '', true, ['required']) }}
-            {{-- Required --}} {{ KJField::number('ACCOUNT',KJLocalization::translate('Admin - Financieel', 'Grootboeknummer', 'Grootboeknummer'), $item ? $item->ACCOUNT : '', true, ['required', 'min' => 1, 'steps' => 1]) }}
+            {{-- Required --}} {{ KJField::number('ACCOUNT',KJLocalization::translate('Admin - Financieel', 'Grootboeknummer', 'Grootboeknummer'), $item ? $item->ACCOUNT : '', true, ['required', 'min' => 1, 'step' => 1]) }}
         </div>
     </div>
 

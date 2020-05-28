@@ -13,11 +13,17 @@ class DropdownvalueUtils
             $none = ['' => KJLocalization::translate('Algemeen', 'Niets geselecteerd', 'Niets geselecteerd') . '..'];
         }
 
-        $valuesOri = DropdownValue::all()
-            ->where('ACTIVE', true)
-            ->where('FK_CORE_DROPDOWNTYPE',$config_dropdowntype)
-            ->sortBy('SEQUENCE')
-            ->pluck('value', 'ID');
+        $localeId = config('app.locale_id') ? config('app.locale_id') : config('language.defaultLangID');
+
+        $valuesOri = DropdownValue::leftJoin('CORE_TRANSLATION', function($join) use ($localeId) {
+                $join->on('FK_CORE_TRANSLATION_KEY', '=', 'TL_VALUE');
+                $join->where('FK_CORE_LANGUAGE', $localeId);
+            })
+            ->where('CORE_DROPDOWNVALUE.ACTIVE', true)
+            ->where('CORE_DROPDOWNVALUE.FK_CORE_DROPDOWNTYPE', $config_dropdowntype)
+            ->orderByRaw('ISNULL(CORE_DROPDOWNVALUE.SEQUENCE, 0)')
+            ->orderBy('CORE_TRANSLATION.TEXT')
+            ->pluck('CORE_TRANSLATION.TEXT', 'CORE_DROPDOWNVALUE.ID');
 
         $values = ($showNone ? ($values = $none + $valuesOri->toArray()) : ($valuesOri->toArray()) );
 

@@ -42,8 +42,8 @@
         </div>
 
         @if(request('pid') && ((request('type') == config('task_type.TYPE_TASKLIST')) || (request('type') == config('task_type.TYPE_PRODUCT'))))
-            {{-- Required --}} {{ KJField::number('REMEMBER_DATES',KJLocalization::translate('Admin - Taken', 'Herrinneringsdagen', 'Herrinneringsdagen'), $item ? $item->REMEMBER_DATES : '', true, ['required', 'min' => 0, 'steps' => 1]) }}
-            {{-- Required --}} {{ KJField::number('EXPIRATION_DATES',KJLocalization::translate('Admin - Taken', 'Vervaldagen', 'Vervaldagen'), $item ? $item->EXPIRATION_DATES : '', true, ['required', 'min' => 0, 'steps' => 1]) }}
+            {{-- Required --}} {{ KJField::number('REMEMBER_DATES',KJLocalization::translate('Admin - Taken', 'Herinneringsdagen', 'Herinneringsdagen'), $item ? $item->REMEMBER_DATES : '', true, ['required', 'min' => 0, 'step' => 1]) }}
+            {{-- Required --}} {{ KJField::number('EXPIRATION_DATES',KJLocalization::translate('Admin - Taken', 'Vervaldagen', 'Vervaldagen'), $item ? $item->EXPIRATION_DATES : '', true, ['required', 'min' => 0, 'step' => 1]) }}
         @endif
 
         @if(request('pid') && (request('type') == config('task_type.TYPE_PROJECT')))

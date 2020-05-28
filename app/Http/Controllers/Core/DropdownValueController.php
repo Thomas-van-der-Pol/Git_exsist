@@ -17,9 +17,22 @@ class DropdownValueController extends AdminBaseController
 
     protected $allColumns = ['ID', 'ACTIVE', 'SEQUENCE', 'TL_VALUE'];
 
+    protected $joinClause = [
+        [
+            'TABLE' => 'CORE_TRANSLATION',
+            'PRIMARY_FIELD' => 'FK_CORE_TRANSLATION_KEY',
+            'FOREIGN_FIELD' => 'CORE_DROPDOWNVALUE.TL_VALUE',
+            'TYPE' => 'LEFT'
+        ]
+    ];
+
     protected $datatableDefaultSort = array(
         [
             'field' => 'SEQUENCE',
+            'sort'  => 'ASC'
+        ],
+        [
+            'field' => 'CORE_TRANSLATION.TEXT',
             'sort'  => 'ASC'
         ]
     );
@@ -81,17 +94,19 @@ class DropdownValueController extends AdminBaseController
         })->addColumn('SEQUENCE', function(DropdownValue $value) {
             if($value->SEQUENCE){
                 return $value->getSequenceFormattedAttribute();
-            }
-            else {
-                '';
+            } else {
+                return '';
             }
         });
     }
 
     public function allByTypeDatatable(Request $request, int $ID)
     {
+        $localeId = config('app.locale_id') ? config('app.locale_id') : config('language.defaultLangID');
+
         $this->whereClause = array(
             ['FK_CORE_DROPDOWNTYPE', $ID],
+            ['CORE_TRANSLATION.FK_CORE_LANGUAGE', $localeId]
         );
 
         return parent::allDatatable($request);
