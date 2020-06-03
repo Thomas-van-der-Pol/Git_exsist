@@ -15,11 +15,13 @@ class CompensationUtils
 
     public static function generateReport($invoice, string $state)
     {
-        $today = date('d-m-Y');
+        $locale = App::getLocale();
+        $locale_string = config('language.langs')[array_search(strtoupper($locale), array_column(config('language.langs'), 'CODE'))]['LOCALE'];
+
+        setlocale(LC_ALL, $locale_string);
+        $today = strftime("%d %B %Y", time());
 
         $pdfPaper = $invoice->label->document;
-
-        $locale = App::getLocale();
 
         $data = array(
             'OutputFolder' => config('documentservice.output_folder') . '\\' . $invoice->getTable() . '\\' . $invoice->ID . '\\Vergoedingsbrieven',

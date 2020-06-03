@@ -80,7 +80,7 @@ class Product extends Model {
     public function getPriceDecimalAttribute()
     {
         if ($this->PRICE) {
-            return number_format($this->PRICE,2, '.', '.');
+            return number_format($this->PRICE, 2, '.', '');
         } else {
             return '';
         }

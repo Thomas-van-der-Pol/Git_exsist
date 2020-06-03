@@ -30,7 +30,7 @@
     'ADM_CRM_CONTACT_MODAL_TABLE',
     array (
         'method' => 'GET',
-        'url' => '/admin/crm/contact/allDatatable',
+        'url' => '/admin/crm/contact/allDatatable?modal=1',
         'pagination' => true,
         'sortable' => true,
         'searchinput' => '#ADM_CRM_CONTACT_FILTER_SEARCH',

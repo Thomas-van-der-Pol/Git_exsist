@@ -516,7 +516,7 @@ class TasksController extends AdminBaseController {
         }
 
         // Show expired items
-        if (!in_array($type, [config('task_type.TYPE_DONE'), config('task_type.TYPE_SUBSCRIBED')])) {
+        if (!in_array($type, [config('task_type.TYPE_DONE'), config('task_type.TYPE_SUBSCRIBED'), config('task_type.TYPE_RELATION'), config('task_type.TYPE_PROJECT')])) {
             $today = date('Y-m-d');
             $items->orWhere(function ($query) use ($today, $forcedUser, $type, $assignee, $filter) {
                 $query->where('DEADLINE', '<', $today)

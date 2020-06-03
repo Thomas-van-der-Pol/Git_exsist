@@ -102,6 +102,7 @@ class RelationController extends AdminBaseController {
     public function allDatatable(Request $request)
     {
         $type = request('type');
+        $modal = ((request('modal') ?? 0) == '1');
         $localeId = config('app.locale_id') ? config('app.locale_id') : config('language.defaultLangID');
 
         $this->whereClause = [
@@ -112,15 +113,15 @@ class RelationController extends AdminBaseController {
             ['ID, NAME, EMAILADDRESS ', array(
                 'param' => 'ADM_RELATION_FILTER_SEARCH',
                 'operation' => 'like',
-                'default' => \KJ\Core\libraries\SessionUtils::getSession('ADM_RELATION', 'ADM_RELATION_FILTER_SEARCH', '')
+                'default' => ($modal ? '' : \KJ\Core\libraries\SessionUtils::getSession('ADM_RELATION', 'ADM_RELATION_FILTER_SEARCH', ''))
             )],
             ['ACTIVE', array(
                 'param' => 'ACTIVE',
-                'default' => \KJ\Core\libraries\SessionUtils::getSession('ADM_RELATION', 'ADM_FILTER_RELATION_STATUS', 1)
+                'default' => ($modal ? 1 : \KJ\Core\libraries\SessionUtils::getSession('ADM_RELATION', 'ADM_FILTER_RELATION_STATUS', 1))
             )],
             ['FK_CORE_DROPDOWNVALUE_RELATIONTYPE', array(
                 'param' => 'FK_CORE_DROPDOWNVALUE_RELATIONTYPE',
-                'default' => $type? $type: \KJ\Core\libraries\SessionUtils::getSession('ADM_RELATION', 'ADM_FILTER_RELATION_TYPE',  '')
+                'default' => ($type ? $type : \KJ\Core\libraries\SessionUtils::getSession('ADM_RELATION', 'ADM_FILTER_RELATION_TYPE',  ''))
             )]
 
         );

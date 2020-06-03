@@ -25,27 +25,25 @@
         <div class="kt-menu__submenu ">
             <span class="kt-menu__arrow"></span>
             <ul class="kt-menu__subnav">
+
                 <li class="kt-menu__item {{ ((\App\Libraries\Shared\AppUtils::isUrlActive(['admin/crm/relation'], ['admin/crm/contact']) == true) ? 'kt-menu__item--active' : '') }}" aria-haspopup="true">
                     <a href="{{ \KJ\Localization\libraries\LanguageUtils::getUrl('admin/crm/relation') }}" class="kt-menu__link ">
                         <i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i>
                         <span class="kt-menu__link-text">
-                            {{ KJLocalization::translate('Admin - Menu', 'Relaties', 'Relaties') }}
-                        </span>
+                        {{ KJLocalization::translate('Admin - Menu', 'Relaties', 'Relaties') }}
+                    </span>
                     </a>
                 </li>
-            </ul>
-        </div>
-        <div class="kt-menu__submenu ">
-            <span class="kt-menu__arrow"></span>
-            <ul class="kt-menu__subnav">
+
                 <li class="kt-menu__item {{ ((\App\Libraries\Shared\AppUtils::isUrlActive(['admin/crm/contact']) == true) ? 'kt-menu__item--active' : '') }}" aria-haspopup="true">
                     <a href="{{ \KJ\Localization\libraries\LanguageUtils::getUrl('admin/crm/contact') }}" class="kt-menu__link ">
                         <i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i>
                         <span class="kt-menu__link-text">
-                            {{ KJLocalization::translate('Admin - Menu', 'Contactpersonen', 'Contactpersonen') }}
-                        </span>
+                        {{ KJLocalization::translate('Admin - Menu', 'Contactpersonen', 'Contactpersonen') }}
+                    </span>
                     </a>
                 </li>
+
             </ul>
         </div>
     </li>

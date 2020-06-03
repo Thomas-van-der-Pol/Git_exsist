@@ -506,13 +506,10 @@ $(document).on('ADM_RELATION_TABLEAfterSelect', function(e, selectedId, linkObj)
 
 $(document).on('ADM_PRODUCT_MODAL_TABLEAfterSelect', function(e, selectedId, linkObj) {
     // Waardes opzoeken
-    var name = linkObj.closest('tr').find('[data-field=DESCRIPTION_INT]').find('span').text();
-
     var id_input = LastButton.closest('form').find('input[name=FK_ASSORTMENT_PRODUCT]');
     id_input.val(selectedId);
 
     var text_input = LastButton.closest('div.form-group').find('input[type=text]');
-    text_input.val(name);
 
     //Ophalen extra gegevens met AJAX
     $.ajax({
@@ -522,6 +519,7 @@ $(document).on('ADM_PRODUCT_MODAL_TABLEAfterSelect', function(e, selectedId, lin
         processData: false,
 
         success: function (data) {
+            text_input.val(data.DESCRIPTION_EXT);
             $('input[name=PRICE]').val(data.PriceDecimal);
 
             $('select[name=FK_FINANCE_LEDGER]').val(data.FK_FINANCE_LEDGER);

@@ -6,13 +6,10 @@
                     <div class="kt-input-icon kt-input-icon--left">
                         {{ Form::text(
                             'ADM_RELATION_FILTER_SEARCH',
-                            \KJ\Core\libraries\SessionUtils::getSession('ADM_RELATION', 'ADM_RELATION_FILTER_SEARCH', ''),
+                            '',
                             array(
-                                'class'         => 'form-control hasSessionState',
-                                'placeholder'   => KJLocalization::translate('Algemeen', 'Zoeken', 'Zoeken') . '..',
-                                'id'            => 'ADM_RELATION_FILTER_SEARCH',
-                                'data-module'   => 'ADM_RELATION',
-                                'data-key'      => 'ADM_RELATION_FILTER_SEARCH'
+                                'class'         => 'form-control',
+                                'placeholder'   => KJLocalization::translate('Algemeen', 'Zoeken', 'Zoeken') . '..'
                             )
                         ) }}
                         <span class="kt-input-icon__icon kt-input-icon__icon--left">
@@ -29,7 +26,7 @@
     'ADM_RELATION_TABLE',
     array (
         'method' => 'GET',
-        'url' => '/admin/crm/relation/allDatatable' . (isset($type) ? '?type='.config('relation_type.'.$type) : ''),
+        'url' => '/admin/crm/relation/allDatatable?modal=1' . (isset($type) ? '&type='.config('relation_type.'.$type) : ''),
         'pagination' => true,
         'sortable' => true,
         'searchinput' => '#ADM_RELATION_FILTER_SEARCH',

@@ -14,7 +14,7 @@
             {{--Required--}} {{ KJField::text('DESCRIPTION', KJLocalization::translate('Admin - Facturen', 'Omschrijving', 'Omschrijving'), $item ? $item->DESCRIPTION : '', true, ['required'], [
                 'right' => [
                     ['type' => 'hidden', 'name' => 'FK_ASSORTMENT_PRODUCT', 'value' => $item->FK_ASSORTMENT_PRODUCT ?? ''],
-                    ['type' => 'button', 'caption' => KJLocalization::translate('Admin - Facturen', 'Product', 'Product'), 'class' => 'btn btn-primary btn-sm selectProduct']
+                    ['type' => 'button', 'caption' => KJLocalization::translate('Admin - Facturen', 'Interventie', 'Interventie'), 'class' => 'btn btn-primary btn-sm selectProduct']
                 ]
             ]) }}
             {{--Required--}} {{ KJField::number('PRICE', KJLocalization::translate('Admin - Facturen', 'Verkoopprijs', 'Verkoopprijs'), $item->PriceDecimal ?? '' , true, ['required', 'step' => '.01'],['right'=>['&euro;']]) }}

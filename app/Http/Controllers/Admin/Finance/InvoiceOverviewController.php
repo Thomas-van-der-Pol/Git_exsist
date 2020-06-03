@@ -93,6 +93,13 @@ class InvoiceOverviewController extends AdminBaseController {
         $this->whereClause = [];
         $this->whereInClause = [];
 
+        $this->datatableDefaultSort = array(
+            [
+                'sort' => 'DESC',
+                'field' => 'NUMBER'
+            ]
+        );
+
         switch ($ID) {
             // Alle statussen (geen filter)
             case config('invoice_state_type.TYPE_ALL'):
@@ -201,12 +208,18 @@ class InvoiceOverviewController extends AdminBaseController {
     {
         $ids = json_decode($request->get('ids'), true);
 
+        $print_invoices = [];
+
         for ($i = 0; $i < count($ids); $i++) {
-            InvoiceUtils::sendInvoice($ids[$i], true);
+            $invoice = InvoiceUtils::sendInvoice($ids[$i], true);
+            if ($invoice['success'] && $invoice['print']) {
+                $print_invoices[] = $invoice;
+            }
         }
 
         return response()->json([
             'success' => true,
+            'print_invoices' => $print_invoices,
             'message' => KJLocalization::translate('Admin - Facturen', 'Facturen verstuurd', 'Facturen verstuurd')
         ], 200);
     }

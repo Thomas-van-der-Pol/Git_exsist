@@ -44,11 +44,13 @@
             ),
             array(
                 'field' => 'FULL_PRODUCT',
-                'title' => KJLocalization::translate('Admin - Dossiers', 'Omschrijving intern', 'Omschrijving intern')
+                'title' => KJLocalization::translate('Admin - Dossiers', 'Omschrijving intern', 'Omschrijving intern'),
+                'width' => 170
             ),
             array(
                 'field' => 'DESCRIPTION_EXT',
-                'title' => KJLocalization::translate('Admin - Dossiers', 'Omschrijving extern', 'Omschrijving extern')
+                'title' => KJLocalization::translate('Admin - Dossiers', 'Omschrijving extern', 'Omschrijving extern'),
+                'width' => 170
             ),
             array(
                 'field' => 'RELATION',

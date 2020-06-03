@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\CRM;
 
 use App\Libraries\Core\DropdownvalueUtils;
+use App\Models\Admin\Project\Project;
 use Illuminate\Support\Facades\Auth;
 use KJ\Core\controllers\AdminBaseController;
 use Illuminate\Http\Request;
@@ -77,6 +78,8 @@ class ContactController extends AdminBaseController {
 
     public function allDatatable(Request $request)
     {
+        $this->whereInClause = [];
+
         $this->datatableFilter = array(
             ['ID, FIRSTNAME, LASTNAME, PHONENUMBER, CELLPHONENUMBER, EMAILADDRESS, FULLNAME, CRM_RELATION.NAME', array(
                 'param' => 'ADM_CRM_CONTACT_FILTER_SEARCH',
@@ -84,6 +87,13 @@ class ContactController extends AdminBaseController {
                 'default' => SessionUtils::getSession('ADM_CRM', 'ADM_CRM_CONTACT_FILTER_SEARCH', '')
             )]
         );
+
+        $modal = (($request->get('modal') ?? false) == '1');
+        if ($modal) {
+            $this->whereInClause = [
+                ['CRM_RELATION.FK_CORE_DROPDOWNVALUE_RELATIONTYPE', [config('relation_type.WERKGEVER'), config('relation_type.WERKNEMER')]]
+            ];
+        }
 
         return parent::allDatatable($request);
     }
