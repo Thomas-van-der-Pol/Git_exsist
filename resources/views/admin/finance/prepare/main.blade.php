@@ -77,6 +77,10 @@
                                 'title' => KJLocalization::translate('Admin - Facturen', 'Relatie', 'Relatie'),
                             ),
                             array(
+                                'field' => 'PROJECTNAME',
+                                'title' => KJLocalization::translate('Admin - Facturen', 'Dossiernaam', 'Dossiernaam'),
+                            ),
+                            array(
                                 'field' => 'WORKFLOWSTATE',
                                 'title' => KJLocalization::translate('Admin - Facturen', 'Dossierstatus', 'Dossierstatus'),
                             ),
@@ -87,11 +91,7 @@
                             array(
                                 'field' => 'PRICE_TOTAL_INCVAT_FORMATTED',
                                 'title' => KJLocalization::translate('Admin - Facturen', 'Bedrag incl', 'Bedrag incl.'),
-                            ),
-                            array(
-                                'field' => 'DESCRIPTION_SHORT',
-                                'title' => KJLocalization::translate('Admin - Facturen', 'Type factuur', 'Type factuur'),
-                            ),
+                            )
                         ),
                     )
                 ) }}

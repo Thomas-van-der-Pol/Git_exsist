@@ -3,6 +3,7 @@
 namespace App\Models\Admin\Finance;
 
 use App\Models\Admin\Assortment\Product;
+use App\Models\Admin\Project\Project;
 use Illuminate\Database\Eloquent\Model;
 use KJ\Localization\libraries\LanguageUtils;
 use KJLocalization;
@@ -49,10 +50,23 @@ class InvoiceScheme extends Model
         }
     }
 
+    public function getPercentageDecimalAttribute()
+    {
+        if((integer)$this->PERCENTAGE <> $this->PERCENTAGE) {
+            return number_format($this->PERCENTAGE, 2, '.', '.');
+        } else {
+            return number_format($this->PERCENTAGE);
+        }
+    }
+
     public function getPercentageFormattedAttribute()
     {
         if ($this->PERCENTAGE) {
-            return number_format($this->PERCENTAGE,0, LanguageUtils::getDecimalPoint(), LanguageUtils::getThousandsSeparator()) . ' %';
+            if ((integer)$this->PERCENTAGE <> $this->PERCENTAGE) {
+                return number_format($this->PERCENTAGE, 2, LanguageUtils::getDecimalPoint(), LanguageUtils::getThousandsSeparator()) . ' %';
+            } else {
+                return number_format($this->PERCENTAGE) . ' %';
+            }
         } else {
             return '';
         }

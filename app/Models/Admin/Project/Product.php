@@ -86,7 +86,7 @@ class Product extends Model
             'ACTIVE' => true,
             'AUTOMATIC_REMNANT' => true
         ], [
-            'DATE' => date('Y-m-d', strtotime(date('Y-m-d') . ' + 14 days'))
+            'DATE' => date('Y-m-d')
         ]);
 
         $invoiceScheme->PERCENTAGE = $remnant;

@@ -8,7 +8,14 @@
                 $backURL = 'admin/project/detail/'.$item->project->ID;
             }
             else if($type == config('task_type.TYPE_RELATION')) {
-                $backURL = 'admin/crm/relation/detail/'.$item->relation->ID;
+                if($item->relation) {
+                    $backURL = 'admin/crm/relation/detail/'.$item->relation->ID;
+                }
+                if($item->project) {
+                    if($item->project->employer) {
+                        $backURL = 'admin/crm/relation/detail/'.$item->project->employer->ID;
+                    }
+                }
             }
             else if($type == config('task_type.TYPE_TASKLIST')) {
                 $backURL = 'admin/settings/tasklist/detail/'.$item->taskList->ID;

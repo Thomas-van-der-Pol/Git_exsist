@@ -18,14 +18,12 @@ use App\Models\Admin\Task\TaskSubsription;
 use App\Models\Admin\User;
 use App\Models\Core\DropdownValue;
 use App\Models\Core\Translation;
-use Cassandra\Custom;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use KJ\Core\controllers\AdminBaseController;
 use KJ\Core\libraries\SessionUtils;
 use KJLocalization;
-use phpDocumentor\Reflection\Type;
 
 class TasksController extends AdminBaseController {
 
@@ -414,8 +412,9 @@ class TasksController extends AdminBaseController {
                 break;
 
             case config('task_type.TYPE_RELATION'):
+
                 $items = Task::where([
-                    'ACTIVE' => $active,
+                    'ACTIVE' => $active
                 ]);
                 if($statusTask != 0) {
                     if ($statusTask == 1) {
@@ -516,7 +515,7 @@ class TasksController extends AdminBaseController {
         }
 
         // Show expired items
-        if (!in_array($type, [config('task_type.TYPE_DONE'), config('task_type.TYPE_SUBSCRIBED'), config('task_type.TYPE_RELATION'), config('task_type.TYPE_PROJECT')])) {
+        if (!in_array($type, [config('task_type.TYPE_DONE'), config('task_type.TYPE_SUBSCRIBED'), config('task_type.TYPE_RELATION'), config('task_type.TYPE_PROJECT'), config('task_type.TYPE_TASKLIST')])) {
             $today = date('Y-m-d');
             $items->orWhere(function ($query) use ($today, $forcedUser, $type, $assignee, $filter) {
                 $query->where('DEADLINE', '<', $today)
@@ -593,7 +592,7 @@ class TasksController extends AdminBaseController {
     {
         $type = ( $request->get('TYPE') ?? 0 );
         $active = ( $request->get('ACTIVE') ?? true );
-        $status = ( $request->get('STATUS') ?? 1);
+        $status = ( $request->get('STATUS') ?? 0);
         $pid = ( $request->get('PID') ?? 0 );
         $screen = ( $request->get('SCREEN') ?? 0 );
         $assignee = ( $request->get('ASSIGNEE') ?? 0 );

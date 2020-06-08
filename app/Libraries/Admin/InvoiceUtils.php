@@ -190,12 +190,43 @@ class InvoiceUtils
         $resultArray = is_array($result) ? $result : json_decode($result->getContent(), true);
 
         if ($resultArray['statusCode'] == 200) {
-            // Move file from storage ftp to private ftp
+            // Move file from storage ftp to private ft
             if (config('filesystems.disks.ftp.host') != config('filesystems.disks.ftp_docservice.host')) {
                 Storage::disk('ftp')->put($resultArray['filename'], Storage::disk('ftp_docservice')->get($resultArray['filename']));
 
                 // Delete file from storage ftp
                 Storage::disk('ftp_docservice')->delete($resultArray['filename']);
+            }
+
+            // Copy file to project document folder if final invoice
+            if ($invoice->project && $invoice->NUMBER) {
+
+
+                $pieces = explode("//", $resultArray['filename']);
+                $pieces[0] = $invoice->project->getTable();
+                $pieces[1] = $invoice->project->ID;
+                $filename = implode("//",$pieces);
+
+
+
+                Storage::disk('ftp')->put($filename, Storage::disk('ftp')->get($resultArray['filename']));
+
+                // Get file info
+                $documentInfo = pathinfo($filename);
+
+                $fileSize = Storage::disk('ftp')->size(str_replace('//', '\\', $filename));
+                // Add document to project
+                $document = new Document([
+                    'FK_TABLE' => $invoice->project->getTable(),
+                    'FK_ITEM' => $invoice->project->ID,
+                    'UPLOADER_FK_TABLE' => Auth::guard()->user()->getTable(),
+                    'UPLOADER_FK_ITEM' => Auth::guard()->user()->ID,
+                    'FILEPATH' => str_replace('//', '\\', $filename),
+                    'FILESIZE' => $fileSize,
+                    'TITLE' => $documentInfo['filename'],
+                    'FILETYPE' => ($documentInfo['extension'] ?? 'file')
+                ]);
+                $document->save();
             }
 
             // Get file info

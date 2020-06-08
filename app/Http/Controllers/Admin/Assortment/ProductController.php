@@ -153,7 +153,7 @@ class ProductController extends AdminBaseController
             $invoiceScheme = new InvoiceScheme([
                 'ACTIVE' => true,
                 'FK_ASSORTMENT_PRODUCT' => $item->ID,
-                'DAYS' => 14,
+                'DAYS' => 0,
                 'PERCENTAGE' => 100,
                 'AUTOMATIC_REMNANT' => true
             ]);

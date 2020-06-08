@@ -18,6 +18,10 @@
         'title' => KJLocalization::translate("Admin - Facturen", "Relatie", "Relatie")
     );
     $columns[] = array(
+        'field' => 'PROJECTNAME',
+        'title' => KJLocalization::translate("Admin - Facturen", "Dossiernaam", "Dossiernaam")
+    );
+    $columns[] = array(
         'field' => 'TOTAL_PRICE',
         'title' => KJLocalization::translate("Admin - Facturen", "Totaal excl", "Totaal excl.")
     );

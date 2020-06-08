@@ -7,7 +7,6 @@
             'title' => KJLocalization::translate('Algemeen', 'Home', 'Home'),
             'URL' => ltrim(\KJ\Localization\libraries\LanguageUtils::getUrl('admin'), '/')
         ];
-
         if($type == config('task_type.TYPE_TASKLIST')) {
             $breadCrumsTaskList[] = [
                 'title' => KJLocalization::translate('Admin - Menu', 'Instellingen', 'Instellingen'),
@@ -55,18 +54,34 @@
             ];
         }
         else if($type == config('task_type.TYPE_RELATION')) {
+
             $breadCrumsTaskList[] = [
                 'title' => KJLocalization::translate('Admin - Menu', 'CRM Relaties', 'CRM Relaties'),
                 'URL' => ltrim(\KJ\Localization\libraries\LanguageUtils::getUrl('admin/crm/relation'), '/')
             ];
-            $breadCrumsTaskList[] = [
-                'title' => $item ? $item->relation->getTitleAttribute() : KJLocalization::translate('Admin - Relaties', 'Nieuwe relatie', 'Nieuwe relatie'),
-                'URL' => ltrim(\KJ\Localization\libraries\LanguageUtils::getUrl('admin/crm/relation/detail/' . ($item->relation->ID)), '/')
-            ];
-            $breadCrumsTaskList[] = [
-                'title' => KJLocalization::translate('Admin - Menu', 'Taken', 'Taken'),
-                'URL' => ltrim(\KJ\Localization\libraries\LanguageUtils::getUrl('admin/crm/relation/detail/' . ($item->relation->ID) . '?tab=tasks'), '/')
-            ];
+            if($item->relation) {
+                $breadCrumsTaskList[] = [
+                    'title' => $item ? $item->relation->getTitleAttribute() : KJLocalization::translate('Admin - Relaties', 'Nieuwe relatie', 'Nieuwe relatie'),
+                    'URL' => ltrim(\KJ\Localization\libraries\LanguageUtils::getUrl('admin/crm/relation/detail/' . ($item->relation->ID)), '/')
+                ];
+
+                $breadCrumsTaskList[] = [
+                    'title' => KJLocalization::translate('Admin - Menu', 'Taken', 'Taken'),
+                    'URL' => ltrim(\KJ\Localization\libraries\LanguageUtils::getUrl('admin/crm/relation/detail/' . ($item->relation->ID) . '?tab=tasks'), '/')
+                ];
+            }
+            if($item->project) {
+                if($item->project->employer) {
+                    $breadCrumsTaskList[] = [
+                        'title' => $item ? $item->project->employer->getTitleAttribute() : KJLocalization::translate('Admin - Relaties', 'Nieuwe relatie', 'Nieuwe relatie'),
+                        'URL' => ltrim(\KJ\Localization\libraries\LanguageUtils::getUrl('admin/crm/relation/detail/' . ($item->project->employer->ID)), '/')
+                    ];
+                    $breadCrumsTaskList[] = [
+                        'title' => KJLocalization::translate('Admin - Menu', 'Taken', 'Taken'),
+                        'URL' => ltrim(\KJ\Localization\libraries\LanguageUtils::getUrl('admin/crm/relation/detail/' . ($item->project->employer->ID) . '?tab=tasks'), '/')
+                    ];
+                }
+            }
         }
         else {
             $breadCrumsTaskList[] = [

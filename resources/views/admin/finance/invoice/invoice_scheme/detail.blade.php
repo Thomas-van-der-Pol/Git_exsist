@@ -7,7 +7,7 @@
     {{ Form::hidden('ID', $item ? $item->ID : -1) }}
     <div class='col-lg-6'>
     {{--Required--}} {{ KJField::number('DAYS',KJLocalization::translate('Admin - Dossiers', 'Dagen tellen tot facturatie datum', 'Dagen tellen tot facturatie datum'), $item ? $item->DAYS : '' , true, ['required', 'min' => 0, 'step' => 1]) }}
-    {{--Required--}} {{ KJField::number('PERCENTAGE',KJLocalization::translate('Admin - Dossiers', 'Percentage', 'Percentage'), $item ? number_format($item->PERCENTAGE,2) : '', true, ['required', 'max'=> 100, 'min' => 0, 'step' => 1]) }}
+    {{--Required--}} {{ KJField::number('PERCENTAGE',KJLocalization::translate('Admin - Dossiers', 'Percentage', 'Percentage'), $item ? $item->PercentageDecimal : '', true, ['required', 'max'=> 100, 'min' => 0, 'step' => 0.01]) }}
     </div>
     @if(!$item)
         {{ KJField::saveCancel(

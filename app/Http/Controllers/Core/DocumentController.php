@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Core;
 
+use App\Models\Admin\Finance\Invoice;
 use App\Models\Core\Document;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -273,6 +274,7 @@ class DocumentController extends BaseController
         $after_remove = ($request->get('after_remove') ?? '');
 
         $result = false;
+        $message = false;
 
         foreach ($selectedDocuments as $selectedDocument) {
             if ($selectedDocument['type'] == 'dir')
@@ -287,20 +289,35 @@ class DocumentController extends BaseController
                     ->get();
 
                 foreach ($documents as $document) {
-                    $result = $this->deleteSingleDocument($document, $after_remove);
+                    //check if invoice have already been sent and check
+                    $invoice = Invoice::where('FK_DOCUMENT', $document->ID)->orWhere('FK_DOCUMENT_COMPENSATION_LETTER', $document->ID)->orWhere('FK_DOCUMENT_ANONYMIZED', $document->ID)->first();
+                    if(!$invoice) {
+                        $result = $this->deleteSingleDocument($document, $after_remove);
+                    }
+                    else {
+                        $message = KJLocalization::translate('Administration - Document', 'In jouw selectie zitten documenten die al verstuurd zijn', 'In jouw selectie zitten documenten die al verstuurd zijn');
+                    }
+
                 }
             }
             else
             {
                 $document = Document::find($selectedDocument['id']);
                 if ($document) {
-                    $result = $this->deleteSingleDocument($document, $after_remove);
+                    $invoice = Invoice::where('FK_DOCUMENT', $document->ID)->orWhere('FK_DOCUMENT_COMPENSATION_LETTER', $document->ID)->orWhere('FK_DOCUMENT_ANONYMIZED', $document->ID)->first();
+                    if(!$invoice) {
+                        $result = $this->deleteSingleDocument($document, $after_remove);
+                    }
+                    else {
+                        $message = KJLocalization::translate('Administration - Document', 'In jouw selectie zitten documenten die al verstuurd zijn', 'In jouw selectie zitten documenten die al verstuurd zijn');
+                    }
                 }
             }
         }
 
         return response()->json([
-            'success' => $result
+            'success' => $result,
+            'message' => $message
         ]);
     }
 

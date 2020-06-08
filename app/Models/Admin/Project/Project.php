@@ -5,6 +5,7 @@ namespace App\Models\Admin\Project;
 
 use App\Models\Admin\CRM\Contact;
 use App\Models\Admin\CRM\Relation;
+use App\Models\Admin\Finance\Invoice;
 use App\Models\Admin\User;
 use App\Models\Core\DropdownValue;
 use App\Models\Core\WorkflowState;
@@ -93,6 +94,16 @@ class Project extends Model
         return $this->hasMany(Product::class, 'FK_PROJECT', 'ID');
     }
 
+    public function invoices()
+    {
+        return $this->hasMany(Invoice::class, 'FK_PROJECT', 'ID');
+    }
+
+    public function hasInvoices()
+    {
+        return ($this->invoices->where('ACTIVE', true)->count() > 0);
+    }
+
     public function progress()
     {
         if (!$this->workflowstate) {
@@ -166,14 +177,14 @@ class Project extends Model
 
             $product = \App\Models\Admin\Assortment\Product::find($product_id);
 
-            $productProject = \App\Models\Admin\Project\Product::firstOrCreate([
+            $productProject = new \App\Models\Admin\Project\Product([
                 'ACTIVE' => true,
                 'FK_PROJECT' => $this->ID,
                 'FK_ASSORTMENT_PRODUCT' => $product_id,
+                'PRICE' => $product->PRICE,
+                'QUANTITY' => 1,
+                'DESCRIPTION_EXT' => $product->DESCRIPTION_EXT
             ]);
-            $productProject->PRICE = $product->PRICE;
-            $productProject->QUANTITY = ($productProject->QUANTITY ?? 0) + 1;
-            $productProject->DESCRIPTION_EXT = $product->DESCRIPTION_EXT;
             $productProject->save();
 
             if($productProject) {

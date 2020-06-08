@@ -61,7 +61,7 @@ class Product extends Model {
             'ACTIVE' => true,
             'AUTOMATIC_REMNANT' => true
         ], [
-            'DAYS' => 14
+            'DAYS' => 0
         ]);
         $invoiceScheme->PERCENTAGE = $remnant;
         $invoiceScheme->save();

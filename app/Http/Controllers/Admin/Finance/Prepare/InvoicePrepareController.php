@@ -85,6 +85,9 @@ class InvoicePrepareController extends AdminBaseController {
             })
             ->addColumn('WORKFLOWSTATE', function($item) {
                 return ($item->project->workflowstate->DESCRIPTION ?? '');
+            })
+            ->addColumn('PROJECTNAME', function($item) {
+                return ($item->project->title ?? '');
             });
     }
 

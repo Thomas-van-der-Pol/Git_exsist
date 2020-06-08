@@ -38,11 +38,6 @@
         'pagesize' => 99999,
         'columns' => array(
             array(
-                'field' => 'QUANTITY',
-                'title' => KJLocalization::translate('Admin - Dossiers', 'Aantal', 'Aantal'),
-                'width' => 50
-            ),
-            array(
                 'field' => 'FULL_PRODUCT',
                 'title' => KJLocalization::translate('Admin - Dossiers', 'Omschrijving intern', 'Omschrijving intern'),
                 'width' => 170
@@ -59,10 +54,6 @@
             array(
                 'field' => 'PRICE',
                 'title' => KJLocalization::translate('Admin - Dossiers', 'Stukprijs', 'Stukprijs')
-            ),
-            array(
-                'field' => 'PRICE_TOTAL',
-                'title' => KJLocalization::translate('Admin - Dossiers', 'Subtotaal', 'Subtotaal')
             )
         ),
         'customEditButtons' => $customEditButton

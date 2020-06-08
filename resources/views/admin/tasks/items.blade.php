@@ -71,11 +71,10 @@
                                 {{ Form::label('ADM_FILTER_PRODUCT_STATUS', KJLocalization::translate('Algemeen', 'Status', 'Status'). ':') }}
                             </div>
                             <div class="form-inline md-form ml-3">
-
                                 {{ Form::select(
                                     'ADM_TASK_FILTER_STATUS',
                                     $taskStatus,
-                                    ($filter_status ?? 1),
+                                    ($filter_status ?? 0),
                                     [
                                         'class' => 'form-control filter kt-bootstrap-select',
                                         'id'            => 'ADM_TASK_FILTER_STATUS',

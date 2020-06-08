@@ -26,7 +26,7 @@ class CompensationUtils
         $data = array(
             'OutputFolder' => config('documentservice.output_folder') . '\\' . $invoice->getTable() . '\\' . $invoice->ID . '\\Vergoedingsbrieven',
             'Sjabloon' => 'CompensationLetter',
-            'ReportName' => KJLocalization::translate('Admin - Facturen', 'Vergoedingsbrief', 'Vergoedingsbrief', [], $locale),
+            'ReportName' => KJLocalization::translate('Admin - Facturen', 'Vergoedingsbrief', 'Vergoedingsbrief', [], $locale). ' ' . ($invoice->NUMBER ?? KJLocalization::translate('Admin - Facturen', 'Concept', 'Concept', [], $locale)),
             'Statements' => array(
                 array(
                     'Identifier' => "CRM_RELATION",
@@ -88,6 +88,37 @@ class CompensationUtils
 
                 // Delete file from storage ftp
                 Storage::disk('ftp_docservice')->delete($resultArray['filename']);
+            }
+
+            // Copy file to project document folder if final invoice
+            if ($invoice->project && $invoice->NUMBER) {
+
+
+                $pieces = explode("//", $resultArray['filename']);
+                $pieces[0] = $invoice->project->getTable();
+                $pieces[1] = $invoice->project->ID;
+                $filename = implode("//",$pieces);
+
+
+
+                Storage::disk('ftp')->put($filename, Storage::disk('ftp')->get($resultArray['filename']));
+
+                // Get file info
+                $documentInfo = pathinfo($filename);
+
+                $fileSize = Storage::disk('ftp')->size(str_replace('//', '\\', $filename));
+                // Add document to project
+                $document = new Document([
+                    'FK_TABLE' => $invoice->project->getTable(),
+                    'FK_ITEM' => $invoice->project->ID,
+                    'UPLOADER_FK_TABLE' => Auth::guard()->user()->getTable(),
+                    'UPLOADER_FK_ITEM' => Auth::guard()->user()->ID,
+                    'FILEPATH' => str_replace('//', '\\', $filename),
+                    'FILESIZE' => $fileSize,
+                    'TITLE' => $documentInfo['filename'],
+                    'FILETYPE' => ($documentInfo['extension'] ?? 'file')
+                ]);
+                $document->save();
             }
 
             // Get file info

@@ -68,6 +68,9 @@ class InvoiceOverviewController extends AdminBaseController {
             ->addColumn('RELATION', function (Invoice $invoice) {
                 return isset($invoice->relation) ? $invoice->relation->title : '';
             })
+            ->addColumn('PROJECTNAME', function (Invoice $invoice) {
+                return isset($invoice->project) ? $invoice->project->title : '';
+            })
             ->addColumn('WORKFLOWSTATE', function (Invoice $invoice) {
                 return isset($invoice->workflowstate) ? $invoice->workflowstate->DESCRIPTION : '';
             })

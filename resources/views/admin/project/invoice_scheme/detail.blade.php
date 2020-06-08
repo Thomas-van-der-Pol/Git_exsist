@@ -7,7 +7,7 @@
     {{ Form::hidden('ID', $item ? $item->ID : -1) }}
     <div class='col-lg-6'>
     {{--Required--}} {{ KJField::date('DATE', KJLocalization::translate('Admin - Dossiers', 'Datum', 'Datum'), $item ? $item->getDateFormattedAttribute() : '', ['required', 'data-locale-format' => \KJ\Localization\libraries\LanguageUtils::getJSDatePickerFormat()]) }}
-    {{--Required--}} {{ KJField::number('PERCENTAGE',KJLocalization::translate('Admin - Dossiers', 'Percentage', 'Percentage'), $item ? number_format($item->PERCENTAGE,2) : '', true, ['required', 'max'=> 100, 'min' => 0, 'step' => 1]) }}
+    {{--Required--}} {{ KJField::number('PERCENTAGE',KJLocalization::translate('Admin - Dossiers', 'Percentage', 'Percentage'), $item ? $item->PercentageDecimal : '', true, ['required', 'max'=> 100, 'min' => 0, 'step' => 0.01]) }}
         @if(!$item)
             {{ KJField::select('FK_ASSORTMENT_PRODUCT', KJLocalization::translate('Admin - Dossiers', 'Interventie', 'Interventie'), $products, ( $item ? $item->product->title : '' ), true, 0, ['required']) }}
         @else

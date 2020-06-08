@@ -24,18 +24,16 @@ class ReminderTaskNotification extends Command {
             'ACTIVE' => true,
             'DONE' => false,
             'REMINDER_DATE' => $today,
-
         ])->get();
-//        dd($reminderTasks);
+
         foreach ($reminderTasks as $reminderTask)
         {
             $notification = new Notification([
                 'RECIPIENT_FK_CORE_USER' => $reminderTask->assignee->ID,
                 'DATE' => date('Y-m-d'),
-                'SUBJECT' => KJLocalization::translate('Admin - Taken', 'Taak herinnering', 'Taak herinnering: :TASK_DESCRIPTION - :TASK_DETAILS', [
+                'SUBJECT' => KJLocalization::translate('Admin - Taken', 'Taak herinnering', 'Taak herinnering: :TASK_DESCRIPTION', [
                     'USER' => $reminderTask->assignee->title,
-                    'TASK_DESCRIPTION' => $reminderTask->SUBJECT,
-                    'TASK_DETAILS' => $reminderTask->CONTENT
+                    'TASK_DESCRIPTION' => $reminderTask->SUBJECT
                 ]),
                 'CONTENT' => KJLocalization::translate('Admin - Taken', 'Taak notificatie deadline date', 'Deadline: :DATE', [
                     'DATE' => $reminderTask->getDeadlineDatePickerFormattedAttribute(),

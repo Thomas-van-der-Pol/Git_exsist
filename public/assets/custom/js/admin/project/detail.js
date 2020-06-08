@@ -213,6 +213,18 @@ $(document).ready(function() {
         $('input[name="DESCRIPTION"]').val(determineDefaultDescription());
     });
 
+    $('body').on('change', 'input[name="COMPENSATED"]', function(e) {
+        e.preventDefault();
+
+        if (this.checked) {
+            $('input[name="COMPENSATION_PERCENTAGE"]').attr('required', true);
+            $('label[for="COMPENSATION_PERCENTAGE"]').text($('label[for="COMPENSATION_PERCENTAGE"]').text() + '*');
+        } else {
+            $('input[name="COMPENSATION_PERCENTAGE"]').removeAttr('required');
+            $('label[for="COMPENSATION_PERCENTAGE"]').text($('label[for="COMPENSATION_PERCENTAGE"]').text().replace('*', ''));
+        }
+    });
+
     $('body').on('click', '#addProducts', function(e) {
         e.preventDefault();
 
@@ -462,6 +474,14 @@ $(document).on('ADM_PROJECT_PRODUCTS_TABLERowCallback', function(e, row, data, i
             }
         }
     });
+});
+
+$(document).on('ADM_PROJECT_INVOICE_SCHEME_TABLERowCallback', function(e, row, data, index) {
+    if (data.BLOCKED == true) {
+        setTimeout(function() {
+            row.children().last().find('span').find('span').hide();
+        }, 100);
+    }
 });
 
 function determineDefaultDescription()
