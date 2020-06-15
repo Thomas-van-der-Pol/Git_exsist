@@ -111,9 +111,9 @@ class RelationController extends AdminBaseController {
 
         $this->datatableFilter = array(
             ['ID, NAME, EMAILADDRESS ', array(
-                'param' => 'ADM_RELATION_FILTER_SEARCH',
+                'param' => $modal ? 'ADM_RELATION_MODAL_FILTER_SEARCH': 'ADM_RELATION_FILTER_SEARCH',
                 'operation' => 'like',
-                'default' => ($modal ? '' : \KJ\Core\libraries\SessionUtils::getSession('ADM_RELATION', 'ADM_RELATION_FILTER_SEARCH', ''))
+                'default' => ($modal ? \KJ\Core\libraries\SessionUtils::getSession('ADM_RELATION', 'ADM_RELATION_MODAL_FILTER_SEARCH', '') : \KJ\Core\libraries\SessionUtils::getSession('ADM_RELATION', 'ADM_RELATION_FILTER_SEARCH', ''))
             )],
             ['ACTIVE', array(
                 'param' => 'ACTIVE',

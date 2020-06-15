@@ -78,21 +78,21 @@ class ContactController extends AdminBaseController {
 
     public function allDatatable(Request $request)
     {
+        $modal = (($request->get('modal') ?? false) == '1');
         $this->whereInClause = [];
-
         $this->datatableFilter = array(
             ['ID, FIRSTNAME, LASTNAME, PHONENUMBER, CELLPHONENUMBER, EMAILADDRESS, FULLNAME, CRM_RELATION.NAME', array(
-                'param' => 'ADM_CRM_CONTACT_FILTER_SEARCH',
+                'param' =>  $modal ? 'ADM_CRM_CONTACT_MODAL_FILTER_SEARCH': 'ADM_CRM_CONTACT_FILTER_SEARCH',
                 'operation' => 'like',
-                'default' => SessionUtils::getSession('ADM_CRM', 'ADM_CRM_CONTACT_FILTER_SEARCH', '')
+                'default' => $modal ? \KJ\Core\libraries\SessionUtils::getSession('ADM_CRM', 'ADM_CRM_CONTACT_MODAL_FILTER_SEARCH', '') : SessionUtils::getSession('ADM_CRM', 'ADM_CRM_CONTACT_FILTER_SEARCH', '')
             )]
         );
 
-        $modal = (($request->get('modal') ?? false) == '1');
         if ($modal) {
-            $this->whereInClause = [
-                ['CRM_RELATION.FK_CORE_DROPDOWNVALUE_RELATIONTYPE', [config('relation_type.WERKGEVER'), config('relation_type.WERKNEMER')]]
-            ];
+            $this->whereInClause = array(
+                ['CRM_RELATION.FK_CORE_DROPDOWNVALUE_RELATIONTYPE', [config('relation_type.WERKGEVER'), config('relation_type.WERKNEMER')]],
+                ['CRM_RELATION.ACTIVE', [true]],
+            );
         }
 
         return parent::allDatatable($request);
@@ -102,13 +102,20 @@ class ContactController extends AdminBaseController {
     {
         $active = (isset(request('query')['ACTIVE']) ? request('query')['ACTIVE'] : SessionUtils::getSession('ADM_CRM', 'ADM_FILTER_CONTACT_STATUS', 1));
 
-        if ($active == true) {
-            $items->where('CRM_CONTACT.ACTIVE', $active);
-            $items->where('CRM_RELATION.ACTIVE', $active);
+        if(\request('modal') != '1') {
+            if ($active == true) {
+                $items->where('CRM_CONTACT.ACTIVE', $active);
+                $items->where('CRM_RELATION.ACTIVE', $active);
+            } else {
+                $items->where(function ($query) use ($active) {
+                    $query->where('CRM_CONTACT.ACTIVE', $active);
+                    $query->orWhere('CRM_RELATION.ACTIVE', $active);
+                });
+            }
         } else {
-            $items->where(function($query) use ($active) {
-                $query->where('CRM_CONTACT.ACTIVE', $active);
-                $query->orWhere('CRM_RELATION.ACTIVE', $active);
+            $items->where(function ($query) {
+                $query->where('CRM_CONTACT.ACTIVE', true);
+                $query->orWhere('CRM_RELATION.ACTIVE', true);
             });
         }
     }

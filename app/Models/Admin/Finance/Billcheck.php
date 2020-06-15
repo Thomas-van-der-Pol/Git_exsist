@@ -40,7 +40,8 @@ class Billcheck extends Model
     public function getQuantityFormattedAttribute()
     {
         if((integer)$this->QUANTITY <> $this->QUANTITY) {
-            return number_format($this->QUANTITY, 2, LanguageUtils::getDecimalPoint(), LanguageUtils::getThousandsSeparator());
+            $val = (string)floatval($this->QUANTITY);
+            return str_replace('.', LanguageUtils::getDecimalPoint(),(string)$val);
         } else {
             return number_format($this->QUANTITY);
         }

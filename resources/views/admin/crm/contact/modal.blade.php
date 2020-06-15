@@ -5,14 +5,14 @@
                 <div class="col-md-6 kt-margin-b-20-tablet-and-mobile">
                     <div class="kt-input-icon kt-input-icon--left">
                         {{ Form::text(
-                            'ADM_CRM_CONTACT_FILTER_SEARCH',
-                            \KJ\Core\libraries\SessionUtils::getSession('ADM_CRM', 'ADM_CRM_CONTACT_FILTER_SEARCH', ''),
+                            'ADM_CRM_CONTACT_MODAL_FILTER_SEARCH',
+                            \KJ\Core\libraries\SessionUtils::getSession('ADM_CRM', 'ADM_CRM_CONTACT_MODAL_FILTER_SEARCH', ''),
                             array(
                                 'class'         => 'form-control filter hasSessionState',
                                 'placeholder'   => KJLocalization::translate('Algemeen', 'Zoeken', 'Zoeken') . '..',
-                                'id'            => 'ADM_CRM_CONTACT_FILTER_SEARCH',
+                                'id'            => 'ADM_CRM_CONTACT_MODAL_FILTER_SEARCH',
                                 'data-module'   => 'ADM_CRM',
-                                'data-key'      => 'ADM_CRM_CONTACT_FILTER_SEARCH'
+                                'data-key'      => 'ADM_CRM_CONTACT_MODAL_FILTER_SEARCH'
                             )
                         ) }}
                         <span class="kt-input-icon__icon kt-input-icon__icon--left">
@@ -33,7 +33,7 @@
         'url' => '/admin/crm/contact/allDatatable?modal=1',
         'pagination' => true,
         'sortable' => true,
-        'searchinput' => '#ADM_CRM_CONTACT_FILTER_SEARCH',
+        'searchinput' => '#ADM_CRM_CONTACT_MODAL_FILTER_SEARCH',
         'selectable' => true,
         'columns' => array(
             array(

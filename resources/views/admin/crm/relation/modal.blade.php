@@ -5,11 +5,12 @@
                 <div class="col-md-6 kt-margin-b-20-tablet-and-mobile">
                     <div class="kt-input-icon kt-input-icon--left">
                         {{ Form::text(
-                            'ADM_RELATION_FILTER_SEARCH',
+                            'ADM_RELATION_MODAL_FILTER_SEARCH',
                             '',
                             array(
                                 'class'         => 'form-control',
-                                'placeholder'   => KJLocalization::translate('Algemeen', 'Zoeken', 'Zoeken') . '..'
+                                'placeholder'   => KJLocalization::translate('Algemeen', 'Zoeken', 'Zoeken') . '..',
+                                'id'    => 'ADM_RELATION_MODAL_FILTER_SEARCH',
                             )
                         ) }}
                         <span class="kt-input-icon__icon kt-input-icon__icon--left">
@@ -29,7 +30,7 @@
         'url' => '/admin/crm/relation/allDatatable?modal=1' . (isset($type) ? '&type='.config('relation_type.'.$type) : ''),
         'pagination' => true,
         'sortable' => true,
-        'searchinput' => '#ADM_RELATION_FILTER_SEARCH',
+        'searchinput' => '#ADM_RELATION_MODAL_FILTER_SEARCH',
         'selectable' => true,
         'columns' => array(
             array(

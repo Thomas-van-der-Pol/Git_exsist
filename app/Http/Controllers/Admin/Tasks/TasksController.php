@@ -186,7 +186,7 @@ class TasksController extends AdminBaseController {
         $usersOri = User::all()->where('ACTIVE', true)->sortBy('title')->pluck('title', 'ID');
         $users = $none + $usersOri->toArray();
 
-        $customMaps = CustomMap::all()->where('FK_CORE_USER', Auth::guard()->user()->ID)->sortByDesc('NAME');
+        $customMaps = CustomMap::all()->where('FK_CORE_USER', Auth::guard()->user()->ID)->sortBy('NAME');
         $filters = DropdownvalueUtils::getDropdown(config('dropdown_type.TYPE_TASK_CATEGORY'));
 
         $bindings = array(
@@ -237,6 +237,14 @@ class TasksController extends AdminBaseController {
             }
 
             $newTask->save();
+            $newTask->refresh();
+            if(count($task->categories) > 0){
+                foreach($task->categories as $category){
+                    $newCategoryLink = $category->replicate();
+                    $newCategoryLink->FK_TASK = $newTask->ID;
+                    $newCategoryLink->save();
+                }
+            }
         }
         return response()->json([
             'success' => true

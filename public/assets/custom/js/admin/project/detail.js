@@ -11,6 +11,10 @@ $(document).ready(function() {
         {'Selecteer contactpersoon': 'Selecteer contactpersoon'}
     ]);
 
+    kjlocalization.create('Admin - Taken', [
+        {'Selecteer een werknemer': 'Selecteer een werknemer'}
+    ]);
+
     // Load screen
     loadScreen($('#default'), {
         url: '/admin/project/detailScreen',
@@ -480,7 +484,7 @@ $(document).on('ADM_PROJECT_INVOICE_SCHEME_TABLERowCallback', function(e, row, d
     if (data.BLOCKED == true) {
         setTimeout(function() {
             row.children().last().find('span').find('span').hide();
-        }, 100);
+        }, 10);
     }
 });
 

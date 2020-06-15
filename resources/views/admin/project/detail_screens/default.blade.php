@@ -101,27 +101,27 @@
                         <div class="col-xl-4 col-lg-6">
 
                             @php
-                                $compensation_screenmode = 'read, edit';
+                                $compensation_readonly = '';
                                 $compensation_can_change = true;
 
                                 if (($item && ($item->INVOICING_COMPLETE ?? false)) == true) {
-                                    $compensation_screenmode = 'read';
+                                    $compensation_readonly = 'readonly';
                                     $compensation_can_change = false;
                                 }
                                 else if ($item && ($item->hasInvoices())) {
-                                    $compensation_screenmode = 'read';
+                                    $compensation_readonly = 'readonly';
                                     $compensation_can_change = false;
                                 }
+
                             @endphp
-
-                            {{ KJField::checkbox('COMPENSATED', KJLocalization::translate('Admin - Dossiers', 'Wordt vergoed', 'Wordt vergoed'), true, ( $item ? $item->COMPENSATED : false ), true, ['data-screen-mode' => $compensation_screenmode]) }}
-
-                            {{ KJField::text('COMPENSATION_PERCENTAGE_READ', KJLocalization::translate('Admin - Dossiers', 'Vergoedingspercentage', 'Vergoedingspercentage'), $item ? $item->getCompensationPercentageFormattedAttribute() : '', true, ['data-screen-mode' => 'read']) }}
                             @if($compensation_can_change)
-                                {{ KJField::number('COMPENSATION_PERCENTAGE', KJLocalization::translate('Admin - Dossiers', 'Vergoedingspercentage', 'Vergoedingspercentage'), $item ? $item->getCompensationPercentageDecimalAttribute() : '', true, ['data-screen-mode' => $compensation_screenmode, 'min' => 0], [
-                                    'right' => [['type' => 'text', 'caption' => '%']]]
-                                ) }}
+                                {{ KJField::checkbox('COMPENSATED', KJLocalization::translate('Admin - Dossiers', 'Wordt vergoed', 'Wordt vergoed'), true, ( $item ? $item->COMPENSATED : false ), true, ['disabled', 'data-screen-mode' => 'read,edit']) }}
+                            @else
+                                {{ KJField::text('COMPENSATED', KJLocalization::translate('Admin - Taken', 'Wordt vergoed', 'Wordt vergoed'), $item ? ($item->COMPENSATED ? KJLocalization::translate('Admin - Dossiers', 'Ja', 'Ja') : KJLocalization::translate('Admin - Dossiers', 'Nee', 'Nee')) : '' , true, [$compensation_readonly, 'data-screen-mode' => 'read, edit']) }}
                             @endif
+                            {{ KJField::number('COMPENSATION_PERCENTAGE', KJLocalization::translate('Admin - Dossiers', 'Vergoedingspercentage', 'Vergoedingspercentage'), $item ? $item->getCompensationPercentageDecimalAttribute() : '', true, [$item ? ($item->COMPENSATED ? 'required' : '') : '',$compensation_readonly, 'data-screen-mode' => 'read, edit', 'min' => 0], [
+                                'right' => [['type' => 'text', 'caption' => '%']]]
+                            ) }}
 
                             {{--Required--}} {{ KJField::date('START_DATE', KJLocalization::translate('Admin - Dossiers', 'Eerste ziektedag', 'Eerste ziektedag'), $item ? $item->getStartDateFormattedAttribute() : '', ['required', 'data-screen-mode' => 'read, edit', 'data-date-end-date' => '-0d', 'data-locale-format' => \KJ\Localization\libraries\LanguageUtils::getJSDatePickerFormat()]) }}
                             {{--Required--}} {{ KJField::text('POLICY_NUMBER', KJLocalization::translate('Admin - Dossiers', 'Polisnummer', 'Polisnummer'), $item ? $item->POLICY_NUMBER : '', true, ['required', 'data-screen-mode' => 'read, edit']) }}
