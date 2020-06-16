@@ -186,7 +186,7 @@ class TasksController extends AdminBaseController {
         $usersOri = User::all()->where('ACTIVE', true)->sortBy('title')->pluck('title', 'ID');
         $users = $none + $usersOri->toArray();
 
-        $customMaps = CustomMap::all()->where('FK_CORE_USER', Auth::guard()->user()->ID)->sortBy('NAME');
+        $customMaps = CustomMap::all()->where('FK_CORE_USER', Auth::guard()->user()->ID)->sortBy('NAME',SORT_NATURAL|SORT_FLAG_CASE);
         $filters = DropdownvalueUtils::getDropdown(config('dropdown_type.TYPE_TASK_CATEGORY'));
 
         $bindings = array(
