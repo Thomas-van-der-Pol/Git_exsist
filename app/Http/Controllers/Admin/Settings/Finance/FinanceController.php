@@ -73,7 +73,6 @@ class FinanceController extends AdminBaseController
 
     protected function beforeDetailScreen(int $id, $item, $screen)
     {
-//        dd($item);
         $bindings = [];
 
         $none = ['' => KJLocalization::translate('Algemeen', 'Niets geselecteerd', 'Niets geselecteerd') . '..'];

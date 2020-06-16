@@ -513,7 +513,6 @@ class TasksController extends AdminBaseController {
             });
         }
 
-//        dd($items->get());
         // Apply date filter
         if($type != config('task_type.TYPE_TODAY') && $type != config('task_type.TYPE_WEEK') && $type != config('task_type.TYPE_MONTH')){
             if ($beginDate && $endDate) {
@@ -522,7 +521,6 @@ class TasksController extends AdminBaseController {
                 $items->whereBetween('DEADLINE', [$begin, $end]);
             }
         }
-//        dd($items->get());
         if (in_array($type, [
             config('task_type.TYPE_OPEN'),
             config('task_type.TYPE_ALL'),
