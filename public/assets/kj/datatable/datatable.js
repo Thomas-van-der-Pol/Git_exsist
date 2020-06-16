@@ -129,10 +129,30 @@ function loadDatatable(div) {
                     aWidth += 41;
                 }
             });
+            if (aWidth == 0) {
+
+                aWidth = 41;
+            }
+            var title = '';
+
+            if(configuration.titleAddButton){
+
+                var parentId = '';
+
+                if(configuration.parentid){
+                    parentId = configuration.parentid;
+                }
+                if(configuration.addButton){
+                    title = '<a href="javascript:;" id="'+ configuration.addButton.substring(1,configuration.addButton.length)+'_titleButton" data-parent-id="'+parentId+'" class="btn btn-success btn-sm btn-icon "><i class="la la-plus"></i></a>';
+                }
+                else {
+                    title = '<a href="'+configuration.addButtonURL+'" id="_titleButton" data-parent-id="'+parentId+'" class="btn btn-success btn-sm btn-icon "><i class="la la-plus"></i></a>';
+                }
+            }
 
             configuration.columns.push({
                 field: 'customEditButtons_end',
-                title: '',
+                title: title,
                 width: aWidth,
                 sortable: false,
                 overflow: 'visible',
@@ -152,6 +172,30 @@ function loadDatatable(div) {
 
                     return template;
                 }
+            });
+        }
+    } else {
+        if(configuration.titleAddButton){
+            aWidth = 41;
+            var title = '';
+            var parentId = '';
+            if(configuration.parentid){
+                parentId = configuration.parentid;
+            }
+            if(configuration.addButton){
+                title = '<a href="javascript:;" id="'+ configuration.addButton.substring(1,configuration.addButton.length)+'_titleButton" data-parent-id="'+parentId+'" class="btn btn-success btn-sm btn-icon "><i class="la la-plus"></i></a>';
+            }
+            else {
+                title = '<a href="'+configuration.addButtonURL+'" id="_titleButton" data-parent-id="'+parentId+'" class="btn btn-success btn-sm btn-icon "><i class="la la-plus"></i></a>';
+            }
+
+            configuration.columns.push({
+                field: 'customEditButtons_end',
+                title: title,
+                width: aWidth,
+                sortable: false,
+                overflow: 'visible',
+                autoHide: false,
             });
         }
     }
@@ -508,6 +552,13 @@ function loadDatatable(div) {
     // Initialisatie add button
     if (configuration.addable === true) {
         $(configuration.addButton).on('click', function(e) {
+            e.preventDefault();
+            addNew(div.attr('id'));
+            return false;
+        });
+    }
+    if (configuration.titleAddButton === true) {
+        $(configuration.addButton+'_titleButton').on('click', function(e) {
             e.preventDefault();
             addNew(div.attr('id'));
             return false;

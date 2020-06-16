@@ -10,29 +10,50 @@ $(document).ready(function() {
         {'Foutmelding printen': 'Er ging iets fout tijdens het printen van het document. Probeer het opnieuw.'}
     ]);
 
+    // Trigger options
+    $(document).trigger('communicatorSetOptions',[]);
+
     // Controleer of geinstalleerd
     kjcommunicator.checkInstalled();
 });
 
 var kjcommunicator = {
-    base_uri: 'http://127.0.0.1:5050/api/',
+    terminal_server: false,
+
+    base_uri: 'http://127.0.0.1:5050/api/', // Basis moet altijd bestaan (terminal_server of niet)
+    base_installed: false,
+
+    uri: 'http://127.0.0.1:[port_number]/api/', // Voor aanroep, indien terminal_server dan is poort anders
+    port_number: 5050,
+    installed: false,
+
     version: '2.0.0',
     username: 'kjsoftware',
     password: 'sEUA%WB!rp*q',
-    installed: false,
 
-    checkInstalled: function() {
+    setOptions: function(options) {
+        kjcommunicator.terminal_server = options.terminal_server || false;
+    },
+
+    setPortNumber: function(port_number) {
+        kjcommunicator.port_number = port_number;
+        kjcommunicator.uri = 'http://127.0.0.1:'+port_number+'/api/';
+    },
+
+    internal_checkInstalled: function(url, callback) {
         $.ajax({
             method: "GET",
             headers: {
                 "Authorization": "Basic " + btoa(kjcommunicator.username + ":" + kjcommunicator.password)
             },
-            url: kjcommunicator.base_uri + "actuator/info",
+            url: url + "actuator/info",
 
             success: function(data) {
                 if (data.app.version === kjcommunicator.version) {
                     // Geïnstalleerd
-                    kjcommunicator.installed = true;
+                    if (callback != null) {
+                        callback(data);
+                    }
                 } else {
                     // Wel bereikbaar, maar verkeerde versie
                     swal.fire({
@@ -80,13 +101,52 @@ var kjcommunicator = {
         });
     },
 
+    checkInstalled: function() {
+        kjcommunicator.internal_checkInstalled(kjcommunicator.base_uri, function(data) {
+            if (kjcommunicator.terminal_server) {
+                kjcommunicator.base_installed = true;
+
+                // Trigger after init
+                $(document).trigger('communicatorAfterBaseCheck',[]);
+            } else {
+                kjcommunicator.installed = true;
+                kjcommunicator.setPortNumber(5050);
+            }
+        });
+    },
+
+    writeConfiguration: function(config) {
+        $.ajax({
+            method: "POST",
+            headers: {
+                "Authorization": "Basic " + btoa(kjcommunicator.username + ":" + kjcommunicator.password)
+            },
+            url: kjcommunicator.base_uri + "host/write-configuration",
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            data: JSON.stringify(config)
+        });
+    },
+
+    checkInstalledTS: function(port_number) {
+        if (kjcommunicator.terminal_server) {
+            kjcommunicator.setPortNumber(port_number);
+
+            kjcommunicator.internal_checkInstalled(kjcommunicator.uri, function(data) {
+                kjcommunicator.installed = true;
+            });
+        } else {
+            return false;
+        }
+    },
+
     openDocument: function(url, token, title) {
         $.ajax({
             method: "POST",
             headers: {
                 "Authorization": "Basic " + btoa(kjcommunicator.username + ":" + kjcommunicator.password)
             },
-            url: kjcommunicator.base_uri + "document/open",
+            url: kjcommunicator.uri + "document/open",
             contentType: "application/json; charset=utf-8",
             datatype: "json",
             data: JSON.stringify({
@@ -115,7 +175,7 @@ var kjcommunicator = {
             headers: {
                 "Authorization": "Basic " + btoa(kjcommunicator.username + ":" + kjcommunicator.password)
             },
-            url: kjcommunicator.base_uri + "host",
+            url: kjcommunicator.uri + "host",
             datatype: "json",
 
             success: function(data) {
@@ -134,7 +194,7 @@ var kjcommunicator = {
             headers: {
                 "Authorization": "Basic " + btoa(kjcommunicator.username + ":" + kjcommunicator.password)
             },
-            url: kjcommunicator.base_uri + "printer",
+            url: kjcommunicator.uri + "printer",
             datatype: "json",
 
             success: function(data) {
@@ -161,7 +221,7 @@ var kjcommunicator = {
             headers: {
                 "Authorization": "Basic " + btoa(kjcommunicator.username + ":" + kjcommunicator.password)
             },
-            url: kjcommunicator.base_uri + "printer/print",
+            url: kjcommunicator.uri + "printer/print",
             contentType: "application/json; charset=utf-8",
             datatype: "json",
             async: false,
@@ -194,7 +254,7 @@ var kjcommunicator = {
             headers: {
                 "Authorization": "Basic " + btoa(kjcommunicator.username + ":" + kjcommunicator.password)
             },
-            url: kjcommunicator.base_uri + "printer/printZPL",
+            url: kjcommunicator.uri + "printer/printZPL",
             contentType: "application/json; charset=utf-8",
             datatype: "json",
             data: JSON.stringify({

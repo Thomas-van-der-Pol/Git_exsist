@@ -383,6 +383,7 @@ function loadDateRangePickers() {
         $(this).daterangepicker({
                 autoUpdateInput: autoUpdateInput,
                 showDropdowns: true,
+                linkedCalendars: false,
                 buttonClasses: 'btn',
                 applyClass: 'btn-brand',
                 cancelClass: 'btn-secondary',
@@ -437,7 +438,15 @@ function loadDateRangePickers() {
         });
 
         $(this).closest('.input-group').on('click', '.daterangeclear', function(e){
-            $(this).closest('.input-group').find('.kjdaterangepicker-picker').data('daterangepicker').clickCancel();
+            var datepicker = $(this).closest('.input-group').find('.kjdaterangepicker-picker');
+            var placeholder = datepicker.placeholder;
+
+            datepicker.data('daterangepicker').toggle();
+            $('.daterangepicker:visible').find('.cancelBtn').click();
+
+            if(placeholder){
+                datepicker.placeholder = placeholder;
+            }
         });
     });
 }
