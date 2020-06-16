@@ -82,7 +82,7 @@
 
             <div class="row">
                 <div class="col-xl-12 col-lg-6">
-                    {{ KJField::select('FK_CORE_USER_ASSIGNEE', KJLocalization::translate('Admin - Taken', 'Toegewezen aan', 'Toegewezen aan'), $users, ($item ? $item->FK_CORE_USER_ASSIGNEE : ''), true, 0, ['required']) }}
+                    {{ KJField::select('FK_CORE_USER_ASSIGNEE', KJLocalization::translate('Admin - Taken', 'Toegewezen aan', 'Toegewezen aan'), $users, ($item ? $item->FK_CORE_USER_ASSIGNEE : Auth::guard()->user()->ID), true, 0, ['required']) }}
                 </div>
             </div>
         @endif

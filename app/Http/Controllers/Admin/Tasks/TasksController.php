@@ -524,7 +524,7 @@ class TasksController extends AdminBaseController {
         if (in_array($type, [
             config('task_type.TYPE_OPEN'),
             config('task_type.TYPE_ALL'),
-            config('task_type.TODAY'),
+            config('task_type.TYPE_TODAY'),
             config('task_type.TYPE_WEEK'),
             config('task_type.TYPE_MONTH')]))
         {

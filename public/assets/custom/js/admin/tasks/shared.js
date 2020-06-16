@@ -178,27 +178,6 @@ $(document).ready(function() {
 
     });
 
-    $('body').on('change', '#ADM_TASK_FILTER_STATUS', function() {
-        // Store session
-        var value = $(this).val();
-        storeSession('ADM_TASK', 'ADM_TASK_FILTER_STATUS', value);
-
-        // Load items
-        var container = $(this).closest('.tab-pane');
-        loadTaskScreen(container);
-
-    });
-
-    $('body').on('change', '#ADM_FILTER_TASK_FILTERS', function() {
-        // Store session
-        var value = $(this).val();
-        storeSession('ADM_TASK', 'ADM_FILTER_TASK_FILTERS', value);
-
-        // Load items
-        var container = $(this).closest('.tab-pane');
-        loadTaskScreen(container);
-
-    });
     $('body').on('click', '.shiftDeadline, .connectEmployee, .copyToMap', function(e) {
         e.preventDefault();
 
@@ -300,8 +279,7 @@ function loadTaskFunctionModal(type, taskIds, subject = null, container) {
     }
 }
 
-function loadTaskScreen(object, beginDate = null, endDate = null)
-{
+function loadTaskScreen(object, beginDate = null, endDate = null) {
     // Clear inactive tab-panes
     $('.tab-pane:not(.active)').empty();
 
@@ -336,11 +314,10 @@ function loadTaskScreen(object, beginDate = null, endDate = null)
     var assignee = 0;
     if ($('#ADM_FILTER_TASK_ASSIGNEE').length) {
         assignee = $('#ADM_FILTER_TASK_ASSIGNEE').val();
-
         if (screen === 'subscribed_tasks') {
-            $('#ASSIGNEE_FILTER').hide();
+            $('.filterAssignee').hide();
         } else {
-            $('#ASSIGNEE_FILTER').show();
+            $('.filterAssignee').show();
         }
     }
 

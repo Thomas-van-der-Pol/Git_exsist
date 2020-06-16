@@ -36,7 +36,6 @@ $(document).ready(function() {
     // Change assignee filter
     $('body').on('change', 'select[name=ADM_FILTER_TASK_ASSIGNEE], select[name=ADM_FILTER_TASK_FILTERS]', function(e) {
         e.preventDefault();
-
         loadTaskItemActive();
     });
 });

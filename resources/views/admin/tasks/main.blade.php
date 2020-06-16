@@ -262,7 +262,7 @@
                             <div class="row align-items-center">
                                 <div class="col-lg-12">
                                     <div class="row align-items-center">
-                                        <div class="col-4">
+                                        <div class="col-4 filterAssignee">
                                             <div class="kt-form__group kt-form__group--inline">
                                                 <div class="kt-form__label">
                                                     {{ Form::label('ADM_FILTER_TASK_ASSIGNEE', KJLocalization::translate('Algemeen', 'Toegewezen aan', 'Toegewezen aan'). ':', ['style' => 'width: 120px;']) }}
