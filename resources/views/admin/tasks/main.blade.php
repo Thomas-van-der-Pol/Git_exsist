@@ -308,18 +308,26 @@
                                                     {{ Form::label('ADM_FILTER_LBL_TASK_DATE', KJLocalization::translate('Admin - Taken', 'Deadline', 'Deadline'). ':') }}
                                                 </div>
                                                 <div class="kt-form__control">
+                                                    <?php
+                                                    $options = [];
+                                                    if (\KJ\Core\libraries\SessionUtils::getSession('ADM_TASK', 'ADM_FILTER_TASK_DATE_startDate', '') != '') {
+                                                        $options = [
+                                                            'data-start-date' => \KJ\Core\libraries\SessionUtils::getSession('ADM_TASK', 'ADM_FILTER_TASK_DATE_startDate', ''),
+                                                            'data-end-date' => \KJ\Core\libraries\SessionUtils::getSession('ADM_TASK', 'ADM_FILTER_TASK_DATE_endDate', ''),
+
+                                                        ];
+                                                    }
+                                                    ?>
                                                     {{ KJField::daterangepicker(
                                                         'ADM_FILTER_TASK_DATE_GROUP',
                                                         'ADM_FILTER_TASK_DATE',
                                                         '',
-                                                        array(
+                                                         array_merge([
                                                             'class' => 'form-control kjdaterangepicker-picker hasSessionState',
-                                                            'data-start-date' => \KJ\Core\libraries\SessionUtils::getSession('ADM_TASK', 'ADM_FILTER_TASK_DATE_startDate', date(\KJ\Localization\libraries\LanguageUtils::getDateFormat(), strtotime('today'))),
-                                                            'data-end-date' => \KJ\Core\libraries\SessionUtils::getSession('ADM_TASK', 'ADM_FILTER_TASK_DATE_endDate', date(\KJ\Localization\libraries\LanguageUtils::getDateFormat(), strtotime('+6 weeks'))),
                                                             'data-module'   => 'ADM_TASK',
                                                             'data-key'      => 'ADM_FILTER_TASK_DATE',
                                                             'data-locale-format' => \KJ\Localization\libraries\LanguageUtils::getJSDateFormat()
-                                                        )
+                                                        ], $options)
                                                     ) }}
                                                 </div>
                                             </div>

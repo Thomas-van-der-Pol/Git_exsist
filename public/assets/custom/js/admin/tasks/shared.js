@@ -311,7 +311,7 @@ function loadTaskScreen(object, beginDate = null, endDate = null)
     // Handle active tab
     var nav = object.closest('.nav');
     if (nav.length) {
-        object.closest('.nav').find('a[data-toggle="tab"]').removeClass('kt-widget__item--active');
+        object.closest('.nav').find('a[data-toggle="tab"]').removeClass('kt-widget__item--active').removeClass('active');
         object.addClass('kt-widget__item--active');
     }
 

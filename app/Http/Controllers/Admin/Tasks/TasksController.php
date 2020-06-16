@@ -167,7 +167,7 @@ class TasksController extends AdminBaseController {
 
         $contactsOri = Contact::all()->pluck('FIRSTNAME', 'ID');
         $contacts = $none + $contactsOri->toArray();
-        $customMapsOri = CustomMap::all()->where('FK_CORE_USER', Auth::guard()->user()->ID)->sortByDesc('NAME')->pluck('NAME', 'ID');
+        $customMapsOri = CustomMap::all()->where('FK_CORE_USER', Auth::guard()->user()->ID)->sortBy('NAME',SORT_NATURAL|SORT_FLAG_CASE)->pluck('NAME', 'ID');
         $customMaps = $none + $customMapsOri->toArray();
         $view = $this->index()
             ->with('contacts', $contacts)
@@ -187,8 +187,10 @@ class TasksController extends AdminBaseController {
         $users = $none + $usersOri->toArray();
 
         $customMaps = CustomMap::all()->where('FK_CORE_USER', Auth::guard()->user()->ID)->sortBy('NAME',SORT_NATURAL|SORT_FLAG_CASE);
-        $filters = DropdownvalueUtils::getDropdown(config('dropdown_type.TYPE_TASK_CATEGORY'));
+        $filters = DropdownvalueUtils::getDropdown(config('dropdown_type.TYPE_TASK_CATEGORY'), false);
+        $filters = collect($filters)->sort(SORT_NATURAL|SORT_FLAG_CASE);
 
+        $filters = $none + $filters->toArray();
         $bindings = array(
             ['users', $users],
             ['filters', $filters],
@@ -487,9 +489,7 @@ class TasksController extends AdminBaseController {
                 $customMap = CustomMap::where('NAME', $type)->first();
                 $items = Task::where([
                     'ACTIVE' => $active,
-                    'DONE' => false,
                 ]);
-
                 $items->whereHas('customMaps', function($q) use ($customMap)
                 {
                     $q->where('NAME', $customMap->NAME);
@@ -513,6 +513,7 @@ class TasksController extends AdminBaseController {
             });
         }
 
+//        dd($items->get());
         // Apply date filter
         if($type != config('task_type.TYPE_TODAY') && $type != config('task_type.TYPE_WEEK') && $type != config('task_type.TYPE_MONTH')){
             if ($beginDate && $endDate) {
@@ -521,9 +522,14 @@ class TasksController extends AdminBaseController {
                 $items->whereBetween('DEADLINE', [$begin, $end]);
             }
         }
-
-        // Show expired items
-        if (!in_array($type, [config('task_type.TYPE_DONE'), config('task_type.TYPE_SUBSCRIBED'), config('task_type.TYPE_RELATION'), config('task_type.TYPE_PROJECT'), config('task_type.TYPE_TASKLIST')])) {
+//        dd($items->get());
+        if (in_array($type, [
+            config('task_type.TYPE_OPEN'),
+            config('task_type.TYPE_ALL'),
+            config('task_type.TODAY'),
+            config('task_type.TYPE_WEEK'),
+            config('task_type.TYPE_MONTH')]))
+        {
             $today = date('Y-m-d');
             $items->orWhere(function ($query) use ($today, $forcedUser, $type, $assignee, $filter) {
                 $query->where('DEADLINE', '<', $today)
