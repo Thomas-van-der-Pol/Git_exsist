@@ -332,9 +332,15 @@ function loadTaskScreen(object, beginDate = null, endDate = null) {
 
     var category = $('#ADM_FILTER_TASK_FILTERS').val()|| '';
 
-    if(beginDate == null && endDate == null){
-        beginDate = $('#ADM_FILTER_TASK_DATE').data('start-date') || '';
-        endDate = $('#ADM_FILTER_TASK_DATE').data('end-date') || '';
+    if(beginDate == null && endDate == null) {
+        if ($('#ADM_FILTER_TASK_DATE').val() != '') {
+            var date = $('#ADM_FILTER_TASK_DATE').val().split(' / ');
+            beginDate = date[0] ? moment(date[0], 'DD-MM-YYYY').format('YYYY-MM-DD') : '';
+            endDate = date[1] ? moment(date[1], 'DD-MM-YYYY').format('YYYY-MM-DD') : '';
+        } else {
+            beginDate = '';
+            endDate = '';
+        }
     }
 
     var filter = ($('#ADM_TASK_FILTER_SEARCH').val() || '');
