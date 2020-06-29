@@ -293,10 +293,12 @@
                                                         $filters,
                                                         \KJ\Core\libraries\SessionUtils::getSession('ADM_TASK', 'ADM_FILTER_TASK_FILTERS', 1),
                                                         [
-                                                            'class' => 'form-control filter kt-bootstrap-select hasSessionState',
-                                                            'id'            => 'ADM_FILTER_TASK_FILTERS',
-                                                            'data-module'   => 'ADM_TASK',
-                                                            'data-key'      => 'ADM_FILTER_TASK_FILTERS'
+                                                            'class'             => 'form-control filter kt-bootstrap-select hasSessionState',
+                                                            'id'                => 'ADM_FILTER_TASK_FILTERS',
+                                                            'data-module'       => 'ADM_TASK',
+                                                            'data-key'          => 'ADM_FILTER_TASK_FILTERS',
+                                                            'data-size'         => 5,
+                                                            'data-live-search'  => 1
                                                         ]
                                                     ) }}
                                                 </div>
@@ -361,7 +363,7 @@
 @endsection
 
 @section('page-resources')
-    {!! Html::script('/assets/custom/js/admin/tasks/main.js?v='.Cache::get('cache_version_number')) !!}
     {!! Html::script('/assets/custom/js/admin/tasks/shared.js?v='.Cache::get('cache_version_number')) !!}
+    {!! Html::script('/assets/custom/js/admin/tasks/main.js?v='.Cache::get('cache_version_number')) !!}
     {!! Html::script('/assets/themes/demo1/plugins/custom/jquery-ui/jquery-ui.bundle.js?v='.Cache::get('cache_version_number')) !!}
 @endsection

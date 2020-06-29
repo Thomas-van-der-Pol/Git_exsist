@@ -50,7 +50,8 @@
                                 array(
                                     'class'         => 'form-control filter',
                                     'placeholder'   => KJLocalization::translate('Algemeen', 'Zoeken', 'Zoeken') . '..',
-                                    'id'            => 'ADM_TASK_FILTER_SEARCH'
+                                    'id'            => 'ADM_TASK_FILTER_SEARCH',
+                                    'autocomplete'  => 'off'
                                 )
                             ) }}
                         </div>
@@ -90,10 +91,12 @@
                                     $categories,
                                     \KJ\Core\libraries\SessionUtils::getSession('ADM_TASK', 'ADM_FILTER_TASK_FILTERS', 1),
                                     [
-                                        'class' => 'form-control filter kt-bootstrap-select hasSessionState',
-                                        'id'            => 'ADM_FILTER_TASK_FILTERS',
-                                        'data-module'   => 'ADM_TASK',
-                                        'data-key'      => 'ADM_FILTER_TASK_FILTERS'
+                                        'class'             => 'form-control filter kt-bootstrap-select hasSessionState',
+                                        'id'                => 'ADM_FILTER_TASK_FILTERS',
+                                        'data-module'       => 'ADM_TASK',
+                                        'data-key'          => 'ADM_FILTER_TASK_FILTERS',
+                                        'data-size'         => 5,
+                                        'data-live-search'  => 1
                                     ]
                                 ) }}
                             </div>

@@ -184,6 +184,15 @@ $(document).ready(function() {
         loadTaskScreen(container);
     });
 
+    $('body').on('change', '#ADM_FILTER_TASK_FILTERS', function() {
+        // Load items
+        var value = $(this).val();
+        storeSession('ADM_TASK', 'ADM_FILTER_TASK_FILTERS', value);
+
+        var container = $(this).closest('.tab-pane');
+        loadTaskScreen(container);
+    });
+
     $('body').on('click', '.shiftDeadline, .connectEmployee, .copyToMap', function(e) {
         e.preventDefault();
 
