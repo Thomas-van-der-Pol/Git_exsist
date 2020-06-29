@@ -76,7 +76,7 @@
                                     $taskStatus,
                                     ($filter_status ?? 0),
                                     [
-                                        'class' => 'form-control filter kt-bootstrap-select',
+                                        'class'         => 'form-control filter kt-bootstrap-select',
                                         'id'            => 'ADM_TASK_FILTER_STATUS',
                                     ]
                                 ) }}

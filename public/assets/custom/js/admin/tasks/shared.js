@@ -178,6 +178,12 @@ $(document).ready(function() {
 
     });
 
+    $('body').on('change', '#ADM_TASK_FILTER_STATUS', function() {
+           // Load items
+        var container = $(this).closest('.tab-pane');
+        loadTaskScreen(container);
+    });
+
     $('body').on('click', '.shiftDeadline, .connectEmployee, .copyToMap', function(e) {
         e.preventDefault();
 
