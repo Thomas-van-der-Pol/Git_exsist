@@ -295,6 +295,24 @@ class InvoiceUtils
             $invoice->refresh();
         }
 
+//       als het factuur document bestaat, maar niet op de ftp
+        if (($invoice->document) && !Storage::disk('ftp')->exists($invoice->document->FILEPATH)) {
+            $invoice->update(['FK_DOCUMENT' => null]);
+            $invoice->document->delete();
+            self::generateReport($invoice, 'final');
+        }
+//      als het geanonimiseerde document bestaat, maar niet op de ftp
+        if (($invoice->document_anonymized) && !Storage::disk('ftp')->exists($invoice->document_anonymized->FILEPATH)) {
+            $invoice->update(['FK_DOCUMENT_ANONYMIZED' => null]);
+            $invoice->document_anonymized->delete();
+            self::generateReport($invoice, 'anonymize_final');
+        }
+//      als de vergoedingsbrief bestaat, maar niet op de ftp
+        if (($invoice->document_compensation_letter) && !Storage::disk('ftp')->exists($invoice->document_compensation_letter->FILEPATH)) {
+            $invoice->update(['FK_DOCUMENT_COMPENSATION_LETTER' => null]);
+            CompensationUtils::generateReport($invoice, 'anonymize_final');
+        }
+
         // Indien factuur aanwezig is
         $fileRequest = null;
         if ($invoice->document) {

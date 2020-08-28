@@ -10,6 +10,7 @@ use App\Models\Admin\Finance\Invoice;
 use App\Models\Core\WorkflowState;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
 use KJ\Core\controllers\AdminBaseController;
 use KJ\Core\libraries\ReportUtils;
@@ -106,6 +107,11 @@ class InvoiceController extends AdminBaseController {
         $invoice = Invoice::find($ID);
 
         if ($invoice->document && !$request->has('renew')) {
+            if (!Storage::disk('ftp')->exists($invoice->document->FILEPATH)) {
+                $invoice->update(['FK_DOCUMENT' => null]);
+                $invoice->document->delete();
+                InvoiceUtils::generateReport($invoice, 'final');
+            }
             return ReportUtils::getFile($invoice->document->FILEPATH);
         } else {
             $documents = InvoiceUtils::generateDocuments($ID, '');
