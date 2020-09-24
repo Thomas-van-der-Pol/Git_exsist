@@ -64,6 +64,7 @@
                             @endif
 
                             {{--Required--}} {{ KJField::select('FK_CORE_DROPDOWNVALUE_PROJECTTYPE', KJLocalization::translate('Admin - Dossiers', 'Soort traject', 'Soort traject'), $project_types, $item ? $item->FK_CORE_DROPDOWNVALUE_PROJECTTYPE : '', true, config('dropdown_type.TYPE_PROJECTTYPE'), ['required', 'data-screen-mode' => 'read, edit']) }}
+                            {{--Required--}} {{ KJField::select('FK_CORE_WORKFLOWSTATE_TYPE', KJLocalization::translate('Admin - Dossiers', 'Workflow', 'Workflow'), $workflowStateTypes, $item ? $item->FK_CORE_WORKFLOWSTATE_TYPE : '', true, null,['required', 'data-screen-mode' => 'edit']) }}
                             @php
                                 $relationButtons = [];
                                 $relationButtons[] = ['type' => 'button', 'caption' => KJLocalization::translate('Admin - Dossiers', 'Relatie', 'Relatie'), 'class' => 'btn btn-primary btn-sm selectRelation'];
@@ -77,7 +78,7 @@
                             {{ Form::hidden('FK_CRM_RELATION_REFERRER', $item ? $item->FK_CRM_RELATION_REFERRER : null, ['required']) }}
                             {{--Required--}} {{ KJField::select('FK_CRM_CONTACT_REFERRER', KJLocalization::translate('Admin - Dossiers', 'Contactpersoon verwijzer', 'Contactpersoon verwijzer'), $contacts_referrer, $item ? $item->FK_CRM_CONTACT_REFERRER : '', true, 0, ['required', 'data-screen-mode' => 'read, edit']) }}
 
-                            {{--Required--}} {{ KJField::text('EMPLOYER_NAME', KJLocalization::translate('Admin - Dossiers', 'Werkgever', 'Werkgever'), $item ? ($item->employer ? $item->employer->title : '') : '-', true, ['readonly', 'required', 'data-screen-mode' => 'read, edit', 'data-update' => 'FK_CRM_CONTACT_EMPLOYER'], [
+                            {{--Required--}} {{ KJField::text('EMPLOYER_NAME', KJLocalization::translate('Admin - Dossiers', 'Werkgever', 'Werkgever'), $item ? ($item->employer ? $item->employer->title : '') : '-', true, ['readonly', 'required', 'data-screen-mode' => 'read, edit', 'data-update' => 'FK_CRM_CONTACT_EMPLOYER,FK_CRM_CONTACT_EMPLOYEE'], [
                                  'right' => $relationButtons
                             ]) }}
                             {{ Form::hidden('FK_CRM_RELATION_EMPLOYER', $item ? $item->FK_CRM_RELATION_EMPLOYER : null, ['required']) }}
@@ -90,41 +91,19 @@
                                     $contactButtons[] = ['type' => 'button', 'caption' => KJLocalization::translate('Algemeen', 'Openen', 'Openen'), 'class' => 'btn btn-dark btn-sm openContact'];
                                 }
                             @endphp
-                            {{--Required--}} {{ KJField::text('EMPLOYEE_NAME', KJLocalization::translate('Admin - Dossiers', 'Werknemer', 'Werknemer'), $item ? ($item->employee ? $item->employee->title : '') : '-', true, ['readonly', 'required', 'data-screen-mode' => 'read, edit'], [
-                                 'right' => $contactButtons
-                            ]) }}
-                            {{ Form::hidden('FK_CRM_CONTACT_EMPLOYEE', $item ? $item->FK_CRM_CONTACT_EMPLOYEE : null, ['required']) }}
-
+                            {{ KJField::select('FK_CRM_CONTACT_EMPLOYEE', KJLocalization::translate('Admin - Dossiers', 'Werknemer', 'Werknemer'), $contacts_employer, $item ? $item->FK_CRM_CONTACT_EMPLOYEE : '', true, 0, ['data-screen-mode' => 'read, edit', ]) }}
                             {{ KJField::text('DESCRIPTION', KJLocalization::translate('Admin - Dossiers', 'Dossiernaam', 'Dossiernaam'), $item ? $item->DESCRIPTION : '-', true, ['required', 'data-screen-mode' => 'edit'] ) }}
                         </div>
 
                         <div class="col-xl-4 col-lg-6">
+                            {{--Required--}} {{ KJField::text('INVOICE_RELATION_NAME', KJLocalization::translate('Admin - Dossiers', 'Factuur relatie', 'Factuur relatie'), $item ? ($item->invoiceRelation ? $item->invoiceRelation->title : '-') : '-', true, ['readonly', 'data-screen-mode' => 'read, edit'], [
+                                 'right' => $relationButtons
+                            ]) }}
+                            {{ Form::hidden('FK_CRM_RELATION_INVOICE', $item ? $item->FK_CRM_RELATION_INVOICE : null, []) }}
+                            {{ KJField::date('NOTIFICATION_DATE', KJLocalization::translate('Admin - Dossiers', 'Meldingsdatum', 'Meldingsdatum'), $item ? $item->getNotificationDateFormattedAttribute() : '', ['data-screen-mode' => 'read, edit', 'data-locale-format' => \KJ\Localization\libraries\LanguageUtils::getJSDatePickerFormat()]) }}
 
-                            @php
-                                $compensation_readonly = '';
-                                $compensation_can_change = true;
-
-                                if (($item && ($item->INVOICING_COMPLETE ?? false)) == true) {
-                                    $compensation_readonly = 'readonly';
-                                    $compensation_can_change = false;
-                                }
-                                else if ($item && ($item->hasInvoices())) {
-                                    $compensation_readonly = 'readonly';
-                                    $compensation_can_change = false;
-                                }
-
-                            @endphp
-                            @if($compensation_can_change)
-                                {{ KJField::checkbox('COMPENSATED', KJLocalization::translate('Admin - Dossiers', 'Wordt vergoed', 'Wordt vergoed'), true, ( $item ? $item->COMPENSATED : false ), true, ['disabled', 'data-screen-mode' => 'read,edit']) }}
-                            @else
-                                {{ KJField::text('COMPENSATED', KJLocalization::translate('Admin - Taken', 'Wordt vergoed', 'Wordt vergoed'), $item ? ($item->COMPENSATED ? KJLocalization::translate('Admin - Dossiers', 'Ja', 'Ja') : KJLocalization::translate('Admin - Dossiers', 'Nee', 'Nee')) : '' , true, [$compensation_readonly, 'data-screen-mode' => 'read, edit']) }}
-                            @endif
-                            {{ KJField::number('COMPENSATION_PERCENTAGE', KJLocalization::translate('Admin - Dossiers', 'Vergoedingspercentage', 'Vergoedingspercentage'), $item ? $item->getCompensationPercentageDecimalAttribute() : '', true, [$item ? ($item->COMPENSATED ? 'required' : '') : '',$compensation_readonly, 'data-screen-mode' => 'read, edit', 'min' => 0], [
-                                'right' => [['type' => 'text', 'caption' => '%']]]
-                            ) }}
-
-                            {{--Required--}} {{ KJField::date('START_DATE', KJLocalization::translate('Admin - Dossiers', 'Eerste ziektedag', 'Eerste ziektedag'), $item ? $item->getStartDateFormattedAttribute() : '', ['required', 'data-screen-mode' => 'read, edit', 'data-date-end-date' => '-0d', 'data-locale-format' => \KJ\Localization\libraries\LanguageUtils::getJSDatePickerFormat()]) }}
-                            {{--Required--}} {{ KJField::text('POLICY_NUMBER', KJLocalization::translate('Admin - Dossiers', 'Polisnummer', 'Polisnummer'), $item ? $item->POLICY_NUMBER : '', true, ['required', 'data-screen-mode' => 'read, edit']) }}
+                            {{ KJField::date('START_DATE', KJLocalization::translate('Admin - Dossiers', 'Eerste ziektedag', 'Eerste ziektedag'), $item ? $item->getStartDateFormattedAttribute() : '', ['data-screen-mode' => 'read, edit', 'data-date-end-date' => '-0d', 'data-locale-format' => \KJ\Localization\libraries\LanguageUtils::getJSDatePickerFormat()]) }}
+                            {{ KJField::text('POLICY_NUMBER', KJLocalization::translate('Admin - Dossiers', 'Polisnummer', 'Polisnummer'), $item ? $item->POLICY_NUMBER : '', true, ['data-screen-mode' => 'read, edit']) }}
                         </div>
                     </div>
 

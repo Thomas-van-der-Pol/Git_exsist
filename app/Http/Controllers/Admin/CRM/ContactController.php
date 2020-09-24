@@ -90,7 +90,7 @@ class ContactController extends AdminBaseController {
 
         if ($modal) {
             $this->whereInClause = array(
-                ['CRM_RELATION.FK_CORE_DROPDOWNVALUE_RELATIONTYPE', [config('relation_type.WERKGEVER'), config('relation_type.WERKNEMER')]],
+                ['CRM_RELATION.FK_CORE_DROPDOWNVALUE_RELATIONTYPE', [config('relation_type.WERKGEVER')]],
                 ['CRM_RELATION.ACTIVE', [true]],
             );
         }

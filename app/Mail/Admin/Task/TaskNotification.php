@@ -34,6 +34,9 @@ class TaskNotification extends BaseMail
         $email = $this->from(config('mail.from.address'), config('mail.from.name'))
             ->subject(KJLocalization::translate('E-mails', 'Taak toegewezen', 'Taak toegewezen'))
             ->embed('logo', public_path('/assets/custom/img/logos/mail/logo.png'))
+            ->embed('twitter', public_path('/assets/custom/img/logos/mail/twitter.png'))
+            ->embed('facebook', public_path('/assets/custom/img/logos/mail/facebook.png'))
+            ->embed('linkedin', public_path('/assets/custom/img/logos/mail/instagram.png'))
             ->markdown('admin.mails.task.notification', [
                 'item' => $this->item,
                 'url' => $this->url

@@ -30,7 +30,7 @@ class CompensationUtils
             'Statements' => array(
                 array(
                     'Identifier' => "CRM_RELATION",
-                    'Query' => "SELECT CR.ID, CR.NAME FROM CRM_RELATION CR WITH(NOLOCK) WHERE CR.ID = {1}",
+                    'Query' => "SELECT CR.ID, CR.NAME, CR.EMAILADDRESS FROM CRM_RELATION CR WITH(NOLOCK) WHERE CR.ID = {1}",
                     'Parameters' => [(int)$invoice->label->proxy->ID]
                 ),
                 array(
@@ -44,7 +44,7 @@ class CompensationUtils
                 array(
                     'Identifier' => "COMPENSATION",
                     'Query' => "SELECT ".
-                        " '" . $invoice->project->getCompensationPercentageFormattedAttribute() . "' AS PERCENTAGE, " .
+                        " '" . $invoice->product->getCompensationPercentageFormattedAttribute() . "' AS PERCENTAGE, " .
                         " '" . $invoice->getCompensatedPriceFormattedAttribute() . "' AS PRICE ",
                     'Parameters' => []
                 ),

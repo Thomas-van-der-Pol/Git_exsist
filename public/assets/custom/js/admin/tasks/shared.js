@@ -4,7 +4,8 @@ $(document).ready(function() {
 
     // Translations
     kjlocalization.create('Admin - Taken', [
-        {'Nieuwe taak': 'Nieuwe taak'}
+        {'Nieuwe taak': 'Nieuwe taak'},
+        {'Tekst meetellen factuurdatums': 'Wil je ook de factuurschema datums laten meetellen?'},
     ]);
 
     // New task
@@ -195,6 +196,7 @@ $(document).ready(function() {
 
     $('body').on('click', '.shiftDeadline, .connectEmployee, .copyToMap', function(e) {
         e.preventDefault();
+        var configType = $('input[name="TYPE"]').val();
 
         var container = $(this).closest('.tab-pane');
         var taskIds = $.map($('input[name="DONE"]:checked'), function(c){
@@ -222,7 +224,7 @@ $(document).ready(function() {
             subject = kjlocalization.get('admin_-_taken', 'toevoegen_aan_map');
         }
 
-        loadTaskFunctionModal(type, taskIds, subject, container);
+        loadTaskFunctionModal(type, taskIds, subject, container, configType);
     });
 
     $('body').on('click', '#addMap', function(e) {
@@ -231,7 +233,7 @@ $(document).ready(function() {
     });
 });
 
-function loadTaskFunctionModal(type, taskIds, subject = null, container) {
+function loadTaskFunctionModal(type, taskIds, subject = null, container, configType = null) {
     var url = '/admin/tasks/functions/modal/?type=' + type;
     if (type) {
         $.ajax({
@@ -269,17 +271,42 @@ function loadTaskFunctionModal(type, taskIds, subject = null, container) {
 
                     var rawData = form.serializeArray();
                     var formData = new FormData();
-
-                    //Alle velden
-                    rawData.forEach(function (data, index, form) {
-                        formData.append(data.name, data.value);
-                    });
-                    formData.append('task', JSON.stringify(taskIds));
-                    kjrequest('POST', url, formData, false, function (data) {
-                        if (data.success === true) {
-                            loadTaskScreen(container);
-                        }
-                    });
+                    if(configType == 9 && type == "shiftDeadline"){
+                        swal.fire({
+                            title: kjlocalization.get('admin_-_taken', 'tekst_meetellen_factuurdatums'),
+                            showCancelButton: true,
+                            confirmButtonText: kjlocalization.get('algemeen', 'ja'),
+                            cancelButtonText: kjlocalization.get('algemeen', 'nee')
+                        }).then(function(result) {
+                            if (result.value) {
+                                formData.append('countInInvoiceDates', 1);
+                            } else {
+                                formData.append('countInInvoiceDates', 0);
+                            }
+                            //Alle velden
+                            rawData.forEach(function (data, index, form) {
+                                formData.append(data.name, data.value);
+                            });
+                            formData.append('task', JSON.stringify(taskIds));
+                            kjrequest('POST', url, formData, false, function (data) {
+                                if (data.success === true) {
+                                    loadTaskScreen(container);
+                                }
+                            });
+                        });
+                    }
+                    else {
+                        //Alle velden
+                        rawData.forEach(function (data, index, form) {
+                            formData.append(data.name, data.value);
+                        });
+                        formData.append('task', JSON.stringify(taskIds));
+                        kjrequest('POST', url, formData, false, function (data) {
+                            if (data.success === true) {
+                                loadTaskScreen(container);
+                            }
+                        });
+                    }
                 });
 
                 $('.kj_field_modal').find('.modal-body').find('form').find('.kt-portlet__body').find('input').keypress(function (e) {

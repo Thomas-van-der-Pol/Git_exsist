@@ -32,7 +32,9 @@ class ProductProjectController extends AdminBaseController
     ];
 
     protected $saveUnsetValues = [
-        'PROVIDER_NAME'
+        'PROVIDER_NAME',
+        'PROJECT_START_DATE',
+        'PROJECT_POLICY_NUMBER'
     ];
 
     protected function beforeDatatable($datatable)
@@ -105,10 +107,11 @@ class ProductProjectController extends AdminBaseController
 
         $startDate = $request->get('date');
         $id = ( $request->get('id') ?? 0 );
+        $quatation = ( $request->get('quatation') ?? '' );
         $product = json_decode(( $request->get('product') ?? 0 ), true);
         $project = Project::find($id);
 
-        $createProduct = $project->createProduct($product, $startDate, $assignee);
+        $createProduct = $project->createProduct($product, $startDate, $assignee, $quatation);
 
         return response()->json([
             'success' => ($createProduct != null)

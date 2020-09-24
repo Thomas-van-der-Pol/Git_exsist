@@ -33,8 +33,8 @@ class InvoiceUtils
         $invoice_report = self::generateReport($invoice, $state);
 
         // Generate extra documents when compensated
-        if($invoice->project) {
-            if ($invoice->project->COMPENSATED) {
+        if($invoice->product) {
+            if ($invoice->product->COMPENSATED) {
                 // Generate compensation letter
                 if ($invoice->label->proxy) {
                     $compensation_report = CompensationUtils::generateReport($invoice, $state);
@@ -67,8 +67,8 @@ class InvoiceUtils
         $locale = App::getLocale();
         $localeId = config('language.langs')[array_search(strtoupper($locale), array_column(config('language.langs'), 'CODE'))]['ID'];
 
-        $paymentText = KJLocalization::translate('Admin - Facturen', 'Betalingstekst', 'Wij verzoeken u deze factuur voor :EXPIRATION_DATE te voldoen op bankrekening :IBAN_NUMBER ten name van Exsist B.V. te Doetinchem, onder vermelding van het factuurnummer en uw debiteurnummer (:INVOICE_NUMBER, :NUMBER_DEBTOR)', [
-            'EXPIRATION_DATE' => $invoice->getExpirationDateFormattedAttribute() ?? 'Vervaldatum (concept)',
+        $paymentText = KJLocalization::translate('Admin - Facturen', 'Betalingstekst', 'Wij verzoeken u deze factuur voor :EXPIRATION_DATE te voldoen op bankrekening :IBAN_NUMBER ten name van Exsist B.V. te Doetinchem, onder vermelding van het factuurnummer en uw debiteurnummer (:INVOICE_NUMBER / :NUMBER_DEBTOR)', [
+            'EXPIRATION_DATE' => $invoice->EXPIRATION_DATE ? $invoice->getExpirationDateFormattedAttribute() : '...',
             'IBAN_NUMBER' => $invoice->label->IBAN_NUMBER,
             'INVOICE_NUMBER' => $invoice->NUMBER ?? KJLocalization::translate('Admin - Facturen', 'Concept', 'Concept', [], $locale),
             'NUMBER_DEBTOR' => $invoice->relation->NUMBER_DEBTOR
@@ -80,8 +80,8 @@ class InvoiceUtils
         }
 
         $is_anonymized = 0;
-        if($invoice->project){
-            if ($invoice->project->COMPENSATED && in_array($state, ['anonymize', 'anonymize_final'])) {
+        if($invoice->product){
+            if ($invoice->product->COMPENSATED && in_array($state, ['anonymize', 'anonymize_final'])) {
                 $is_anonymized = 1;
             }
         }
@@ -117,16 +117,22 @@ class InvoiceUtils
                     CASE WHEN FI.NUMBER IS NULL THEN '".KJLocalization::translate('Admin - Facturen', 'Concept', 'Concept', [], $locale)."' ELSE CAST(FI.NUMBER AS VARCHAR(100)) END AS NUMBER, 
                     FI.DATE, 
                     FI.EXPIRATION_DATE, 
+                    P.NOTIFICATION_DATE AS MELDINGSDATUM, 
                     ISNULL(FI.PRICE_TOTAL_EXCL,0) AS TOTALEXCL, 
                     ISNULL(FI.PRICE_TOTAL_INCL,0) AS TOTALINCL, 
                     ISNULL(FI.VAT_TOTAL,0) AS TOTALVAT, 
                     '".$paymentText."' AS PAYMENTTEXT,
-                    CC.FULLNAME AS EMPLOYEE,
+                    CCE.FULLNAME AS EMPLOYEE,
+                    CR.NAME AS EMPLOYER,
+                    CCE.BIRTHDAY_DATE AS GEBOORTEDATUM,
+                    PAP.QUOTATION_NUMBER AS OFFERTENUMMER,
 					P.START_DATE AS FIRST_SICKDAY,
 					P.POLICY_NUMBER AS POLICY_NUMBER
                     FROM FINANCE_INVOICE FI WITH(NOLOCK) 
-					LEFT JOIN dbo.PROJECT P ON P.ID = FI.FK_PROJECT
-					LEFT JOIN dbo.CRM_CONTACT CC ON CC.ID = P.FK_CRM_CONTACT_EMPLOYEE
+					LEFT JOIN dbo.PROJECT P WITH (NOLOCK) ON P.ID = FI.FK_PROJECT
+					LEFT JOIN dbo.CRM_CONTACT CCE WITH (NOLOCK) ON CCE.ID = P.FK_CRM_CONTACT_EMPLOYEE
+					LEFT JOIN dbo.CRM_RELATION CR WITH (NOLOCK) ON CR.ID = P.FK_CRM_RELATION_EMPLOYER
+					LEFT JOIN dbo.PROJECT_ASSORTMENT_PRODUCT PAP WITH (NOLOCK) ON PAP.ID = FI.FK_PROJECT_ASSORTMENT_PRODUCT
 					 WHERE FI.ID = {1}",
                     'Parameters' => [$invoice->ID]
                 ),
@@ -162,7 +168,11 @@ class InvoiceUtils
                         " '" . KJLocalization::translate('Admin - Facturen', 'Factuurnummer', 'Factuurnummer', [], $locale) . "' AS FACTUURNUMMER, " .
                         " '" . KJLocalization::translate('Admin - Facturen', 'Factuurdatum', 'Factuurdatum', [], $locale) . "' AS FACTUURDATUM, " .
                         " '" . KJLocalization::translate('Admin - Facturen', 'Vervaldatum', 'Vervaldatum', [], $locale) . "' AS VERVALDATUM, " .
+                        " '" . KJLocalization::translate('Admin - Facturen', 'Meldingsdatum', 'Meldingsdatum', [], $locale) . "' AS MELDINGSDATUM, " .
+                        " '" . KJLocalization::translate('Admin - Facturen', 'Geboortedatum', 'Geboortedatum', [], $locale) . "' AS GEBOORTEDATUM, " .
+                        " '" . KJLocalization::translate('Admin - Facturen', 'Offertenummer', 'Offertenummer', [], $locale) . "' AS OFFERTENUMMER_INTERVENTIE, " .
                         " '" . KJLocalization::translate('Admin - Facturen', 'T.b.v. werknemer', 'T.b.v. werknemer', [], $locale) . "' AS TBV_WERKNEMER, " .
+                        " '" . KJLocalization::translate('Admin - Facturen', 'Werkgever', 'Werkgever', [], $locale) . "' AS WERKGEVER, " .
                         " '" . KJLocalization::translate('Admin - Facturen', 'Polisnummer', 'Polisnummer', [], $locale) . "' AS POLISNUMMER, " .
                         " '" . KJLocalization::translate('Admin - Facturen', 'Eerste ziektedag', 'Eerste ziektedag', [], $locale) . "' AS EERSTE_ZIEKTEDAG, " .
                         " '" . KJLocalization::translate('Admin - Facturen', 'Totaal inclusief btw', 'Totaal inclusief btw', [], $locale) . "' AS TOTAL_INCL, " .
@@ -310,6 +320,7 @@ class InvoiceUtils
 //      als de vergoedingsbrief bestaat, maar niet op de ftp
         if (($invoice->document_compensation_letter) && !Storage::disk('ftp')->exists($invoice->document_compensation_letter->FILEPATH)) {
             $invoice->update(['FK_DOCUMENT_COMPENSATION_LETTER' => null]);
+            $invoice->document_compensation_letter->delete();
             CompensationUtils::generateReport($invoice, 'anonymize_final');
         }
 
@@ -344,10 +355,9 @@ class InvoiceUtils
                 $fileRequest->save();
                 $fileRequest->refresh();
             }
-
             // Send to proxy relation
-            if($invoice->project) {
-                if ($invoice->project->COMPENSATED) {
+            if($invoice->product) {
+                if ($invoice->product->COMPENSATED) {
                     if ($invoice->label->proxy) {
                         if ($invoice->label->proxy->EMAILADDRESS && ($invoice->label->proxy->EMAILADDRESS != '')) {
                             try {

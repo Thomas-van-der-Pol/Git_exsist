@@ -6,6 +6,7 @@ use App\Libraries\Core\DropdownvalueUtils;
 use App\Models\Admin\Core\Label;
 use App\Models\Admin\Project\Project;
 use App\Models\Core\WorkflowState;
+use App\Models\Core\WorkflowStateType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\HtmlString;
@@ -58,10 +59,10 @@ class ProjectController extends AdminBaseController {
     protected $saveUnsetValues = [
         'REFERRER_NAME',
         'EMPLOYER_NAME',
-        'EMPLOYEE_NAME',
         'COMPENSATION_PERCENTAGE_READ',
         'USER_CREATED',
         'DATE_CREATED',
+        'INVOICE_RELATION_NAME'
     ];
 
     protected function authorizeRequest($method, $parameters)
@@ -118,7 +119,9 @@ class ProjectController extends AdminBaseController {
         }
 
         if ($ID > 0) {
-            $this->whereClause = array_merge($this->whereClause, [['FK_CORE_WORKFLOWSTATE', $ID]]);
+            $workflowState = WorkflowState::find($ID);
+            $allWorkFlowStatesIDs = WorkflowState::where('DESCRIPTION', $workflowState->DESCRIPTION)->where('ACTIVE', true)->get()->pluck('ID');
+            $this->whereInClause = array_merge($this->whereInClause, [['FK_CORE_WORKFLOWSTATE', $allWorkFlowStatesIDs]]);
         }
 
         $this->datatableFilter = [
@@ -138,7 +141,7 @@ class ProjectController extends AdminBaseController {
         $show_done = ((int)($request->query('query')['SHOW_DONE'] ?? 0) == 1);
         if ($show_done == false) {
             $this->whereNotInClause = [
-                ['FK_CORE_WORKFLOWSTATE', [config('workflowstate.PROJECT_DONE')]]
+                ['FK_CORE_WORKFLOWSTATE', [config('workflowstate.TYPE_PROJECT.PROJECT_DONE'), config('workflowstate.BEZAVA.PROJECT_DONE')]]
             ];
         }
 
@@ -256,16 +259,18 @@ class ProjectController extends AdminBaseController {
                 $previousWorkflowstate = null;
                 $nextWorkflowstate = null;
                 if ($item && $item->workflowstate) {
-                    $previousWorkflowstate = WorkflowState::where(['ACTIVE' => true, 'FK_CORE_WORKFLOWSTATETYPE' => config('workflowstate_type.TYPE_PROJECT')])
+                    $previousWorkflowstate = WorkflowState::where(['ACTIVE' => true, 'FK_CORE_WORKFLOWSTATETYPE' => $item->FK_CORE_WORKFLOWSTATE_TYPE])
                         ->where('SEQUENCE', '<', $item->workflowstate->SEQUENCE)
                         ->orderBy('SEQUENCE', 'desc')
                         ->first();
 
-                    $nextWorkflowstate = WorkflowState::where(['ACTIVE' => true, 'FK_CORE_WORKFLOWSTATETYPE' => config('workflowstate_type.TYPE_PROJECT')])
+                    $nextWorkflowstate = WorkflowState::where(['ACTIVE' => true, 'FK_CORE_WORKFLOWSTATETYPE' => $item->FK_CORE_WORKFLOWSTATE_TYPE])
                         ->where('SEQUENCE', '>', $item->workflowstate->SEQUENCE)
                         ->orderBy('SEQUENCE', 'asc')
                         ->first();
                 }
+
+                $workflowStateTypes = WorkflowStateType::where('ID','<>', config('workflowstate_type.TYPE_INVOICE'))->get()->pluck('DESCRIPTION', 'ID');
 
                 $bindings = array_merge($bindings, [
                     ['labels', $labels],
@@ -273,6 +278,7 @@ class ProjectController extends AdminBaseController {
                     ['project_types', $project_types],
                     ['previousWorkflowstate', $previousWorkflowstate],
                     ['nextWorkflowstate', $nextWorkflowstate],
+                    ['workflowStateTypes', $workflowStateTypes],
                     ['contacts_referrer', $contacts_referrer],
                     ['contacts_employer', $contacts_employer],
                 ]);
@@ -299,16 +305,23 @@ class ProjectController extends AdminBaseController {
         if ($request->get('ID') == $this->newRecordID) {
             $item->CREATE_FK_CORE_USER = Auth::guard()->user()->ID;
 
-            // Reset workflowstate
-            $nextWorkflowstate = WorkflowState::where(['ACTIVE' => true, 'FK_CORE_WORKFLOWSTATETYPE' => config('workflowstate_type.TYPE_PROJECT')])
-                ->orderBy('SEQUENCE', 'asc')
-                ->first();
-
-            $item->FK_CORE_WORKFLOWSTATE = ($nextWorkflowstate->ID ?? null);
-
-            // Store
-            $item->save();
+            $this->resetWorkFlowStateType($item);
         }
+        else if($item->FK_CORE_WORKFLOWSTATE_TYPE != $originalItem->FK_CORE_WORKFLOWSTATE_TYPE){
+            // Reset workflowstate
+            $this->resetWorkFlowStateType($item);
+        }
+    }
+
+    public function resetWorkFlowStateType($item){
+        $nextWorkflowstate = WorkflowState::where(['ACTIVE' => true, 'FK_CORE_WORKFLOWSTATETYPE' => $item->FK_CORE_WORKFLOWSTATE_TYPE])
+            ->orderBy('SEQUENCE', 'asc')
+            ->first();
+
+        $item->FK_CORE_WORKFLOWSTATE = ($nextWorkflowstate->ID ?? null);
+
+        // Stored
+        $item->save();
     }
 
     public function delete(int $id)

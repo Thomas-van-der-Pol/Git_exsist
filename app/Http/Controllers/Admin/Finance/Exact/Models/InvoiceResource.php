@@ -143,6 +143,7 @@ class InvoiceResource extends ExactBaseResource
                     $salesEntry->PaymentCondition = $item->PAYMENT_CONDITION;
                     $salesEntry->Description = $item->DESCRIPTION;
                     $salesEntry->YourRef = $item->REFERENCE;
+                    $salesEntry->ExternalLinkReference = $item->product->QUOTATION_NUMBER;
 
                     // Lines toevoegen
                     $invoiceItems = collect(DB::select('EXEC [FINANCE_ACCOUNTANCY_INVOICE_ITEM] ?', [

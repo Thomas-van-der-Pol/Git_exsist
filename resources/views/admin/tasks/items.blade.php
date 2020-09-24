@@ -3,6 +3,7 @@
         <div class="kt-todo__head">
             <div class="kt-todo__toolbar">
                 <div class="kt-todo__actions kt-todo__actions--expanded">
+                    {{ Form::hidden('TYPE', $type ? $type : -1) }}
                     @if($type != config('task_type.TYPE_TASKLIST') && $type != config('task_type.TYPE_PRODUCT'))
                         <div class="kt-todo__check">
                             <label class="kt-checkbox kt-checkbox--single kt-checkbox--tick kt-checkbox--brand">
