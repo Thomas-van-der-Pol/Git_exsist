@@ -41,6 +41,10 @@ class InvoiceScheme extends Model
         return $this->hasOne(InvoiceLine::class, 'ID', 'FK_FINANCE_INVOICE_LINE');
     }
 
+    public function financeBillchecks(){
+        return $this->hasMany(Billcheck::class, 'FK_FINANCE_INVOICE_SCHEME', 'ID');
+    }
+
     function getDateFormattedAttribute()
     {
         if ($this->DATE) {

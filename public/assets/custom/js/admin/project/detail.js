@@ -226,9 +226,11 @@ $(document).ready(function() {
 
         if (this.checked) {
             $('input[name="COMPENSATION_PERCENTAGE"]').attr('required', true);
+            $('input[name="COMPENSATION_PERCENTAGE"]').attr('disabled', false);
             $('label[for="COMPENSATION_PERCENTAGE"]').text($('label[for="COMPENSATION_PERCENTAGE"]').text() + '*');
         } else {
             $('input[name="COMPENSATION_PERCENTAGE"]').removeAttr('required');
+            $('input[name="COMPENSATION_PERCENTAGE"]').attr('disabled', true);
             $('label[for="COMPENSATION_PERCENTAGE"]').text($('label[for="COMPENSATION_PERCENTAGE"]').text().replace('*', ''));
         }
     });
@@ -512,7 +514,7 @@ function determineDefaultDescription()
 
     var employee_id = $('#FK_CRM_CONTACT_EMPLOYEE').val();
     var employee = $('#FK_CRM_CONTACT_EMPLOYEE').find('option[value="'+employee_id+'"]').text()
-    debugger;
+
     var result = '';
     if (employer_id > 0) {
         result = employer;

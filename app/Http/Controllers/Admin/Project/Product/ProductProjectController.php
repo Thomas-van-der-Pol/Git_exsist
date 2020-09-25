@@ -126,6 +126,9 @@ class ProductProjectController extends AdminBaseController
 
             // Delete all invoice moments of this intervention-dossier
             foreach ($item->invoiceSchemes as $invoiceScheme){
+                foreach ($invoiceScheme->financeBillchecks as $billcheck){
+                    $billcheck->delete();
+                }
                 $invoiceScheme->delete();
             }
 
