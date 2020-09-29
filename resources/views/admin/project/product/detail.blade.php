@@ -42,14 +42,14 @@
 
             @endphp
             @if($compensation_can_change)
-                {{ KJField::checkbox('COMPENSATED', KJLocalization::translate('Admin - Dossiers', 'Wordt vergoed', 'Wordt vergoed'), true, ( $item ? $item->COMPENSATED : false ), true, ['data-screen-mode' => 'read,edit']) }}
+                {{ KJField::checkbox('COMPENSATED', KJLocalization::translate('Admin - Dossiers', 'Wordt vergoed', 'Wordt vergoed'), true, ( $item ? $item->COMPENSATED : false ), true, ['data-screen-mode' => 'read,edit', 'data-id' => $item ? $item->project->ID : -1]) }}
             @else
                 {{ KJField::text('COMPENSATED', KJLocalization::translate('Admin - Taken', 'Wordt vergoed', 'Wordt vergoed'), $item ? ($item->COMPENSATED ? KJLocalization::translate('Admin - Dossiers', 'Ja', 'Ja') : KJLocalization::translate('Admin - Dossiers', 'Nee', 'Nee')) : '' , true, [$compensation_readonly, 'data-screen-mode' => 'read, edit']) }}
             @endif
 
             {{ Form::hidden('PROJECT_START_DATE', $item ? ($item->project ? $item->project->START_DATE : '') : '') }}
             {{ Form::hidden('PROJECT_POLICY_NUMBER', $item ? ($item->project ? $item->project->POLICY_NUMBER : '') : '') }}
-            {{ KJField::number('COMPENSATION_PERCENTAGE', KJLocalization::translate('Admin - Dossiers', 'Vergoedingspercentage', 'Vergoedingspercentage'), $item ? $item->getCompensationPercentageDecimalAttribute() : '', true, [$item ? ($item->COMPENSATED ? 'required' : 'disabled') : '',$compensation_readonly, 'data-screen-mode' => 'read, edit', 'min' => 0], [
+            {{ KJField::number('COMPENSATION_PERCENTAGE', KJLocalization::translate('Admin - Dossiers', 'Vergoedingspercentage', 'Vergoedingspercentage'), $item ? $item->getCompensationPercentageDecimalAttribute() : '', true, [$item ? ($item->COMPENSATED ? 'required' : 'disabled') : '',$compensation_readonly, 'data-screen-mode' => 'read, edit', 'min' => 0, 'max'=> 100], [
                 'right' => [['type' => 'text', 'caption' => '%']]]
             ) }}
         </div>

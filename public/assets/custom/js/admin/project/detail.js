@@ -474,11 +474,15 @@ function afterLoadScreen(id, screen, data) {
 
             $('#COMPENSATED').on('click', function(data) {
                 var compensated = $('#COMPENSATED');
+                var id = compensated.data('id');
                 if(compensated.is(":checked")){
-                    if( $('input[name="PROJECT_POLICY_NUMBER"]').val() == '' || $('input[name="PROJECT_START_DATE"]').val() == ''){
-                        $.notify({message: kjlocalization.get('admin_-_dossiers', 'dossier_mist_ziektedag_of_polisnummer')}, {type: 'danger'});
-                        compensated.prop( "checked", false );
-                    }
+                    kjrequest('GET', '/admin/project/data/' + id, null, true, function (data) {
+                        if( !data.item.POLICY_NUMBER || !data.item.START_DATE){
+                            $.notify({message: kjlocalization.get('admin_-_dossiers', 'dossier_mist_ziektedag_of_polisnummer')}, {type: 'danger'});
+                            compensated.prop( "checked", false );
+                            $('label[for="COMPENSATION_PERCENTAGE"]').text($('label[for="COMPENSATION_PERCENTAGE"]').text().replace('*', ''));
+                        }
+                    });
                 }
             });
 

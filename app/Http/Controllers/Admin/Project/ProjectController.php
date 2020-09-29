@@ -14,7 +14,8 @@ use KJ\Core\controllers\AdminBaseController;
 use KJ\Core\libraries\SessionUtils;
 use KJLocalization;
 
-class ProjectController extends AdminBaseController {
+class ProjectController extends AdminBaseController
+{
 
     protected $model = 'App\Models\Admin\Project\Project';
 
@@ -48,7 +49,7 @@ class ProjectController extends AdminBaseController {
     protected $datatableDefaultSort = array(
         [
             'field' => 'TS_CREATED',
-            'sort'  => 'DESC'
+            'sort' => 'DESC'
         ]
     );
 
@@ -168,39 +169,40 @@ class ProjectController extends AdminBaseController {
 
     protected function beforeDatatable($datatable)
     {
-        $datatable->addColumn('REFERRER', function(Project $project) {
-                return $project->referrer ? $project->referrer->title : '';
-            })
-            ->addColumn('EMPLOYER', function(Project $project) {
+        $datatable->addColumn('REFERRER', function (Project $project) {
+            return $project->referrer ? $project->referrer->title : '';
+        })
+            ->addColumn('EMPLOYER', function (Project $project) {
                 return $project->employer ? $project->employer->title : '';
             })
-            ->addColumn('EMPLOYEE', function(Project $project) {
+            ->addColumn('EMPLOYEE', function (Project $project) {
                 return $project->employee ? $project->employee->title : '';
             })
-            ->addColumn('PROJECTTYPE', function(Project $project) {
+            ->addColumn('PROJECTTYPE', function (Project $project) {
                 return $project->type ? $project->type->value : '';
             })
-            ->addColumn('WORKFLOWSTATE', function(Project $project) {
+            ->addColumn('WORKFLOWSTATE', function (Project $project) {
                 $html = '<div class="progress" style="height: 16px; width: 100%">
-                            <div class="progress-bar kt-bg-brand" role="progressbar" style="width: '.$project->progress().'%;">
+                            <div class="progress-bar kt-bg-brand" role="progressbar" style="width: ' . $project->progress() . '%;">
                                 ' . ($project->workflowstate ? $project->workflowstate->DESCRIPTION : "") . '
                             </div>
                         </div>' . $project->progress() . '%';
 
                 return new HtmlString($html);
             })
-            ->addColumn('START_DATE_FORMATTED', function(Project $project) {
+            ->addColumn('START_DATE_FORMATTED', function (Project $project) {
                 return $project->getStartDateFormattedAttribute();
             })
-            ->addColumn('CREATED_DATE_FORMATTED', function(Project $project) {
+            ->addColumn('CREATED_DATE_FORMATTED', function (Project $project) {
                 return $project->getCreatedDateFormattedAttribute();
             })
-            ->addColumn('LASTMODIFIED_STATE_FORMATTED', function(Project $project) {
+            ->addColumn('LASTMODIFIED_STATE_FORMATTED', function (Project $project) {
                 return $project->getLastModifiedStateFormattedAttribute();
             });
     }
 
-    public function detailScreenOverview(Request $request) {
+    public function detailScreenOverview(Request $request)
+    {
         if ($this->detailScreenOverviewFolder == '') {
             abort(400, 'Geen detail screen overview folder opgegeven! Vul variabele detailScreenOverviewFolder.');
         }
@@ -216,7 +218,7 @@ class ProjectController extends AdminBaseController {
             'DESCRIPTION' => KJLocalization::translate('Admin - Dossiers', 'Alle dossiers', 'Alle dossiers')
         ]);
 
-        $view = view($this->detailScreenOverviewFolder.'.project_base')
+        $view = view($this->detailScreenOverviewFolder . '.project_base')
             ->with('type', $type)
             ->with('workflowStates', $workflowStates);
 
@@ -270,7 +272,7 @@ class ProjectController extends AdminBaseController {
                         ->first();
                 }
 
-                $workflowStateTypes = WorkflowStateType::where('ID','<>', config('workflowstate_type.TYPE_INVOICE'))->get()->pluck('DESCRIPTION', 'ID');
+                $workflowStateTypes = WorkflowStateType::where('ID', '<>', config('workflowstate_type.TYPE_INVOICE'))->get()->pluck('DESCRIPTION', 'ID');
 
                 $bindings = array_merge($bindings, [
                     ['labels', $labels],
@@ -306,14 +308,14 @@ class ProjectController extends AdminBaseController {
             $item->CREATE_FK_CORE_USER = Auth::guard()->user()->ID;
 
             $this->resetWorkFlowStateType($item);
-        }
-        else if($item->FK_CORE_WORKFLOWSTATE_TYPE != $originalItem->FK_CORE_WORKFLOWSTATE_TYPE){
+        } else if ($item->FK_CORE_WORKFLOWSTATE_TYPE != $originalItem->FK_CORE_WORKFLOWSTATE_TYPE) {
             // Reset workflowstate
             $this->resetWorkFlowStateType($item);
         }
     }
 
-    public function resetWorkFlowStateType($item){
+    public function resetWorkFlowStateType($item)
+    {
         $nextWorkflowstate = WorkflowState::where(['ACTIVE' => true, 'FK_CORE_WORKFLOWSTATETYPE' => $item->FK_CORE_WORKFLOWSTATE_TYPE])
             ->orderBy('SEQUENCE', 'asc')
             ->first();
@@ -350,4 +352,14 @@ class ProjectController extends AdminBaseController {
         }
     }
 
+    public function data(int $id)
+    {
+        $item = $this->find($id);
+
+        return response()->json([
+            'success' => true,
+            'item' => $item
+        ]);
+
+    }
 }
