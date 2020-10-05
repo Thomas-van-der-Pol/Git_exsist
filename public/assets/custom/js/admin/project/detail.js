@@ -480,7 +480,7 @@ function afterLoadScreen(id, screen, data) {
                         if( !data.item.POLICY_NUMBER || !data.item.START_DATE){
                             $.notify({message: kjlocalization.get('admin_-_dossiers', 'dossier_mist_ziektedag_of_polisnummer')}, {type: 'danger'});
                             compensated.prop( "checked", false );
-                            $('label[for="COMPENSATION_PERCENTAGE"]').text($('label[for="COMPENSATION_PERCENTAGE"]').text().replace('*', ''));
+                            compensated.trigger('change');
                         }
                     });
                 }

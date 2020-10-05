@@ -124,6 +124,7 @@ class InvoiceUtils
                     '".$paymentText."' AS PAYMENTTEXT,
                     CCE.FULLNAME AS EMPLOYEE,
                     CR.NAME AS EMPLOYER,
+                    P.FK_CRM_RELATION_INVOICE AS CUSTOM_INVOICE_RELATION,
                     CCE.BIRTHDAY_DATE AS GEBOORTEDATUM,
                     PAP.QUOTATION_NUMBER AS OFFERTENUMMER,
 					P.START_DATE AS FIRST_SICKDAY,

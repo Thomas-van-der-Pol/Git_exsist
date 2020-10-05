@@ -86,7 +86,7 @@ $(document).ready(function() {
 });
 
 $(document).on('ADM_BILLCHECK_TABLERowCallback', function(e, row, data, index) {
-    if (data.INVALID == true) {
+    if (data.INVALID == true || data.INVALID_ADDRESS == true) {
         row.addClass('font-danger');
         row.addClass('block-selection');
         row.find('td[data-field="BILLCHECKIDString"]').replaceWith('<td class="kt-datatable__cell--center kt-datatable__cell kt-datatable__cell--check" data-autohide-disabled="false"><span></span></td>');
