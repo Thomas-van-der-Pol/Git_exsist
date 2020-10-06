@@ -135,8 +135,6 @@ img {
     -premailer-cellspacing: 0;
     -premailer-width: 100%;
     background-color: #ffffff;
-    border-bottom: 1px solid #edf2f7;
-    border-top: 1px solid #edf2f7;
     margin: 0;
     padding: 0;
     width: 100%;
@@ -147,7 +145,6 @@ img {
     -premailer-cellspacing: 0;
     -premailer-width: 570px;
     background-color: #ffffff;
-    border-color: #e8e5ef;
     border-radius: 2px;
     border-width: 1px;
     box-shadow: 0 2px 0 rgba(0, 0, 150, 0.025), 2px 4px 0 rgba(0, 0, 150, 0.015);
@@ -159,7 +156,6 @@ img {
 /* Subcopy */
 
 .subcopy {
-    border-top: 1px solid #e8e5ef;
     margin-top: 25px;
     padding-top: 25px;
 }
@@ -180,6 +176,10 @@ img {
     width: 570px;
 }
 
+.footer table {
+    color: #ffffff;
+}
+
 .footer span {
     color: #ffffff;
 }
@@ -187,8 +187,24 @@ img {
 .footer p {
     color: #ffffff;
     font-size: 12px;
-    text-align: center;
+    text-align: left;
 }
+
+.footer p .btn-circle {
+    background-color: #4CAF50;
+    border: none;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    border-radius: 50%;
+}
+
+.footer table tr {
+    border-bottom: none !important;
+}
+
 
 .footer a {
     color: #ffffff;
@@ -206,7 +222,6 @@ img {
 }
 
 .table th {
-    border-bottom: 1px solid #edeff2;
     margin: 0;
     padding-bottom: 8px;
 }

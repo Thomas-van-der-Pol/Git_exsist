@@ -9,6 +9,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use App\Notifications\Consumer\Auth\ResetPassword as ResetPasswordNotification;
 use Illuminate\Contracts\Auth\CanResetPassword;
 use Illuminate\Support\Facades\Password;
+use KJ\Localization\libraries\LanguageUtils;
 use KJLocalization;
 
 class Contact extends Authenticatable implements CanResetPassword
@@ -129,6 +130,11 @@ class Contact extends Authenticatable implements CanResetPassword
         return $this->hasOne(DropdownValue::class, 'ID', 'FK_CORE_DROPDOWNVALUE_GENDER');
     }
 
+    public function salutation()
+    {
+        return $this->hasOne(DropdownValue::class, 'ID', 'FK_CORE_DROPDOWNVALUE_SALUTATION');
+    }
+
     public static function isEmailValid(int $id, string $email)
     {
         $contacts = Contact::where('EMAILADDRESS', $email)
@@ -146,5 +152,11 @@ class Contact extends Authenticatable implements CanResetPassword
         // Generate a new reset password token
         $token = Password::broker('users')->createToken($this);
         $this->notify(new WelcomePassword($token));
+    }
+
+    public function getBirthdayDateFormattedAttribute()
+    {
+        // Datum in juiste formaat
+        return isset($this->BIRTHDAY_DATE) ? date(LanguageUtils::getDateFormat(), strtotime($this->BIRTHDAY_DATE)) : '';
     }
 }

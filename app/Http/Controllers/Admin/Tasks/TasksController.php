@@ -792,6 +792,20 @@ class TasksController extends AdminBaseController {
         $days = $request->get('SHIFT_DATES');
 
         if ($tasks && $days) {
+            // Interventies ophalen
+            if($request->get('countInInvoiceDates') == true) {
+                $products = Task::select(['FK_PROJECT_ASSORTMENT_PRODUCT'])->whereIn('ID', $tasks)->distinct()->pluck('FK_PROJECT_ASSORTMENT_PRODUCT');
+
+                foreach ($products as $product_id) {
+                    $product = \App\Models\Admin\Project\Product::find($product_id);
+                    foreach($product->invoiceSchemes as $invoiceScheme){
+                        $invoiceScheme->update([
+                            'DATE' => date('Y-m-d', strtotime($invoiceScheme->DATE . ' + ' . $days . ' days'))
+                        ]);
+                    }
+                }
+            }
+
             foreach ($tasks as $taskID) {
                 $task = Task::find($taskID);
                 $task->update([

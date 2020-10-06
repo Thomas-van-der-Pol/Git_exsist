@@ -3,7 +3,8 @@ $(document).ready(function() {
     kjlocalization.create('Admin - Dossiers', [
         {'Selecteer product': 'Selecteer product'},
         {'Verwijder projectproduct titel': 'Weet je het zeker?'},
-        {'Verwijder projectproduct tekst': 'Alle taken en alle factuurmomenten die aan deze interventie gekoppeld zijn worden verwijderd.'}
+        {'Verwijder projectproduct tekst': 'Alle taken en alle factuurmomenten die aan deze interventie gekoppeld zijn worden verwijderd.'},
+        {'Dossier mist ziektedag of polisnummer': 'Dossier mist ziektedag of polisnummer'},
     ]);
 
     kjlocalization.create('Admin - CRM', [
@@ -141,6 +142,9 @@ $(document).ready(function() {
         if(type === "PROVIDER_NAME"){
             selectRelation('PROVIDER');
         }
+        if(type === "INVOICE_RELATION_NAME"){
+            selectRelation('');
+        }
     });
 
     function selectRelation(type){
@@ -211,7 +215,7 @@ $(document).ready(function() {
         });
     });
 
-    $('body').on('change', 'select[name="FK_CRM_CONTACT_EMPLOYER"]', function(e) {
+    $('body').on('change', 'select[name="FK_CRM_CONTACT_EMPLOYEE"]', function(e) {
         e.preventDefault();
 
         $('input[name="DESCRIPTION"]').val(determineDefaultDescription());
@@ -222,9 +226,11 @@ $(document).ready(function() {
 
         if (this.checked) {
             $('input[name="COMPENSATION_PERCENTAGE"]').attr('required', true);
+            $('input[name="COMPENSATION_PERCENTAGE"]').attr('disabled', false);
             $('label[for="COMPENSATION_PERCENTAGE"]').text($('label[for="COMPENSATION_PERCENTAGE"]').text() + '*');
         } else {
             $('input[name="COMPENSATION_PERCENTAGE"]').removeAttr('required');
+            $('input[name="COMPENSATION_PERCENTAGE"]').attr('disabled', true);
             $('label[for="COMPENSATION_PERCENTAGE"]').text($('label[for="COMPENSATION_PERCENTAGE"]').text().replace('*', ''));
         }
     });
@@ -264,6 +270,7 @@ $(document).ready(function() {
                     var productIds = getCheckedRows('ADM_PRODUCT_MODAL_TABLE');
                     var date = $('#STARTDATE').val();
                     var assignee = $('#FK_CORE_USER_ASSIGNEE').val();
+                    var quatation = $('#QUOTATION_NUMBER').val();
                     if (productIds.length === 0) {
                         swal.fire({
                             text: kjlocalization.get('algemeen', 'selecteer_minimaal_een_regel'),
@@ -286,6 +293,7 @@ $(document).ready(function() {
                     formData.append('product', JSON.stringify(productIds));
                     formData.append('date', date);
                     formData.append('assignee', assignee);
+                    formData.append('quatation', quatation);
 
                     $.ajaxSetup({
                         headers: {
@@ -463,6 +471,21 @@ function afterLoadScreen(id, screen, data) {
             $('#btnCancelQuantity').on('click', function(e) {
                 $('input[name="FK_CRM_RELATION"]').val(relationValue);
             });
+
+            $('#COMPENSATED').on('click', function(data) {
+                var compensated = $('#COMPENSATED');
+                var id = compensated.data('id');
+                if(compensated.is(":checked")){
+                    kjrequest('GET', '/admin/project/data/' + id, null, true, function (data) {
+                        if( !data.item.POLICY_NUMBER || !data.item.START_DATE){
+                            $.notify({message: kjlocalization.get('admin_-_dossiers', 'dossier_mist_ziektedag_of_polisnummer')}, {type: 'danger'});
+                            compensated.prop( "checked", false );
+                            compensated.trigger('change');
+                        }
+                    });
+                }
+            });
+
         });
     }
     else if (screen === 'documents') {
@@ -493,8 +516,8 @@ function determineDefaultDescription()
     var employer_id = $('input[name="FK_CRM_RELATION_EMPLOYER"]').val();
     var employer = $('input[name="EMPLOYER_NAME"]').val();
 
-    var employee_id = $('input[name="FK_CRM_CONTACT_EMPLOYEE"]').val();
-    var employee = $('input[name="EMPLOYEE_NAME"]').val();
+    var employee_id = $('#FK_CRM_CONTACT_EMPLOYEE').val();
+    var employee = $('#FK_CRM_CONTACT_EMPLOYEE').find('option[value="'+employee_id+'"]').text()
 
     var result = '';
     if (employer_id > 0) {
@@ -527,15 +550,18 @@ $(document).on('ADM_RELATION_TABLEAfterSelect', function(e, selectedId, linkObj)
             dataType: 'JSON',
 
             success: function (data) {
-                var select =  $('#'+text_input.data('update'));
+                var updatedValues = text_input.data('update').split(',');
+                $.each(updatedValues, function (index, value) {
+                    var select = $('#' + value);
 
-                select.empty();
-                $.each(data.items, function (index, value) {
-                    select.append($("<option></option>").attr("value", index).text(value));
+                    select.empty();
+                    $.each(data.items, function (index, value) {
+                        select.append($("<option></option>").attr("value", index).text(value));
+                    });
+
+                    select.val('');
+                    select.selectpicker('refresh');
                 });
-
-                select.val('');
-                select.selectpicker('refresh');
             }
         });
     }

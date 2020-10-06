@@ -19,6 +19,7 @@ CREATE TABLE [dbo].[CRM_CONTACT]
 [PASSWORD] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [REMEMBER_TOKEN] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [FULLNAME] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[BIRTHDAY_DATE] [datetime] NULL,
 [REMARKS] [nvarchar] (4000) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [NEW_PASSWORD] [datetime] NULL,
 [DOCUMENT_PASSWORD] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,

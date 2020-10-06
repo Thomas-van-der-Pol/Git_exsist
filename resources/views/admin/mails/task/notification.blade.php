@@ -20,4 +20,11 @@
 [{{ $url}}]({{ $url}})
 @endslot
 
+{!! KJLocalization::translate('E-mails', 'Met vriendelijke groet,', 'Met vriendelijke groet,', [], $locale, true) !!}<br/>
+{{ config('mail.contact_details.name') }}<br/>
+{{ config('mail.contact_details.mail_address') }}<br/>
+{{ config('mail.contact_details.website') }}<br/>
+
+<img align="center" src="{{ $logo }}" alt="Logo" title="Logo" height="200"/>
+
 @endcomponent

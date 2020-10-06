@@ -54,6 +54,11 @@ class Project extends Model
         return $this->hasOne(Relation::class, 'ID', 'FK_CRM_RELATION_REFERRER');
     }
 
+    public function invoiceRelation()
+    {
+        return $this->hasOne(Relation::class, 'ID', 'FK_CRM_RELATION_INVOICE');
+    }
+
     public function referrer_contact()
     {
         return $this->hasOne(Contact::class, 'ID', 'FK_CRM_CONTACT_REFERRER');
@@ -96,7 +101,7 @@ class Project extends Model
 
     public function invoices()
     {
-        return $this->hasMany(Invoice::class, 'FK_PROJECT', 'ID');
+        return ($this->invoices->where('ACTIVE', true)->count() > 0);
     }
 
     public function hasInvoices()
@@ -112,7 +117,7 @@ class Project extends Model
 
         $maxSequence = WorkflowState::where([
             'ACTIVE' => true,
-            'FK_CORE_WORKFLOWSTATETYPE' => config('workflowstate_type.TYPE_PROJECT')
+            'FK_CORE_WORKFLOWSTATETYPE' => $this->FK_CORE_WORKFLOWSTATE_TYPE
         ])->max('SEQUENCE') - 1;
 
         $currentSequence = $this->workflowstate->SEQUENCE - 1;
@@ -142,23 +147,15 @@ class Project extends Model
         }
     }
 
-    public function getCompensationPercentageDecimalAttribute()
+    public function getNotificationDateFormattedAttribute()
     {
-        if ($this->COMPENSATION_PERCENTAGE) {
-            return number_format($this->COMPENSATION_PERCENTAGE,2, '.', '.');
+        if ($this->NOTIFICATION_DATE) {
+            return date(LanguageUtils::getDateFormat(), strtotime($this->NOTIFICATION_DATE));
         } else {
             return '';
         }
     }
 
-    public function getCompensationPercentageFormattedAttribute()
-    {
-        if ($this->COMPENSATION_PERCENTAGE) {
-            return number_format($this->COMPENSATION_PERCENTAGE,2, LanguageUtils::getDecimalPoint(), LanguageUtils::getThousandsSeparator()) . '%';
-        } else {
-            return '';
-        }
-    }
 
     public function getLastModifiedStateFormattedAttribute()
     {
@@ -169,7 +166,7 @@ class Project extends Model
         }
     }
 
-    public function createProduct($product, $startDate,$assignee)
+    public function createProduct($product, $startDate,$assignee, $quatation)
     {
         $productProject = null;
 
@@ -183,6 +180,7 @@ class Project extends Model
                 'FK_ASSORTMENT_PRODUCT' => $product_id,
                 'PRICE' => $product->PRICE,
                 'QUANTITY' => 1,
+                'QUOTATION_NUMBER' => $quatation,
                 'DESCRIPTION_EXT' => $product->DESCRIPTION_EXT
             ]);
             $productProject->save();

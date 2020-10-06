@@ -114,7 +114,8 @@ foreach($alt_langs as $langCode) {
                 Route::post('/detailScreen', 'Admin\Project\ProjectController@detailScreen');
                 Route::post('/', 'Admin\Project\ProjectController@save');
                 Route::delete('/{ID}', 'Admin\Project\ProjectController@delete');
-                Route::get('/data/{ID}', 'Admin\Project\ProjectController@find');
+                Route::get('/data/{ID}', 'Admin\Project\ProjectController@data');
+
 
                 // Product
                 Route::prefix('product')->group(function() {

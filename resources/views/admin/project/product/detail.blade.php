@@ -26,6 +26,32 @@
             {{ Form::hidden('FK_CRM_RELATION', $item ? $item->FK_CRM_RELATION : null) }}
 
             {{ KJField::number('PRICE', KJLocalization::translate('Admin - Dossiers', 'Stukprijs exclusief', 'Stukprijs exclusief'), $item ? number_format((float)$item->PRICE,2, '.', '') : 0, true, [], ['right' => [['type' => 'text', 'caption' => '&euro;']] ]) }}
+            {{ KJField::text('QUOTATION_NUMBER', KJLocalization::translate('Admin - Facturen', 'Offertenummer', 'Offertenummer'), $item ? $item->QUOTATION_NUMBER : '', true, []) }}
+            @php
+                $compensation_readonly = '';
+                $compensation_can_change = true;
+
+                if (($item && ($item->INVOICING_COMPLETE ?? false)) == true) {
+                    $compensation_readonly = 'readonly';
+                    $compensation_can_change = false;
+                }
+                if ($item && ($item->hasInvoices())) {
+                    $compensation_readonly = 'readonly';
+                    $compensation_can_change = false;
+                }
+
+            @endphp
+            @if($compensation_can_change)
+                {{ KJField::checkbox('COMPENSATED', KJLocalization::translate('Admin - Dossiers', 'Wordt vergoed', 'Wordt vergoed'), true, ( $item ? $item->COMPENSATED : false ), true, ['data-screen-mode' => 'read,edit', 'data-id' => $item ? $item->project->ID : -1]) }}
+            @else
+                {{ KJField::text('COMPENSATED', KJLocalization::translate('Admin - Taken', 'Wordt vergoed', 'Wordt vergoed'), $item ? ($item->COMPENSATED ? KJLocalization::translate('Admin - Dossiers', 'Ja', 'Ja') : KJLocalization::translate('Admin - Dossiers', 'Nee', 'Nee')) : '' , true, [$compensation_readonly, 'data-screen-mode' => 'read, edit']) }}
+            @endif
+
+            {{ Form::hidden('PROJECT_START_DATE', $item ? ($item->project ? $item->project->START_DATE : '') : '') }}
+            {{ Form::hidden('PROJECT_POLICY_NUMBER', $item ? ($item->project ? $item->project->POLICY_NUMBER : '') : '') }}
+            {{ KJField::number('COMPENSATION_PERCENTAGE', KJLocalization::translate('Admin - Dossiers', 'Vergoedingspercentage', 'Vergoedingspercentage'), $item ? $item->getCompensationPercentageDecimalAttribute() : '', true, [$item ? ($item->COMPENSATED ? 'required' : 'disabled') : '',$compensation_readonly, 'data-screen-mode' => 'read, edit', 'min' => 0, 'max'=> 100], [
+                'right' => [['type' => 'text', 'caption' => '%']]]
+            ) }}
         </div>
     </div>
 

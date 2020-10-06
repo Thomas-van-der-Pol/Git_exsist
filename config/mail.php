@@ -61,8 +61,14 @@ return [
     ],
 
     'contact_details' => [
-        'address' => env('MAIL_CONTACT_ADDRESS', 'info@kjsoftware.nl'),
+        'mail_address' => env('MAIL_CONTACT_MAIL_ADDRESS', 'info@kjsoftware.nl'),
+        'name' => env('MAIL_CONTACT_NAME', 'KJ Software B.V.'),
         'phone' => env('MAIL_CONTACT_PHONE', '+31 (0) 413 74 74 74'),
+        'website' => env('MAIL_CONTACT_WEBSITE', 'www.kjsoftware.nl'),
+        'address' => env('MAIL_CONTACT_ADDRESS', 'Lage Landstraat 8'),
+        'zipcode' => env('MAIL_CONTACT_ZIPCODE', '5462 GJ'),
+        'city' => env('MAIL_CONTACT_CITY', 'Veghel'),
+        'country' => env('MAIL_CONTACT_COUNTRY', 'Nederland')
     ],
 
     /*

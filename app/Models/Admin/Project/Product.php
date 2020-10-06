@@ -3,6 +3,7 @@
 namespace App\Models\Admin\Project;
 
 use App\Models\Admin\CRM\Relation;
+use App\Models\Admin\Finance\Invoice;
 use App\Models\Admin\Finance\InvoiceScheme;
 use App\Models\Admin\Task\Task;
 use App\Models\Core\DropdownValue;
@@ -41,6 +42,16 @@ class Product extends Model
     public function relation()
     {
         return $this->hasOne(Relation::class, 'ID', 'FK_CRM_RELATION');
+    }
+
+    public function hasInvoices()
+    {
+        return ($this->invoices->where('ACTIVE', true)->count() > 0);
+    }
+
+    public function invoices()
+    {
+        return $this->hasMany(Invoice::class, 'FK_PROJECT_ASSORTMENT_PRODUCT ', 'ID');
     }
 
     public function invoiceSchemes()
@@ -101,6 +112,24 @@ class Product extends Model
     public function editable(){
         $allInvoiceSchemes = $this->invoiceSchemes->whereNotNull('FK_FINANCE_INVOICE_LINE')->count();
         return ($allInvoiceSchemes > 0) ? false : true;
+    }
+
+    public function getCompensationPercentageDecimalAttribute()
+    {
+        if ($this->COMPENSATION_PERCENTAGE) {
+            return number_format($this->COMPENSATION_PERCENTAGE,2, '.', '.');
+        } else {
+            return '';
+        }
+    }
+
+    public function getCompensationPercentageFormattedAttribute()
+    {
+        if ($this->COMPENSATION_PERCENTAGE) {
+            return number_format($this->COMPENSATION_PERCENTAGE,2, LanguageUtils::getDecimalPoint(), LanguageUtils::getThousandsSeparator()) . '%';
+        } else {
+            return '';
+        }
     }
 
 }

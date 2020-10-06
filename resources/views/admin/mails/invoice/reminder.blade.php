@@ -1,6 +1,9 @@
 @component('mail::message', [
 'title' => KJLocalization::translate('Admin - Facturen', 'Factuur', 'Factuur', [], $locale) . ' ' . ($invoice->NUMBER ?? KJLocalization::translate('Admin - Facturen', 'Concept', 'Concept', [], $locale)),
 'logo' => $logo,
+'twitter' => $twitter,
+'facebook' => $facebook,
+'linkedin' => $linkedin,
 'language' => $locale
 ])
 
@@ -24,6 +27,13 @@ Mocht uw betaling reeds onderweg zijn, dan vragen wij u om ons daarvan op de hoo
     'DATE'    => $invoice->DateFormatted,
     'DUEDATE'    => $invoice->ExpirationDateFormatted,
     'DAYSOLD'    => $invoice->DaysOpen
-], $locale, true) !!}
+], $locale, true) !!}<br/>
+
+{!! KJLocalization::translate('E-mails', 'Met vriendelijke groet,', 'Met vriendelijke groet,', [], $locale, true) !!}<br/>
+{{ config('mail.contact_details.name') }}<br/>
+{{ config('mail.contact_details.mail_address') }}<br/>
+{{ config('mail.contact_details.website') }}<br/>
+
+<img align="center" src="{{ $logo }}" alt="Logo" title="Logo" height="200"/>
 
 @endcomponent

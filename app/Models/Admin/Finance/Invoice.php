@@ -6,6 +6,7 @@ use App\Models\Admin\Core\Label;
 use App\Models\Admin\CRM\Address;
 use App\Models\Admin\CRM\Contact;
 use App\Models\Admin\CRM\Relation;
+use App\Models\Admin\Project\Product;
 use App\Models\Admin\Project\Project;
 use App\Models\Core\Document;
 use App\Models\Core\WorkflowState;
@@ -120,6 +121,11 @@ class Invoice extends Model
     public function project()
     {
         return $this->hasOne(Project::class, 'ID', 'FK_PROJECT');
+    }
+
+    public function product()
+    {
+        return $this->hasOne(Product::class, 'ID', 'FK_PROJECT_ASSORTMENT_PRODUCT');
     }
 
     public function relation()
