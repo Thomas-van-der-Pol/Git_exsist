@@ -122,7 +122,7 @@ class InvoiceUtils
                     ISNULL(FI.PRICE_TOTAL_INCL,0) AS TOTALINCL, 
                     ISNULL(FI.VAT_TOTAL,0) AS TOTALVAT, 
                     '".$paymentText."' AS PAYMENTTEXT,
-                    CCE.FULLNAME AS EMPLOYEE,
+                    CCE.FULLNAME_ATTN AS EMPLOYEE,
                     CR.NAME AS EMPLOYER,
                     P.FK_CRM_RELATION_INVOICE AS CUSTOM_INVOICE_RELATION,
                     CCE.BIRTHDAY_DATE AS GEBOORTEDATUM,

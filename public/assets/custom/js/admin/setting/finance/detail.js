@@ -186,6 +186,30 @@ $(document).on('ADM_RELATION_TABLEAfterSelect', function(e, selectedId, linkObj)
     var text_input = LastButton.closest('div.form-group').find('input[type=text]');
     text_input.val(name);
 
+    // Contactpersonen refreshen
+    if (text_input.data('update') !== undefined) {
+        $.ajax({
+            url: '/admin/crm/relation/contact/allByRelation/' + selectedId,
+            type: 'GET',
+            dataType: 'JSON',
+
+            success: function (data) {
+                var updatedValues = text_input.data('update').split(',');
+                $.each(updatedValues, function (index, value) {
+                    var select = $('#' + value);
+
+                    select.empty();
+                    $.each(data.items, function (index, value) {
+                        select.append($("<option></option>").attr("value", index).text(value));
+                    });
+
+                    select.val('');
+                    select.selectpicker('refresh');
+                });
+            }
+        });
+    }
+
     // Modal hidden
     $('.kj_field_modal').modal('hide');
 });

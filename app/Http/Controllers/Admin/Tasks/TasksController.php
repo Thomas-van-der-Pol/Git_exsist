@@ -798,11 +798,19 @@ class TasksController extends AdminBaseController {
 
                 foreach ($products as $product_id) {
                     $product = \App\Models\Admin\Project\Product::find($product_id);
-                    foreach($product->invoiceSchemes as $invoiceScheme){
-                        $invoiceScheme->update([
-                            'DATE' => date('Y-m-d', strtotime($invoiceScheme->DATE . ' + ' . $days . ' days'))
-                        ]);
+                    $allInvoiceSchemes = $product->invoiceSchemes->whereNotNull('FK_FINANCE_INVOICE_LINE')->count();
+
+                    if($allInvoiceSchemes <= 0) {
+                        foreach($product->invoiceSchemes as $invoiceScheme){
+                            $invoiceScheme->update([
+                                'DATE' => date('Y-m-d', strtotime($invoiceScheme->DATE . ' + ' . $days . ' days'))
+                            ]);
+                        }
                     }
+                    else {
+                        $message = KJLocalization::translate('Admin - Dossiers', 'Factuur deadline kan niet worden verschoven', 'Interventie is al gekoppeld aan een factuur. De deadline van de geselecteerde taken zijn wel verschoven');
+                    }
+
                 }
             }
 
@@ -814,7 +822,8 @@ class TasksController extends AdminBaseController {
             }
         }
         return response()->json([
-            'success' => true
+            'success' => true,
+            'message' => $message ?? KJLocalization::translate('Algemeen', 'Opgeslagen', 'Opgeslagen')
         ]);
     }
 

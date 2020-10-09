@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\Settings\Finance;
 
 use App\Models\Admin\Core\Label;
+use App\Models\Admin\CRM\Contact;
 use App\Models\Admin\Finance\Ledger;
 use App\Models\Admin\Finance\VAT;
 use App\Models\Core\Document;
@@ -79,6 +80,10 @@ class FinanceController extends AdminBaseController
 
         switch ($screen) {
             case 'settings':
+                $none = ['' => KJLocalization::translate('Algemeen', 'Niets geselecteerd', 'Niets geselecteerd') . '..'];
+                $contactsRelationProxyOri = Contact::where('FK_CRM_RELATION', $item->FK_CRM_RELATION_PROXY)->pluck('FULLNAME_ATTN', 'ID');
+                $contactsRelationProxy = $none + $contactsRelationProxyOri->toArray();
+
                 $ledgersOri = Ledger::select(DB::raw("CONCAT(ACCOUNT,' - ',DESCRIPTION) AS COMBINEDDESCRIPTION"),'ID','ACTIVE', 'FK_CORE_LABEL')
                     ->where('ACTIVE', TRUE)
                     ->where('FK_CORE_LABEL', $item->ID)
@@ -94,7 +99,8 @@ class FinanceController extends AdminBaseController
 
                 $bindings = array_merge($bindings, [
                     ['ledgers', $ledgers],
-                    ['vat', $vat]
+                    ['vat', $vat],
+                    ['contactsRelationProxy', $contactsRelationProxy]
                 ]);
                 break;
         }

@@ -34,6 +34,11 @@ class CompensationUtils
                     'Parameters' => [(int)$invoice->label->proxy->ID]
                 ),
                 array(
+                    'Identifier' => "CRM_CONTACT",
+                    'Query' => "SELECT CC.FULLNAME_ATTN FROM CRM_CONTACT CC WITH(NOLOCK) WHERE CC.ID = {1}",
+                    'Parameters' => [(int)$invoice->label->FK_CRM_CONTACT_RELATION_PROXY]
+                ),
+                array(
                     'Identifier' => "CRM_RELATION_ADDRESS",
                     'Query' => "SELECT TOP 1 CA.* FROM CRM_RELATION_ADDRESS CRA WITH (NOLOCK) JOIN CORE_ADDRESS CA WITH (NOLOCK) ON CA.ID = CRA.FK_CORE_ADDRESS WHERE CRA.FK_CRM_RELATION = {1} AND CRA.ACTIVE = 1 AND CRA.FK_CORE_DROPDOWNVALUE_ADRESSTYPE = {2}",
                     'Parameters' => [
@@ -63,6 +68,7 @@ class CompensationUtils
                         " '" . KJLocalization::translate('Admin - Compensatiebrief', 'In de bijlage treft u de factuur. Graag zien wij de betaling binnen 14 dagen tegemoet.', 'In de bijlage treft u de factuur. Graag zien wij de betaling binnen 14 dagen tegemoet.', [], $locale) . "' AS TEXT_AFTER_PRICE, " .
                         " '" . KJLocalization::translate('Admin - Compensatiebrief', 'Heeft u nog vragen naar aanleiding van deze brief? Neemt u dan gerust contact met ons op.', 'Heeft u nog vragen naar aanleiding van deze brief? Neemt u dan gerust contact met ons op.', [], $locale) . "' AS AFSLUITER, " .
                         " '" . KJLocalization::translate('Admin - Compensatiebrief', 'Met vriendelijke groet, ', 'Met vriendelijke groet,', [], $locale) . "' AS GROET," .
+                        " '" . KJLocalization::translate('Admin - Compensatiebrief', 'Tav', 'T.a.v.', [], $locale) . "' AS TAV, " .
                         " '" . KJLocalization::translate('Admin - Compensatiebrief', 'Exsist B.V.', 'Exsist B.V.', [], $locale) . "' AS EXSIST" ,
                     'Parameters' => []
                 ),

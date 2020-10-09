@@ -288,8 +288,9 @@ function loadTaskFunctionModal(type, taskIds, subject = null, container, configT
                                 formData.append(data.name, data.value);
                             });
                             formData.append('task', JSON.stringify(taskIds));
-                            kjrequest('POST', url, formData, false, function (data) {
+                            kjrequest('POST', url, formData, true, function (data) {
                                 if (data.success === true) {
+                                    $.notify({message: data.message}, {type: 'success'});
                                     loadTaskScreen(container);
                                 }
                             });

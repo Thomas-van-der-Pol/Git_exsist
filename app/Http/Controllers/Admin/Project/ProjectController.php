@@ -254,7 +254,7 @@ class ProjectController extends AdminBaseController
                     }
 
                     if ($item->employer) {
-                        $contacts_employer = $none + $item->employer->contacts()->where('ACTIVE', true)->pluck('FULLNAME', 'ID')->toArray();
+                        $contacts_employer = $none + $item->employer->contacts()->where('ACTIVE', true)->pluck('FULLNAME_ATTN', 'ID')->toArray();
                     }
                 }
 

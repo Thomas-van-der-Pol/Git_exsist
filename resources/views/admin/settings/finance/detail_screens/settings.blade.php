@@ -28,10 +28,12 @@
                     }
                 @endphp
 
-                {{--Required--}} {{ KJField::text('PROXY_NAME', KJLocalization::translate('Admin - Financieel', 'Volmachtbedrijf tbv vergoedingen', 'Volmachtbedrijf t.b.v. vergoedingen'), $item ? ($item->proxy ? $item->proxy->title : '-') : '-', true, ['readonly', 'required', 'data-screen-mode' => 'read, edit'], [
+                {{--Required--}} {{ KJField::text('PROXY_NAME', KJLocalization::translate('Admin - Financieel', 'Volmachtbedrijf tbv vergoedingen', 'Volmachtbedrijf t.b.v. vergoedingen'), $item ? ($item->proxy ? $item->proxy->title : '-') : '-', true, ['readonly', 'required', 'data-screen-mode' => 'read, edit', 'data-update' => 'FK_CRM_CONTACT_RELATION_PROXY'], [
                      'right' => $relationButtons
                 ]) }}
                 {{ Form::hidden('FK_CRM_RELATION_PROXY', $item ? $item->FK_CRM_RELATION_PROXY : null, ['required']) }}
+
+                {{--Required--}} {{ KJField::select('FK_CRM_CONTACT_RELATION_PROXY', KJLocalization::translate('Admin - Financieel', 'Contactpersoon volmachtsbedrijf', 'Contactpersoon volmachtsbedrijf'), $contactsRelationProxy ?? [], $item ? $item->FK_CRM_CONTACT_RELATION_PROXY : '', true, 0, ['required', 'data-screen-mode' => 'read, edit']) }}
             </div>
         </div>
 
