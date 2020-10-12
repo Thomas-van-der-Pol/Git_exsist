@@ -792,25 +792,25 @@ class TasksController extends AdminBaseController {
         $days = $request->get('SHIFT_DATES');
 
         if ($tasks && $days) {
-            // Interventies ophalen
+            // Interventies ophalens
             if($request->get('countInInvoiceDates') == true) {
+                $updated = false;
                 $products = Task::select(['FK_PROJECT_ASSORTMENT_PRODUCT'])->whereIn('ID', $tasks)->distinct()->pluck('FK_PROJECT_ASSORTMENT_PRODUCT');
 
                 foreach ($products as $product_id) {
                     $product = \App\Models\Admin\Project\Product::find($product_id);
-                    $allInvoiceSchemes = $product->invoiceSchemes->whereNotNull('FK_FINANCE_INVOICE_LINE')->count();
 
-                    if($allInvoiceSchemes <= 0) {
-                        foreach($product->invoiceSchemes as $invoiceScheme){
-                            $invoiceScheme->update([
-                                'DATE' => date('Y-m-d', strtotime($invoiceScheme->DATE . ' + ' . $days . ' days'))
-                            ]);
-                        }
-                    }
-                    else {
-                        $message = KJLocalization::translate('Admin - Dossiers', 'Factuur deadline kan niet worden verschoven', 'Interventie is al gekoppeld aan een factuur. De deadline van de geselecteerde taken zijn wel verschoven');
-                    }
+                    foreach($product->invoiceSchemes->whereNotNull('FK_FINANCE_INVOICE_LINE') as $invoiceScheme){
+                        $invoiceScheme->update([
+                            'DATE' => date('Y-m-d', strtotime($invoiceScheme->DATE . ' + ' . $days . ' days'))
+                        ]);
 
+                        $updated = true;
+                    }
+                }
+
+                if (!$updated) {
+                    $message = KJLocalization::translate('Admin - Dossiers', 'Deadline factuurschema kan niet worden verschoven', 'Alle factuurmomenten zijn al gefactureerd. De deadline van de geselecteerde taken zijn wel verschoven.');
                 }
             }
 
