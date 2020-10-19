@@ -4,27 +4,6 @@ var baseDocumentUrl = '/document';
 
 $(document).ready(function() {
 
-    kjlocalization.create('Documenten', [
-        {'Document verwijderen titel': 'Weet je het zeker?'},
-        {'Document verwijderen tekst': 'Dit document wordt verwijderd en kan niet ongedaan worden gemaakt. Weet je zeker dat je door wilt gaan?'},
-        {'Naam': 'Naam'},
-        {'Grootte': 'Grootte'},
-        {'Type': 'Type'},
-        {'Gewijzigd op': 'Gewijzigd op'},
-        {'Home': 'Home'},
-        {'Selecteer minimaal een regel': 'Selecteer minimaal een regel'},
-        {'Voer mapnaam in': 'Voer mapnaam in'},
-        {'Mapnaam mag niet leeg zijn': 'Mapnaam mag niet leeg zijn'},
-        {'Voer naam in': 'Voer naam in'},
-        {'Naam mag niet leeg zijn': 'Naam mag niet leeg zijn'},
-        {'Deze map is leeg': 'Deze map is leeg'},
-    ]);
-
-    kjlocalization.create('Algemeen', [
-        {'Doorgaan': 'Doorgaan'},
-        {'Annuleren': 'Annuleren'}
-    ]);
-
     $('body').on('change', '.autoSaveDocument', function(e) {
         e.preventDefault();
 
