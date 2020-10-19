@@ -1,8 +1,4 @@
 $(document).ready(function() {
-    kjlocalization.create('Administration - Content', [
-        {'Delete chapter title': 'Are you sure?'},
-        {'Delete chapter text': 'This chapter will be removed and cannot be undone. Are you sure you want to continue?'},
-    ]);
 
     loadSortableContainers();
 

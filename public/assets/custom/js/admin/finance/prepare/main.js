@@ -1,12 +1,5 @@
 $(document).ready(function() {
 
-    // Translations
-    kjlocalization.create('Admin - Facturen', [
-        {'Peildatum niet gevuld': 'Peildatum niet gevuld'},
-        {'Geen facturen geselecteerd': 'Geen facturen geselecteerd'}
-    ]);
-
-
     $('input[name="REFERENCE_DATE"]').trigger('change');
 
     $('body').on('click', '#btnUpdateData', function(e) {

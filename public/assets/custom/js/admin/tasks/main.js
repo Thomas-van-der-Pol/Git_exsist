@@ -1,8 +1,5 @@
 $(document).ready(function() {
-    kjlocalization.create('Admin - Taken', [
-        {'Map verwijderen titel': 'Weet je het zeker'},
-        {'Map verwijderen tekst': 'Alle taken in deze map worden ontkoppeld van deze map.'}
-    ]);
+
     // Load active tab
     loadTaskItemActive();
 

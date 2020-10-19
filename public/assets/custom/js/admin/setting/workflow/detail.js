@@ -1,9 +1,5 @@
 $(document).ready(function() {
 
-    kjlocalization.create('Admin - Dossiers', [
-        {'Selecteer product': 'Selecteer product'}
-    ]);
-
     // Load screen
     loadScreen($('#default'), {
         url: '/admin/settings/workflow/detailScreen',

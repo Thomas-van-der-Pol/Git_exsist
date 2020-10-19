@@ -2,14 +2,6 @@ var logo_user_select;
 
 $(document).ready(function() {
 
-    kjlocalization.create('Admin - Dossiers', [
-        {'Selecteer dienst': 'Selecteer dienst'}
-    ]);
-
-    kjlocalization.create('Admin - Werknemers', [
-        {'Emailadres leeg': 'E-mailadres is leeg. Wachtwoord kan niet worden gereset!'},
-    ]);
-
     // Load screen
     loadScreen($('#default'), {
         url: '/admin/settings/user/detailScreen',

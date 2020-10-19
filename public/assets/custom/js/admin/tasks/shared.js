@@ -2,12 +2,6 @@ var taskPage = 1;
 
 $(document).ready(function() {
 
-    // Translations
-    kjlocalization.create('Admin - Taken', [
-        {'Nieuwe taak': 'Nieuwe taak'},
-        {'Tekst meetellen factuurdatums': 'Wil je ook de factuurschema datums laten meetellen?'},
-    ]);
-
     // New task
     $('body').on('click', '.newTask', function(e) {
         e.preventDefault();

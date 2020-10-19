@@ -18,6 +18,7 @@
 @endif
 
 {{-- Main scripts --}}
+{!! HTML::script('/assets/custom/js/translations.js?v='.Cache::get('cache_version_number')) !!}
 {!! HTML::script('/assets/custom/js/main.js?v='.Cache::get('cache_version_number')) !!}
 
 {{-- Modals --}}

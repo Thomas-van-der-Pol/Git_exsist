@@ -3,14 +3,6 @@ var loadedType = null;
 $(document).ready(function() {
     loadDateRangePickers();
 
-    // Translations
-    kjlocalization.create('Admin - Facturen', [
-        {'Geen regels geselecteerd': 'Geen regels geselecteerd'},
-        {'Bericht selectie factureren': 'Weet je zeker dat je deze facturen definitief wil versturen? Dit actie is niet ongedaan te maken.'},
-        {'Bericht selectie herinnering': 'Weet je zeker dat je deze facturen een herinnering wil versturen? Dit actie is niet ongedaan te maken.'},
-        {'Bericht selectie printen': 'Let op: enkele facturen worden geprint omdat digitaal factureren niet is ingeschakeld. Wilt u doorgaan met printen?'},
-    ]);
-
     // Load active sub screen
     $('.kt-widget__item--active').each(function() {
         var screen = $(this).attr('href').replace('#', '');
