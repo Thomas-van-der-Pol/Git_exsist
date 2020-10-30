@@ -1,21 +1,5 @@
 $(document).ready(function() {
 
-    kjlocalization.create('Admin - Dossiers', [
-        {'Selecteer product': 'Selecteer product'},
-        {'Verwijder projectproduct titel': 'Weet je het zeker?'},
-        {'Verwijder projectproduct tekst': 'Alle taken en alle factuurmomenten die aan deze interventie gekoppeld zijn worden verwijderd.'},
-        {'Dossier mist ziektedag of polisnummer': 'Dossier mist ziektedag of polisnummer'},
-    ]);
-
-    kjlocalization.create('Admin - CRM', [
-        {'Selecteer relatie': 'Selecteer relatie'},
-        {'Selecteer contactpersoon': 'Selecteer contactpersoon'}
-    ]);
-
-    kjlocalization.create('Admin - Taken', [
-        {'Selecteer een werknemer': 'Selecteer een werknemer'}
-    ]);
-
     // Load screen
     loadScreen($('#default'), {
         url: '/admin/project/detailScreen',

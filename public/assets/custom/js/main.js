@@ -1,13 +1,3 @@
-$(document).ready(function() {
-// Translations
-    kjlocalization.create('Algemeen', [
-        {'Max bestanden uploaden': 'U kunt alleen %{smart_count} bestand uploaden'},
-        {'Maximaal toegestane grootte overschrijden': 'Dit bestand overschrijdt de maximaal toegestane grootte van'},
-        {'Bestandstypefout': 'Je kunt alleen %{types} uploaden'},
-        {'Upload bestand': 'Upload bestand'},
-    ]);
-});
-
 window.log = function() {
     log.history = log.history || [];   // store logs to an array for reference
     log.history.push(arguments);

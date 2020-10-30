@@ -3,14 +3,14 @@ var kjlocalization = {
 
     create: function(category, keyValuePairs) {
 
-        categoryFormatted = category.toLowerCase().replace(' ', '_');
+        categoryFormatted = category.toLowerCase().replaceAll(' ', '_');
         keyValuePairsChecked = [];
 
         // Door keyValuePairs heen lopen om te controleren of deze al zijn ingevoerd. Onnoddige calls uitsluiten
         keyValuePairs.forEach(function (keyValuePair, index) {
 
             $.each(keyValuePair, function(key, value) {
-                keyFormatted = key.toLowerCase().replace(' ', '_');
+                keyFormatted = key.toLowerCase().replaceAll(' ', '_');
 
                 if (kjlocalization.get(categoryFormatted, keyFormatted) === kjlocalization.notFoudText) {
                     keyValuePairsChecked.push(keyValuePair);

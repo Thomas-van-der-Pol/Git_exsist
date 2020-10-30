@@ -1,15 +1,6 @@
 var loadedType = null;
 
 $(document).ready(function() {
-
-    // Translations
-    kjlocalization.create('Admin - Boekhouding', [
-        {'Successvol geexporteerd': 'De gegevens zijn succesvol geëxporteerd!'},
-        {'Exporteren mislukt': 'Fout bij exporteren van gegevens'},
-        {'Successvol geimporteerd': 'De gegevens zijn succesvol geïmporteerd!'},
-        {'Importeren mislukt': 'Fout bij importeren van gegevens'}
-    ]);
-
     // Load active sub screen
     $('.kt-widget__item--active').each(function() {
         var screen = $(this).attr('href').replace('#', '');

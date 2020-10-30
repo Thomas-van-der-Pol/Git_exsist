@@ -1,15 +1,4 @@
 $(document).ready(function() {
-    kjlocalization.create('Admin - CRM', [
-        {'Opslaan + taak': 'Opslaan + taak'},
-        {'Emailadres leeg': 'Emailadres leeg'},
-        {'Wachtwoord succesvol verzonden': 'Wachtwoord succesvol verzonden'}
-    ]);
-
-    kjlocalization.create('Admin - Dossiers', [
-        {'Selecteer product': 'Selecteer product'},
-        {'Selecteer dienst': 'Selecteer dienst'}
-    ]);
-
     // Load screen
     loadScreen($('#default'), {
         url: '/admin/crm/relation/detailScreen',

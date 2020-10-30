@@ -135,12 +135,12 @@ class InvoiceResource extends ExactBaseResource
                     // Versturen naar Exact
                     $salesEntry->Customer = $account->ID;
                     $salesEntry->Type = $item->TYPE;
-                    $salesEntry->Journal = 70;
+                    $salesEntry->Journal = 20;
                     $salesEntry->EntryNumber = $item->NUMBER;
                     $salesEntry->ReportingYear = $item->FINANCIAL_YEAR;
                     $salesEntry->ReportingPeriod = $item->FINANCIAL_PERIOD;
                     $salesEntry->Date = $item->DATE;
-                    $salesEntry->PaymentCondition = $item->PAYMENT_CONDITION;
+                    $salesEntry->PaymentCondition = 21;//$item->PAYMENT_CONDITION;
                     $salesEntry->Description = $item->DESCRIPTION;
                     $salesEntry->YourRef = $item->QUOTATION_NUMBER;
 

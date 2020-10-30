@@ -1,22 +1,3 @@
-$(document).ready(function() {
-    kjlocalization.create('Algemeen', [
-        {'Actief': 'Actief'},
-        {'Inactief': 'Inactief'},
-        {'Doorgaan': 'Doorgaan'},
-        {'Annuleren': 'Annuleren'},
-        {'Inklappen': 'Inklappen'},
-        {'Uitklappen': 'Uitklappen'},
-        {'Verwijderen': 'Verwijderen'},
-        {'Kopieren': 'Kopieren'},
-        {'Openen': 'Openen'},
-        {'Ja': 'Ja'},
-        {'Nee': 'Nee'},
-        {'Anonimiseren titel': 'Weet je het zeker?'},
-        {'Anonimiseren text': 'Weet je zeker dat je door wilt gaan?'},
-        {'Selecteer minimaal een regel': 'Selecteer minimaal een regel om door te gaan'}
-    ]);
-});
-
 $(document).on('kj_managebuttonOnLoad', function(e, modalBody, dropdownTypeID) {
     $.ajax({
         url: '/admin/dropdownvalue?typeid=' + dropdownTypeID,

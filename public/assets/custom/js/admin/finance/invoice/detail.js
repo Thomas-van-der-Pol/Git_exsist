@@ -1,18 +1,4 @@
 $(document).ready(function() {
-
-    // Translations
-    kjlocalization.create('Admin - Dossiers', [
-        {'Selecteer product': 'Selecteer product'}
-    ]);
-
-    kjlocalization.create('Admin - Facturen', [
-        {'Bericht status wijziging': 'Weet u zeker dat u door wilt gaan?'},
-        {'Bericht versturen': 'Weet u zeker dat u deze factuur defintief wilt verzenden? Deze actie is niet ongedaan te maken.'},
-        {'Bericht versturen herinnering': 'Weet u zeker dat u een herinnering van deze factuur wilt verzenden? Deze actie is niet ongedaan te maken.'},
-        {'Conceptfactuur verwijderen': 'Weet u zeker dat u de conceptfactuur wilt verwijderen? Deze actie is niet ongedaan te maken.'},
-        {'Bericht printen': 'Let op: de factuur wordt geprint omdat digitaal factureren niet is ingeschakeld. Wilt u doorgaan met printen?'},
-    ]);
-
     // Load screen
     loadScreen($('#default'), {
         url: '/admin/invoice/detailScreen',
