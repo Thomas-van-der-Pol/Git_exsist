@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin\Project\Product;
 
+use App\Models\Admin\Core\Label;
 use App\Models\Admin\Project\Product;
 use App\Models\Admin\Project\Project;
 use App\Models\Admin\User;
@@ -36,6 +37,30 @@ class ProductProjectController extends AdminBaseController
         'PROJECT_START_DATE',
         'PROJECT_POLICY_NUMBER'
     ];
+
+    protected function beforeDetail(int $ID, $item)
+    {
+        $relationIsVolmacht = false;
+        if($item->project && $item->project->invoiceRelation){
+            if(Label::find(1)->FK_CRM_RELATION_PROXY == $item->project->invoiceRelation->ID){
+                $relationIsVolmacht = true;
+            }
+        }
+        $compensation_readonly = '';
+        $compensation_can_change = true;
+
+        if(($relationIsVolmacht) || (($item && ($item->INVOICING_COMPLETE ?? false)) == true) || ($item && ($item->hasInvoices()))) {
+            $compensation_readonly = 'readonly';
+            $compensation_can_change = false;
+        }
+
+        $bindings = array(
+            ['compensation_readonly', $compensation_readonly],
+            ['compensation_can_change', $compensation_can_change]
+        );
+
+        return $bindings;
+    }
 
     protected function beforeDatatable($datatable)
     {

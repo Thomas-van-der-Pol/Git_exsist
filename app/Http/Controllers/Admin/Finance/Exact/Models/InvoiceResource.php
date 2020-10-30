@@ -132,10 +132,10 @@ class InvoiceResource extends ExactBaseResource
                 {
                     $salesEntry = new \Picqer\Financials\Exact\SalesEntry($this->connection);
 
-                    // Versturen naar Exact
+                    // Versturen naar Exacts
                     $salesEntry->Customer = $account->ID;
                     $salesEntry->Type = $item->TYPE;
-                    $salesEntry->Journal = 20;
+                    $salesEntry->Journal = 70;//20;
                     $salesEntry->EntryNumber = $item->NUMBER;
                     $salesEntry->ReportingYear = $item->FINANCIAL_YEAR;
                     $salesEntry->ReportingPeriod = $item->FINANCIAL_PERIOD;

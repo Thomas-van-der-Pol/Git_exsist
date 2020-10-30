@@ -799,8 +799,7 @@ class TasksController extends AdminBaseController {
 
                 foreach ($products as $product_id) {
                     $product = \App\Models\Admin\Project\Product::find($product_id);
-
-                    foreach($product->invoiceSchemes->whereNotNull('FK_FINANCE_INVOICE_LINE') as $invoiceScheme){
+                    foreach($product->invoiceSchemes->whereNull('FK_FINANCE_INVOICE_LINE') as $invoiceScheme){
                         $invoiceScheme->update([
                             'DATE' => date('Y-m-d', strtotime($invoiceScheme->DATE . ' + ' . $days . ' days'))
                         ]);

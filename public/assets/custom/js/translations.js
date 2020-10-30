@@ -41,6 +41,7 @@ $(document).ready(function () {
         {'Verwijder projectproduct titel': 'Weet je het zeker?'},
         {'Verwijder projectproduct tekst': 'Alle taken en alle factuurmomenten die aan deze interventie gekoppeld zijn worden verwijderd.'},
         {'Dossier mist ziektedag of polisnummer': 'Dossier mist ziektedag of polisnummer'},
+        {'Compensatie error': 'Er zijn gekoppelde interventies die vergoed worden'},
     ]);
 
     kjlocalization.create('Admin - Boekhouding', [

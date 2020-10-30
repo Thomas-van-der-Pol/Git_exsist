@@ -115,6 +115,7 @@ foreach($alt_langs as $langCode) {
                 Route::post('/', 'Admin\Project\ProjectController@save');
                 Route::delete('/{ID}', 'Admin\Project\ProjectController@delete');
                 Route::get('/data/{ID}', 'Admin\Project\ProjectController@data');
+                Route::post('/checkcompensation', 'Admin\Project\ProjectController@checkCompensation');
 
 
                 // Product

@@ -362,4 +362,19 @@ class ProjectController extends AdminBaseController
         ]);
 
     }
+
+    public function checkCompensation(Request $request)
+    {
+        $compensated = false;
+        $item = $this->find($request->get('ProjectID'));
+        if (Label::find(1)->FK_CRM_RELATION_PROXY == $request->get('selectedID')) {
+            if ($item->products->where('COMPENSATED', 1)->count() > 0) {
+                $compensated = true;
+            }
+        }
+        return response()->json([
+            'success' => true,
+            'COMPENSATED' => $compensated,
+        ]);
+    }
 }

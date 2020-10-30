@@ -173,7 +173,7 @@ class ContactController extends AdminBaseController {
         $contactsOri = Contact::all()
             ->where('ACTIVE', true)
             ->where('FK_CRM_RELATION', $ID)
-            ->pluck('FULLNAME', 'ID');
+            ->pluck('FULLNAME_ATTN', 'ID');
 
         $contacts = $none + $contactsOri->toArray();
 

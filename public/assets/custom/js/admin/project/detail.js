@@ -517,6 +517,30 @@ function determineDefaultDescription()
 }
 
 $(document).on('ADM_RELATION_TABLEAfterSelect', function(e, selectedId, linkObj) {
+    var currentProjectID = parseInt(LastButton.closest('form').find('input[name="ID"]').val());
+
+    if(linkObj.closest('.modal-body').find('input[name="TYPE"]').val() == "" && currentProjectID > 0){
+        formdata = new FormData();
+        formdata.append('ProjectID', currentProjectID);
+        formdata.append('selectedID', selectedId);
+        kjrequest('POST', '/admin/project/checkcompensation', formdata, true, function (data) {
+            if(data.COMPENSATED){
+                swal.fire({
+                    text: kjlocalization.get('admin_-_dossiers', 'compensatie_error'),
+                    type: 'error'
+                });
+            }
+            else {
+                afterSelectRelation(linkObj, selectedId);
+            }
+        });
+    } else {
+        afterSelectRelation(linkObj, selectedId);
+    }
+
+});
+
+function afterSelectRelation(linkObj, selectedId){
     // Waardes opzoeken
     var name = linkObj.closest('tr').find('[data-field=NAME]').find('span').text();
 
@@ -555,7 +579,7 @@ $(document).on('ADM_RELATION_TABLEAfterSelect', function(e, selectedId, linkObj)
 
     // Modal hidden
     $('.kj_field_modal').modal('hide');
-});
+}
 
 $(document).on('ADM_CRM_CONTACT_MODAL_TABLEAfterSelect', function(e, selectedId, linkObj) {
     // Waardes opzoeken

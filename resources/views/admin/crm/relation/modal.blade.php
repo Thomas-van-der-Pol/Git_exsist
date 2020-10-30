@@ -22,6 +22,7 @@
         </div>
     </div>
 </div>
+{{ Form::hidden('TYPE', (isset($type) ? '&type='.config('relation_type.'.$type) : '')) }}
 
 {{ KJDatatable::create(
     'ADM_RELATION_TABLE',
