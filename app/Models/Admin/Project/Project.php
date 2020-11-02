@@ -3,6 +3,7 @@
 namespace App\Models\Admin\Project;
 
 
+use App\Models\Admin\Core\Label;
 use App\Models\Admin\CRM\Contact;
 use App\Models\Admin\CRM\Relation;
 use App\Models\Admin\Finance\Invoice;
@@ -52,6 +53,11 @@ class Project extends Model
     public function referrer()
     {
         return $this->hasOne(Relation::class, 'ID', 'FK_CRM_RELATION_REFERRER');
+    }
+
+    public function label()
+    {
+        return $this->hasOne(Label::class, 'ID', 'FK_CORE_LABEL');
     }
 
     public function invoiceRelation()

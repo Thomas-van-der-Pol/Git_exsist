@@ -42,7 +42,7 @@ class ProductProjectController extends AdminBaseController
     {
         $relationIsVolmacht = false;
         if($item->project && $item->project->invoiceRelation){
-            if(Label::find(1)->FK_CRM_RELATION_PROXY == $item->project->invoiceRelation->ID){
+            if($item->project->label->FK_CRM_RELATION_PROXY == $item->project->invoiceRelation->ID){
                 $relationIsVolmacht = true;
             }
         }
