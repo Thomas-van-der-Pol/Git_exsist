@@ -62,8 +62,11 @@ function startKJLoader(options) {
 }
 
 function stopKJLoader() {
-    // Pauzeer als je de loader stopt
-    $('.kj_loader_modal_fun video').get(0).pause();
+	// Pauzeer als je de loader stopt
+	if($('.kj_loader_modal_fun video').length > 0) {
+		$('.kj_loader_modal_fun video').get(0).pause();
+	}
+
     $('.kj_loader_modal').modal('hide');
     stopRealyCrazy();
 
