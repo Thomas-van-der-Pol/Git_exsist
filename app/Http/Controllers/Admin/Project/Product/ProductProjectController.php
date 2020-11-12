@@ -35,7 +35,8 @@ class ProductProjectController extends AdminBaseController
     protected $saveUnsetValues = [
         'PROVIDER_NAME',
         'PROJECT_START_DATE',
-        'PROJECT_POLICY_NUMBER'
+        'PROJECT_POLICY_NUMBER',
+        'COMPENSATED_READ'
     ];
 
     protected function beforeDetail(int $ID, $item)
@@ -71,8 +72,7 @@ class ProductProjectController extends AdminBaseController
                 return ( $item->relation ? $item->relation->title : '' );
             })
             ->addColumn('BLOCKED', function($item) {
-                $allInvoiceSchemes = $item->invoiceSchemes->whereNotNull('FK_FINANCE_INVOICE_LINE')->count();
-                return ($allInvoiceSchemes > 0) ? true : false;
+                return !$item->editable();
             })
             ->addColumn('PRICE', function($item) {
                 return $item->getPriceFormattedAttribute();
