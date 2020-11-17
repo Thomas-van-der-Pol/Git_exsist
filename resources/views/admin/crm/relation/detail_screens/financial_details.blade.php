@@ -20,13 +20,13 @@
 
         <div class="row">
             <div class="col-xl-4 col-lg-6">
-                {{ KJField::number('NUMBER_DEBTOR', KJLocalization::translate('Admin - CRM', 'Debiteurnummer', 'Debiteurnummer'), $item ? $item->NUMBER_DEBTOR : '', true, ['data-screen-mode' => 'read, edit', 'readonly'], [
+                {{ KJField::number('NUMBER_DEBTOR', KJLocalization::translate('Admin - CRM', 'Debiteurnummer', 'Debiteurnummer'), $item ? $item->NUMBER_DEBTOR : '', true, ['data-screen-mode' => 'read, edit'], [
                      'right' => [
                           ['type' => 'button', 'caption' => '<i class="la la-refresh"></i>', 'class' => 'btn btn btn-label-brand btn-square btn-bold btn-upper btn-sm btn-icon generateDebtornumber', 'options' => ['data-id' => $item->ID]]
                      ]
                 ]) }}
 
-                {{ KJField::number('NUMBER_CREDITOR', KJLocalization::translate('Admin - CRM', 'Crediteurnummer', 'Crediteurnummer'), $item ? $item->NUMBER_CREDITOR : '', true, ['data-screen-mode' => 'read, edit', 'readonly'], [
+                {{ KJField::number('NUMBER_CREDITOR', KJLocalization::translate('Admin - CRM', 'Crediteurnummer', 'Crediteurnummer'), $item ? $item->NUMBER_CREDITOR : '', true, ['data-screen-mode' => 'read, edit'], [
                      'right' => [
                           ['type' => 'button', 'caption' => '<i class="la la-refresh"></i>', 'class' => 'btn btn btn-label-brand btn-square btn-bold btn-upper btn-sm btn-icon generateCreditornumber', 'options' => ['data-id' => $item->ID]]
                      ]

@@ -71,6 +71,27 @@ class Relation extends Model
         }
     }
 
+    public static function isDebtorNumberValid(int $id, string $number)
+    {
+        return self::isNumberValid('NUMBER_DEBTOR', $id, $number);
+    }
+
+    public static function isCreditorNumberValid(int $id, string $number)
+    {
+        return self::isNumberValid('NUMBER_CREDITOR', $id, $number);
+    }
+
+    public static function isNumberValid(string $field, int $id, string $number)
+    {
+        $relations = Relation::where($field, $number)->where('ACTIVE', true);
+
+        if ($id != -1) {
+            $relations->where('ID', '<>', $id);
+        }
+
+        return ($relations->count() == 0);
+    }
+
     public function createProduct($product)
     {
         foreach ($product as $product_id) {

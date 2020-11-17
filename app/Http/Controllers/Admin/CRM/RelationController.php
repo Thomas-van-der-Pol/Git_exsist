@@ -181,9 +181,11 @@ class RelationController extends AdminBaseController {
 
     public function save(Request $request)
     {
+        $id = $request->get('ID');
+
         // Validate if relation isn't linked at a project
-        if ($request->get('ID') != $this->newRecordID) {
-            $relation = $this->find($request->get('ID'));
+        if ($id != $this->newRecordID) {
+            $relation = $this->find($id);
 
             // Relation type changed
             if (($request->get('FK_CORE_DROPDOWNVALUE_RELATIONTYPE') != null) && ($relation->FK_CORE_DROPDOWNVALUE_RELATIONTYPE != $request->get('FK_CORE_DROPDOWNVALUE_RELATIONTYPE'))) {
@@ -204,6 +206,27 @@ class RelationController extends AdminBaseController {
                         'message' => KJLocalization::translate('Admin - CRM', 'Type relatie kan niet aangepast worden omdat deze relatie al in een dossier is gekoppeld', 'Type relatie kan niet aangepast worden omdat deze relatie al in een dossier is gekoppeld')
                     ]);
                 }
+            }
+        }
+
+        // Validate debtor number
+        $number_debtor = ($request->get('NUMBER_DEBTOR') ? $request->get('NUMBER_DEBTOR') : '');
+        if ($number_debtor != '') {
+            if (!Relation::isDebtorNumberValid($id, $number_debtor)) {
+                return response()->json([
+                    'message' => KJLocalization::translate('Admin - CRM', 'Debiteurnummer al in gebruik', 'Debiteurnummer al in gebruik'),
+                    'success'=> false
+                ], 200);
+            }
+        }
+
+        $number_creditor = ($request->get('NUMBER_CREDITOR') ? $request->get('NUMBER_CREDITOR') : '');
+        if ($number_creditor != '') {
+            if (!Relation::isCreditorNumberValid($id, $number_creditor)) {
+                return response()->json([
+                    'message' => KJLocalization::translate('Admin - CRM', 'Crediteurnummer al in gebruik', 'Crediteurnummer al in gebruik'),
+                    'success'=> false
+                ], 200);
             }
         }
 
