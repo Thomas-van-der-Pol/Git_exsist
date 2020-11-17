@@ -113,15 +113,15 @@ class CreditorResource extends ExactBaseResource
                 }
 
                 // Versturen naar Exact
-                $account->Name = $item->NAME;
+                $account->Name = ($item->NAME != '' ? $item->NAME : $account->Name);
                 $account->IsSupplier = true;
                 $account->Code = $item->CREDITORNUMBER;
-                $account->Email = $item->EMAILADDRESS;
-                $account->Phone = $item->PHONENUMBER;
+                $account->Email = ($item->EMAILADDRESS != '' ? $item->EMAILADDRESS : $account->Email);
+                $account->Phone = ($item->PHONENUMBER != '' ? $item->PHONENUMBER : $account->Phone);
 //                if ($item->STARTDATE != null) {
 //                    $account->StartDate = $item->STARTDATE;
 //                }
-                $account->Remarks = $item->REMARKS;
+                $account->Remarks = ($item->REMARKS != '' ? $item->REMARKS : $account->Remarks);
                 if (!$item->VAT_LIABLE) {
                     $account->VATNumber = $item->VAT_NUMBER;
                 } else {
@@ -132,11 +132,11 @@ class CreditorResource extends ExactBaseResource
                 if (($item->VISIT_ADDRESS_ID > 0) && ($item->VISIT_RELATION_ADDRESS_ID > 0)) {
                     $address = Address::find($item->VISIT_RELATION_ADDRESS_ID);
 
-                    $account->AddressLine1 = $item->VISIT_ADDRESS_ADDRESSLINE . ' ' . $item->VISIT_ADDRESS_HOUSENUMBER;
-//                    $account->AddressLine2 = $item->VISIT_ADDRESS_ADDRESSLINE2;
-                    $account->Postcode = $item->VISIT_ADDRESS_ZIPCODE;
-                    $account->City = $item->VISIT_ADDRESS_CITY;
-                    $account->Country = $item->VISIT_ADDRESS_COUNTRYCODE;
+                    $AddressLine1 = $item->VISIT_ADDRESS_ADDRESSLINE . ' ' . $item->VISIT_ADDRESS_HOUSENUMBER;
+                    $account->AddressLine1 = (trim($AddressLine1) != '' ? $AddressLine1 : $account->AddressLine1);
+                    $account->Postcode = ($item->VISIT_ADDRESS_ZIPCODE != '' ? $item->VISIT_ADDRESS_ZIPCODE : $account->Postcode);
+                    $account->City = ($item->VISIT_ADDRESS_CITY != '' ? $item->VISIT_ADDRESS_CITY : $account->City);
+                    $account->Country = ($item->VISIT_ADDRESS_COUNTRYCODE != '' ? $item->VISIT_ADDRESS_COUNTRYCODE : $account->Country);
 
                     $address->EXACT_ADDRESS_LASTSYNC = date('Y-m-d H:i:s');
                     $address->save();
@@ -168,11 +168,12 @@ class CreditorResource extends ExactBaseResource
                         $accountAddress->Account = $account->ID;
                         $accountAddress->Type = 3; /* Invoice */
                         $accountAddress->Main = false;
-                        $accountAddress->AddressLine1 = $item->INVOICE_ADDRESS_ADDRESSLINE . ' ' . $item->INVOICE_ADDRESS_HOUSENUMBER;
-//                        $accountAddress->AddressLine2 = $item->INVOICE_ADDRESS_ADDRESSLINE2;
-                        $accountAddress->Postcode = $item->INVOICE_ADDRESS_ZIPCODE;
-                        $accountAddress->City = $item->INVOICE_ADDRESS_CITY;
-                        $accountAddress->Country = $item->INVOICE_ADDRESS_COUNTRYCODE;
+
+                        $AddressLine1 = $item->INVOICE_ADDRESS_ADDRESSLINE . ' ' . $item->INVOICE_ADDRESS_HOUSENUMBER;
+                        $accountAddress->AddressLine1 = (trim($AddressLine1) != '' ? $AddressLine1 : $accountAddress->AddressLine1);
+                        $accountAddress->Postcode = ($item->INVOICE_ADDRESS_ZIPCODE != '' ? $item->INVOICE_ADDRESS_ZIPCODE : $accountAddress->Postcode);
+                        $accountAddress->City = ($item->INVOICE_ADDRESS_CITY != '' ? $item->INVOICE_ADDRESS_CITY : $accountAddress->City);
+                        $accountAddress->Country = ($item->INVOICE_ADDRESS_COUNTRYCODE != '' ? $item->INVOICE_ADDRESS_COUNTRYCODE : $accountAddress->Country);
                         $accountAddress->save();
 
                         // Adres bijwerken
