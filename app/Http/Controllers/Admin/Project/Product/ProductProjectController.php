@@ -82,7 +82,8 @@ class ProductProjectController extends AdminBaseController
             });
     }
 
-    public function itemEditable($ID){
+    public function itemEditable($ID)
+    {
         $item = Product::find($ID);
 
         return response()->json([
@@ -124,6 +125,17 @@ class ProductProjectController extends AdminBaseController
             'success' => true,
             'total' => '€ ' . number_format($total, 2, LanguageUtils::getDecimalPoint(), LanguageUtils::getThousandsSeparator())
         ]);
+    }
+
+    public function save(Request $request)
+    {
+        $this->saveExtraValues = [];
+
+        if ($request->get('COMPENSATED') == 0) {
+            $this->saveExtraValues = ['COMPENSATION_PERCENTAGE' => null];
+        }
+
+        return parent::save($request);
     }
 
     protected function addProduct(Request $request)

@@ -216,6 +216,9 @@ $(document).ready(function() {
             $('input[name="COMPENSATION_PERCENTAGE"]').removeAttr('required');
             $('input[name="COMPENSATION_PERCENTAGE"]').attr('disabled', true);
             $('label[for="COMPENSATION_PERCENTAGE"]').text($('label[for="COMPENSATION_PERCENTAGE"]').text().replace('*', ''));
+
+            $('input[name="COMPENSATION_PERCENTAGE"]').val('');
+            setMaterialActiveLabels($('input[name="COMPENSATION_PERCENTAGE"]').closest('.md-form'));
         }
     });
 
