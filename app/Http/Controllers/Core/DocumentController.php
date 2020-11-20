@@ -41,6 +41,7 @@ class DocumentController extends BaseController
                     $query->orWhereNull('DIRECTORY');
                 }
             })
+            ->where('ACTIVE', true)
             ->where(function($query) {
                 $query->where(function($subQuery) {
                     $subQuery->where('FILETYPE', 'dir');
@@ -60,6 +61,7 @@ class DocumentController extends BaseController
 
         $directories = Document::whereNotNull('DIRECTORY')
             ->whereRaw("DIRECTORY <> IIF('".$dir."' <> '', '".$dir."' + '\', '".$dir."')")
+            ->where('ACTIVE', true)
             ->where(function($query) use ($dir) {
                 $query->where('DIRECTORY', 'like', $dir . '%');
                 if ($dir == '') {
