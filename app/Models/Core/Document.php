@@ -5,11 +5,15 @@ namespace App\Models\Core;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use OwenIt\Auditing\Contracts\Auditable;
 use KJ\Core\models\FileRequest;
 use KJ\Localization\libraries\LanguageUtils;
 use KJLocalization;
 
-class Document extends Model {
+class Document extends Model implements Auditable {
+
+    use \OwenIt\Auditing\Auditable;
+
     /**
      * The table associated with the model.
      *
