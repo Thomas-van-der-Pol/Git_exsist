@@ -318,6 +318,18 @@ function loadDropzone()
                 // Load drag'n'drop
                 loadDragDrop();
             });
+
+            this.on("error", function(file, errorMessage) {
+                // Remove item from documentexplorer
+                $(file.previewElement).remove();
+
+                // Show message
+                swal.fire({
+                    title: 'Something went wrong',
+                    text: (errorMessage.message || 'Unknown reason'),
+                    type: 'error'
+                });
+            });
         },
 
         removedfile: function(file) {
@@ -603,12 +615,17 @@ function setBreadcrumbs()
 
 function getCheckedDocuments(includeItem = false)
 {
-    return $.map($('input[name="MARK_DOCUMENT"]:checked'), function(c){
-        return {
-            id: ($(c).data('id') || -1),
-            folder: ($(c).data('folder') || ''),
-            type: ((($(c).data('id') || -1) === -1) ? 'dir' : 'file'),
-            input: ((includeItem === true) ? $(c).closest('.kt-widget4__item') : null)
-        };
+    return $.map($('input[name="MARK_DOCUMENT"]:checked'), function(c) {
+        var item = $(c).closest('div.kt-widget4__item');
+        var invalid = (item.hasClass('dz-error'));
+
+        if (!invalid) {
+            return {
+                id: ($(c).data('id') || -1),
+                folder: ($(c).data('folder') || ''),
+                type: ((($(c).data('id') || -1) === -1) ? 'dir' : 'file'),
+                input: ((includeItem === true) ? $(c).closest('.kt-widget4__item') : null)
+            };
+        }
     });
 }
