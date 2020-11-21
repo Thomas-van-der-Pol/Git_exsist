@@ -3,6 +3,7 @@
 namespace App\Mail\Admin\Task;
 
 use Illuminate\Bus\Queueable;
+use Illuminate\Support\Facades\App;
 use KJ\Core\mail\BaseMail;
 use KJLocalization;
 
@@ -12,6 +13,7 @@ class TaskNotification extends BaseMail
 
     public $item;
     public $url;
+    public $locale;
 
     /**
      * Create a notification instance.
@@ -22,6 +24,7 @@ class TaskNotification extends BaseMail
     {
         $this->item = $item;
         $this->url = url(route('admin.task.detail', ['ID' => $item->ID]));
+        $this->locale = App::getLocale();
     }
 
     /**

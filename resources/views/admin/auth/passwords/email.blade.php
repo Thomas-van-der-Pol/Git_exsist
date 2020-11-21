@@ -1,6 +1,9 @@
 @component('mail::message', [
 'title' => KJLocalization::translate('E-mails', 'Wijzig je wachtwoord', 'Wijzig je wachtwoord', [], $language),
 'logo' => $logo,
+'twitter' => $twitter,
+'facebook' => $facebook,
+'linkedin' => $linkedin,
 'language' => $language
 ])
 # {{ KJLocalization::translate('E-mails', 'Beste', 'Beste', [], $language) }} {{ $name }},
@@ -22,4 +25,12 @@
 [{{ substr($url,0,strlen($url) / 2) }}]({{ $url  }})
 [{{ substr($url,strlen($url) / 2, strlen($url)) }}]({{ $url }})
 @endslot
+
+{!! KJLocalization::translate('E-mails', 'Met vriendelijke groet,', 'Met vriendelijke groet,', [], $language, true) !!}<br/>
+{{ config('mail.contact_details.name') }}<br/>
+{{ config('mail.contact_details.mail_address') }}<br/>
+{{ config('mail.contact_details.website') }}<br/>
+
+<img align="center" src="{{ $logo }}" alt="Logo" title="Logo" height="200"/>
+
 @endcomponent

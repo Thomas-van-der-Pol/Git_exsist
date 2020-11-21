@@ -1,6 +1,9 @@
 @component('mail::message', [
 'title' => KJLocalization::translate('E-mails', 'Welcome bij Exsist', 'Welcome to Exsist', [], $language),
 'logo' => $logo,
+'twitter' => $twitter,
+'facebook' => $facebook,
+'linkedin' => $linkedin,
 'language' => $language
 ])
 # {{ KJLocalization::translate('E-mails', 'Beste', 'Beste', [], $language) }} {{ $name }},
@@ -23,4 +26,12 @@
 {{ KJLocalization::translate('E-mails', 'Werkt de link niet text uitleg', 'Kopieer en plak onderstaande link in het adresvak van je browser.', [], $language) }}<br/>
 [{{ $url}}]({{ $url}})
 @endslot
+
+{!! KJLocalization::translate('E-mails', 'Met vriendelijke groet,', 'Met vriendelijke groet,', [], $language, true) !!}<br/>
+{{ config('mail.contact_details.name') }}<br/>
+{{ config('mail.contact_details.mail_address') }}<br/>
+{{ config('mail.contact_details.website') }}<br/>
+
+<img align="center" src="{{ $logo }}" alt="Logo" title="Logo" height="200"/>
+
 @endcomponent

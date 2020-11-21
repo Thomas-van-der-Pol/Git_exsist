@@ -37,6 +37,9 @@ class WelcomePassword extends BaseMail
     {
         $email = $this->from(config('mail.from.address'), config('mail.from.name'))
             ->embed('logo', public_path('/assets/custom/img/logos/mail/logo.png'))
+            ->embed('twitter', public_path('/assets/custom/img/logos/mail/twitter.png'))
+            ->embed('facebook', public_path('/assets/custom/img/logos/mail/facebook.png'))
+            ->embed('linkedin', public_path('/assets/custom/img/logos/mail/instagram.png'))
             ->markdown('admin.auth.passwords.welcome', [
                 'url' => url(route('admin.password.reset') . '/' . $this->token),
                 'name' => $this->notifiable->title,
