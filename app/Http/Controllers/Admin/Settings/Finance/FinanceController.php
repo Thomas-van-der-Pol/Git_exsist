@@ -157,7 +157,7 @@ class FinanceController extends AdminBaseController
         $file = $request->file('file');
         if ($file) {
             // Save in storage
-            $fullpathsavedfile = $file->storeAs('/'.$item->getTable().'/'.$item->ID, $file->getClientOriginalName(), ['disk' => 'ftp']);
+            $fullpathsavedfile = $file->storeAs('/'.$item->getTable().'/'.$item->ID, $file->getClientOriginalName(), ['disk' => 'ftp_docservice']);
             $accessableFile = str_replace('public/','storage/', $fullpathsavedfile);
 
             // Get file info

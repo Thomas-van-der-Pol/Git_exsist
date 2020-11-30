@@ -7,7 +7,7 @@
 ])
 
 {!! KJLocalization::translate('E-mails', 'Email factuur intro', 'Geachte :SALUTATION :LASTNAME,', [
-    'SALUTATION' => $contact->salutation ? $contact->salutation->value : 'Heer / mevrouw' ,
+    'SALUTATION' => $contact->salutation ? lcfirst($contact->salutation->value) : 'heer / mevrouw' ,
     'LASTNAME' => $contact->LASTNAME,
 ], $locale, true) !!}<br/><br/>
 
