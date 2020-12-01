@@ -21,6 +21,7 @@
 
 {!! KJLocalization::translate('E-mails', 'Email factuur vragen', 'Mocht u vragen hebben over de factuur of een betalingsregeling willen treffen. Laat het ons dan gerust weten.', [
  ], $locale, true) !!}<br/>
+
 {!! KJLocalization::translate('E-mails', 'Email factuur outro', 'Wij hopen u hiermee voldoende te hebben geïnformeerd.', [
  ], $locale, true) !!}<br/>
 
