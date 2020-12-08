@@ -2,6 +2,7 @@
 
 namespace App\Models\Admin\Core;
 
+use App\Models\Admin\CRM\Contact;
 use App\Models\Admin\CRM\Relation;
 use App\Models\Core\Document;
 use Illuminate\Database\Eloquent\Model;
@@ -41,6 +42,11 @@ class Label extends Model
     public function proxy()
     {
         return $this->hasOne(Relation::class, 'ID', 'FK_CRM_RELATION_PROXY');
+    }
+
+    public function proxy_contact()
+    {
+        return $this->hasOne(Contact::class, 'ID', 'FK_CRM_CONTACT_RELATION_PROXY');
     }
 
     public function getNewInvoiceNumber()

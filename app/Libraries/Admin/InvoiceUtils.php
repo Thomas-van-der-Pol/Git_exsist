@@ -359,10 +359,10 @@ class InvoiceUtils
             // Send to proxy relation
             if($invoice->product) {
                 if ($invoice->product->COMPENSATED) {
-                    if ($invoice->label->proxy) {
-                        if ($invoice->label->proxy->EMAILADDRESS && ($invoice->label->proxy->EMAILADDRESS != '')) {
+                    if ($invoice->label->proxy_contact) {
+                        if ($invoice->label->proxy_contact->EMAILADDRESS && ($invoice->label->proxy_contact->EMAILADDRESS != '')) {
                             try {
-                                Mail::to($invoice->label->proxy->EMAILADDRESS)->send(new NewInvoiceCompensation($invoice));
+                                Mail::to($invoice->label->proxy_contact->EMAILADDRESS)->send(new NewInvoiceCompensation($invoice));
                             } catch (\Exception $exception) {
                                 return response()->json([
                                     'success' => false,
