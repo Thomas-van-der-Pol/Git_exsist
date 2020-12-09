@@ -315,6 +315,13 @@ foreach($alt_langs as $langCode) {
                         Route::post('/', 'Admin\Settings\Finance\VatController@save');
                         Route::delete('/{ID}', 'Admin\Settings\Finance\VatController@delete');
                     });
+
+                    Route::prefix('payment-term')->group(function () {
+                        Route::get('/allByLabelDatatable/{ID}', 'Admin\Settings\Finance\PaymentTermController@allByLabelDatatable');
+                        Route::get('/detailRendered/{ID}', 'Admin\Settings\Finance\PaymentTermController@detailAsJSON');
+                        Route::post('/', 'Admin\Settings\Finance\PaymentTermController@save');
+                        Route::delete('/{ID}', 'Admin\Settings\Finance\PaymentTermController@delete');
+                    });
                 });
 
                 // Role & Permission

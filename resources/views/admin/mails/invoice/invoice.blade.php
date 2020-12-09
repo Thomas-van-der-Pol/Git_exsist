@@ -15,8 +15,8 @@
      'NUMBER' => $invoice->NUMBER,
  ], $locale, true) !!}<br/>
 
-{!! KJLocalization::translate('E-mails', 'Email factuur betaling ontvangst', 'Graag zien wij de betaling binnen 14 dagen tegemoet.', [
-     'NUMBER' => $invoice->NUMBER,
+{!! KJLocalization::translate('E-mails', 'Email factuur betaling ontvangst', 'Graag zien wij de betaling binnen :AMOUNT_DAYS dagen tegemoet.', [
+     'AMOUNT_DAYS' => (int) (isset($invoice->relation->paymentTerm) ? $invoice->relation->paymentTerm->AMOUNT_DAYS : 0)
  ], $locale, true) !!}<br/>
 
 {!! KJLocalization::translate('E-mails', 'Email factuur vragen', 'Mocht u vragen hebben over de factuur of een betalingsregeling willen treffen. Laat het ons dan gerust weten.', [

@@ -1,5 +1,3 @@
-// var logo_email_select;
-
 $(document).ready(function() {
 
     // Load screen
@@ -161,11 +159,21 @@ $(document).ready(function() {
             return false;
         }
     });
+
+    $('body').on('click', '.deletePaymentTerm', function(e) {
+        e.preventDefault();
+
+        var id = $(this).data('id');
+        kjrequest('DELETE', '/admin/settings/finance/payment-term/' + id, null, false,
+            function(result) {
+                ADM_LABEL_PAYMENT_TERM_TABLE_configuration.datatableSelector.reload(null, false);
+            }
+        );
+    });
 });
 
 function afterLoadScreen(id, screen, data) {
     if (screen === 'default') {
-        // logo_email_select = new KTAvatar('LOGO_EMAIL_SELECT');
         loadUppyFileUpload($('#'+screen), ['.pdf'], '/admin/settings/finance/upload', '/admin/settings/finance/deleteFile/', '/document/request');
     }
     else if (screen === 'ledgers') {
@@ -173,6 +181,9 @@ function afterLoadScreen(id, screen, data) {
     }
     else if (screen === 'vat') {
         loadDatatable($('#ADM_LABEL_VAT_TABLE'));
+    }
+    else if (screen === 'payment_term') {
+        loadDatatable($('#ADM_LABEL_PAYMENT_TERM_TABLE'));
     }
 }
 

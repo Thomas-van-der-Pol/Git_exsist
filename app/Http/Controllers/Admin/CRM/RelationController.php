@@ -7,6 +7,7 @@ use App\Models\Admin\Core\Label;
 use App\Models\Admin\CRM\Contact;
 use App\Models\Admin\CRM\Relation;
 use App\Models\Admin\Finance\CollectInterval;
+use App\Models\Admin\Finance\PaymentTerm;
 use App\Models\Admin\Project\Product;
 use App\Models\Admin\Project\Project;
 use Illuminate\Support\Facades\Auth;
@@ -157,11 +158,11 @@ class RelationController extends AdminBaseController {
                 break;
 
             case 'financial_details':
-                $collectIntervalOri = CollectInterval::all()->where('ACTIVE', true)->sortBy('SEQUENCE')->pluck('title', 'ID');
-                $collectInterval = $none + $collectIntervalOri->toArray();
+                $paymentTermsOri = PaymentTerm::where('ACTIVE', true)->orderBy('DESCRIPTION', 'ASC')->pluck('DESCRIPTION', 'ID');
+                $paymentTerms = $none + $paymentTermsOri->toArray();
 
                 $bindings = array_merge($bindings, [
-                    ['collectInterval', $collectInterval]
+                    ['paymentTerms', $paymentTerms]
                 ]);
                 break;
 
@@ -236,10 +237,20 @@ class RelationController extends AdminBaseController {
     protected function afterSave($item, $originalItem, Request $request, &$response)
     {
         if($request->get('ID') == $this->newRecordID) {
+            // Get deault payment
+            $paymentTerm = PaymentTerm::where([
+                'ACTIVE' => true,
+                'DEFAULT' => true
+            ])->first();
+
+            // If de payment term default is not null or payment term default > 0 then use default payment term else null
+            if (($paymentTerm->DEFAULT != null) || ($paymentTerm->DEFAULT > 0)) {
+                $item->FK_FINANCE_PAYMENT_TERM = $paymentTerm->ID;
+            }
+
             // Save default label administration
             $item->NUMBER_DEBTOR = $item->label->NEXT_DEBTOR_NUMBER;
             $item->INVOICE_ELECTRONIC = $item->label->DEFAULT_DIGITAL_INVOICE;
-            $item->PAYMENTTERM_DAY = $item->label->DEFAULT_PAYMENTTERM_DAY;
             $item->RATE_KM = $item->label->DEFAULT_RATE_KM;
             $item->FK_FINANCE_INVOICE_COLLECT_INTERVAL = 1;
             $item->save();

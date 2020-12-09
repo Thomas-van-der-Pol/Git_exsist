@@ -43,6 +43,7 @@
             </div>
 
             <div class="col-xl-4 col-lg-6">
+                {{ KJField::select('FK_FINANCE_PAYMENT_TERM', KJLocalization::translate('Admin - CRM', 'Betaalconditie', 'Betaalconditie'), $paymentTerms, $item ? $item->FK_FINANCE_PAYMENT_TERM : '', true, 0, ['data-screen-mode' => 'read, edit']) }}
                 {{ KJField::checkbox('INVOICE_ELECTRONIC', KJLocalization::translate('Admin - CRM', 'Digitaal factureren', 'Digitaal factureren'), true, $item ? $item->INVOICE_ELECTRONIC : '', ['data-screen-mode' => 'read, edit']) }}
             </div>
         </div>
