@@ -34,7 +34,7 @@ class PaymentTermController extends AdminBaseController
         if ($default != '') {
             if (!PaymentTerm::isDefaultValid($id)) {
                 return response()->json([
-                    'message' => KJLocalization::translate('Admin - Financieel', 'Er is al een standaard betaalconditie in gebruik', 'Er is al een standaard betaalconditie in gebruik'),
+                    'message' => KJLocalization::translate('Admin - Financieel', 'Er is al een standaard betalingsconditie in gebruik', 'Er is al een standaard betalingsconditie in gebruik'),
                     'success'=> false
                 ], 200);
             }
@@ -62,7 +62,7 @@ class PaymentTermController extends AdminBaseController
 
         $this->datatableDefaultSort = [
             [
-                'field' => 'DESCRIPTION',
+                'field' => 'AMOUNT_DAYS',
                 'sort' => 'ASC'
             ]
         ];

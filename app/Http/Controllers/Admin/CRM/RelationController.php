@@ -158,7 +158,7 @@ class RelationController extends AdminBaseController {
                 break;
 
             case 'financial_details':
-                $paymentTermsOri = PaymentTerm::where('ACTIVE', true)->orderBy('DESCRIPTION', 'ASC')->pluck('DESCRIPTION', 'ID');
+                $paymentTermsOri = PaymentTerm::where('ACTIVE', true)->orderBy('AMOUNT_DAYS', 'ASC')->pluck('DESCRIPTION', 'ID');
                 $paymentTerms = $none + $paymentTermsOri->toArray();
 
                 $bindings = array_merge($bindings, [

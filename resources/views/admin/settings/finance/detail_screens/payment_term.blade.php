@@ -4,7 +4,7 @@
             <div class="col order-2 order-xl-2">
                 <a href="javascript:;" id="addPaymentTerm" class="btn btn-success btn-sm btn-upper pull-right">
                     <i class="fa fa-plus-square"></i>
-                    {{ KJLocalization::translate('Admin - Financieel', 'Betaalconditie', 'Betaalconditie')}}
+                    {{ KJLocalization::translate('Admin - Financieel', 'Betalingsconditie', 'Betalingsconditie')}}
                 </a>
             </div>
         </div>
