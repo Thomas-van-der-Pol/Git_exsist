@@ -297,7 +297,9 @@ $(document).ready(function() {
                         success: function (data) {
                             if (data.success === true) {
                                 // Reload datatable
+                                ADM_PROJECT_PRODUCTS_TABLE_configuration.selected = [];
                                 ADM_PROJECT_PRODUCTS_TABLE_configuration.datatableSelector.reload(null, false);
+                                showCheckedRows('ADM_PROJECT_PRODUCTS_TABLE');
 
                                 // Modal hidden
                                 $('.kj_field_modal').modal('hide');

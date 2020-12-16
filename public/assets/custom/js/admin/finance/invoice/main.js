@@ -137,7 +137,9 @@ $(document).ready(function() {
 
                                         // Refresh table
                                         var configuration = window['ADM_INVOICE_TABLE_' + loadedType + '_configuration'];
+                                        configuration.selected = [];
                                         configuration.datatableSelector.reload(null, false);
+                                        showCheckedRows('ADM_INVOICE_TABLE_' + loadedType);
                                     });
                                 }, 500);
                             } else {
@@ -148,7 +150,9 @@ $(document).ready(function() {
                                     timer: 1500
                                 }).then(function (result) {
                                     var configuration = window['ADM_INVOICE_TABLE_' + loadedType + '_configuration'];
+                                    configuration.selected = [];
                                     configuration.datatableSelector.reload(null, false);
+                                    showCheckedRows('ADM_INVOICE_TABLE_' + loadedType);
                                 });
                             }
                         }
@@ -161,8 +165,15 @@ $(document).ready(function() {
                             });
                         }
                     },
-                    function() {
+                    function(data) {
                         stopKJLoader();
+
+                        if (data.message != undefined) {
+                            swal.fire({
+                                text: data.message,
+                                type: 'error'
+                            });
+                        }
                     }
                 );
 
@@ -206,7 +217,9 @@ $(document).ready(function() {
                                 timer: 1500
                             }).then(function(result) {
                                 var configuration = window['ADM_INVOICE_TABLE_' + loadedType + '_configuration'];
+                                configuration.selected = [];
                                 configuration.datatableSelector.reload(null, false);
+                                showCheckedRows('ADM_INVOICE_TABLE_' + loadedType);
                             });
                         }
                         else
@@ -218,8 +231,15 @@ $(document).ready(function() {
                             });
                         }
                     },
-                    function() {
+                    function(data) {
                         stopKJLoader();
+
+                        if (data.message != undefined) {
+                            swal.fire({
+                                text: data.message,
+                                type: 'error'
+                            });
+                        }
                     }
                 );
 

@@ -86,6 +86,7 @@ $(document).ready(function() {
                 stopKJLoader();
 
                 configuration.datatableSelector.reload(null, false);
+                showCheckedRows(datatable_name);
 
                 swal.fire({
                     text: kjlocalization.get('admin_-_boekhouding', 'exporteren_mislukt') + ': ' + data.message,
