@@ -104,7 +104,7 @@
                                         </svg>
                                     </span>
                                     <span class="kt-widget__desc">
-                                        {{ KJLocalization::translate('Admin - Financieel', 'Betalingsconditie', 'Betalingsconditie') }}
+                                        {{ KJLocalization::translate('Admin - Financieel', 'Betalingscondities', 'Betalingscondities') }}
                                     </span>
                                 </span>
                             </a>
