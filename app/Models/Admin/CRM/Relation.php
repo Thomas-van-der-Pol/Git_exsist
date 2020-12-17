@@ -3,6 +3,7 @@
 namespace App\Models\Admin\CRM;
 
 use App\Models\Admin\Core\Label;
+use App\Models\Admin\Finance\PaymentTerm;
 use App\Models\Core\DropdownValue;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
@@ -51,6 +52,11 @@ class Relation extends Model
     public function label()
     {
         return $this->hasOne(Label::class, 'ID', 'FK_CORE_LABEL');
+    }
+
+    public function paymentTerm()
+    {
+        return $this->hasOne(PaymentTerm::class, 'ID', 'FK_FINANCE_PAYMENT_TERM');
     }
 
     public function generateDebtornumber()

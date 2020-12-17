@@ -71,7 +71,7 @@ class Invoice extends Model
         {
             $this->NUMBER = $this->label->getNewInvoiceNumber();
 
-            if (!isset($this->relation->NUMBER_DEBTOR) or $this->relation->NUMBER_DEBTOR == '') {
+            if (!isset($this->relation->NUMBER_DEBTOR) || $this->relation->NUMBER_DEBTOR == '') {
                 $this->relation->generateDebtornumber();
             }
 
@@ -83,8 +83,10 @@ class Invoice extends Model
 
             if(!isset($this->EXPIRATION_DATE)) {
                 $expirationDate = new DateTime();
-                $expirationDate->add(new DateInterval('P' . ((int)$this->relation->PAYMENTTERM_DAY ?? 0) . 'D'));
+                $expirationDate->add(new DateInterval('P' . ((int) isset($this->relation->paymentTerm) ? $this->relation->paymentTerm->AMOUNT_DAYS : 0) . 'D'));
                 $this->EXPIRATION_DATE = $expirationDate;
+                $this->PAYMENT_TERM_CODE = ((int) isset($this->relation->paymentTerm) ? $this->relation->paymentTerm->CODE : 0);
+                $this->FK_FINANCE_PAYMENT_TERM = ((int) isset($this->relation->paymentTerm) ? $this->relation->paymentTerm->ID : 0);
             }
 
             $this->save();
@@ -187,27 +189,6 @@ class Invoice extends Model
         $today = new DateTime();
 
         return $invoicedate->diff($today)->format("%a");
-    }
-
-    public function getPaymentCondition()
-    {
-        // If invoice expiration date is set
-        if ($this->EXPIRATION_DATE) {
-            $today = new DateTime($this->DATE);
-            $expirationDate = new DateTime($this->EXPIRATION_DATE);
-
-            $daysLeft = $expirationDate->diff($today)->format("%a");
-
-            return $daysLeft;
-        }
-        // Relation payment condition
-        else if ($this->relation->PAYMENTTERM_DAY) {
-            return $this->relation->PAYMENTTERM_DAY;
-        }
-        // Label payment condition
-        else {
-            return $this->label->DEFAULT_PAYMENTTERM_DAY ?? 0;
-        }
     }
 
     public function getDateFormattedAttribute()

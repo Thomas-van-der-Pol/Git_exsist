@@ -75,7 +75,7 @@
             </div>
 
             <div class="col-xl-4 col-lg-4">
-                {{ KJField::number('DEFAULT_PAYMENTTERM_DAY', KJLocalization::translate('Admin - Financieel', 'Betalingstermijn', 'Betalingstermijn'), $item ? $item->DEFAULT_PAYMENTTERM_DAY : '', true, ['data-screen-mode' => 'read, edit']) }}
+                {{ KJField::number('SALES_JOURNAL_NUMBER', KJLocalization::translate('Admin - Financieel', 'Verkoopdagboek nummer', 'Verkoopdagboek nummer'), $item ? $item->SALES_JOURNAL_NUMBER : 0, true, ['data-screen-mode' => 'read, edit', 'min' => 0, 'step' => 1]) }}
                 {{ KJField::checkbox('DEFAULT_DIGITAL_INVOICE', KJLocalization::translate('Algemeen', 'Digitaal factureren', 'Digitaal factureren'), true, ( $item ? $item->DEFAULT_DIGITAL_INVOICE : 0 ), true, ['data-screen-mode' => 'read, edit']) }}
             </div>
         </div>
