@@ -114,7 +114,7 @@ class InvoiceUtils
                     'Identifier' => "FINANCE_INVOICE",
                     'Query' => "SELECT FI.ID, ISNULL(IS_CREDIT, 0) AS IS_CREDIT, 
                     ISNULL(HAS_SPECIFICATION, 0) AS HAS_SPECIFICATION, 
-                    CASE WHEN FI.NUMBER IS NULL THEN '".KJLocalization::translate('Admin - Facturen', 'Concept', 'Concept', [], $locale)."' ELSE CAST(FI.NUMBER AS VARCHAR(100)) END AS NUMBER, 
+                    CASE WHEN FI.NUMBER IS NULL THEN '".KJLocalization::translate('Admin - Facturen', 'Concept', 'Concept', [], $locale)."' ELSE CONVERT(NVARCHAR, FI.NUMBER) + ' ' END AS NUMBER, 
                     FI.DATE, 
                     FI.EXPIRATION_DATE, 
                     P.NOTIFICATION_DATE AS MELDINGSDATUM, 
