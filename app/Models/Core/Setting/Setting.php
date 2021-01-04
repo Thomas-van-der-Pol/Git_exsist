@@ -35,4 +35,11 @@ class Setting extends Model {
             ->orderBy('SEQUENCE');
     }
 
+    public function values()
+    {
+        return $this->hasMany(SettingValue::class, 'FK_CORE_SETTING', 'ID')
+            ->where('ACTIVE', true)
+            ->orderBy('SEQUENCE');
+    }
+
 }

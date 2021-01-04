@@ -42,11 +42,23 @@
                                 if ($setting->REQUIRED) {
                                     $options = array_merge($options, ['required']);
                                 }
+
+                                if ($setting->FK_CORE_SETTING_TYPE == config('setting_type.TYPE_EMAIL_MULTIPLE')) {
+                                    $options = array_merge($options, [
+                                        'pattern' => '^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9\-]+\.)+([a-zA-Z0-9\-\.]+)+([;]([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9\-]+\.)+([a-zA-Z0-9\-\.]+))*$',
+                                        'title' => KJLocalization::translate('Algemeen', 'Voer een geldig emailadres in. Gebruik ; als scheidingsteken.', 'Voer een geldig emailadres in. Gebruik ; als scheidingsteken.')
+                                    ]);
+                                }
                             @endphp
 
                             @switch($setting->FK_CORE_SETTING_TYPE)
                                 @case(config('setting_type.TYPE_TEXT'))
+                                @case(config('setting_type.TYPE_EMAIL_MULTIPLE'))
                                     {{ KJField::text('SETTING_' . $setting->ID, KJLocalization::translate('Admin - Settings', $setting->DESCRIPTION, $setting->DESCRIPTION), $value, true, $options) }}
+                                @break
+
+                                @case(config('setting_type.TYPE_CHECKBOX'))
+                                {{ KJField::checkbox('SETTING_' . $setting->ID, KJLocalization::translate('Admin - Settings', $setting->DESCRIPTION, $setting->DESCRIPTION), true, $value, true, $options) }}
                                 @break
 
                                 @case(config('setting_type.TYPE_EMAIL'))

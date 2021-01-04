@@ -70,7 +70,7 @@ class Contact extends Authenticatable implements CanResetPassword
      * @return string
      */
     public function routeNotificationForMail() {
-        return config('app.test_email_mode') ? config('app.test_email') : $this->EMAILADDRESS;
+        return $this->EMAILADDRESS;
     }
 
     /**
