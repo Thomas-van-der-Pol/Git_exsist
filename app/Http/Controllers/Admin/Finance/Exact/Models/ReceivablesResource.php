@@ -17,10 +17,7 @@ class ReceivablesResource extends ExactBaseResource
 
     public function import()
     {
-        $journal = 70;
-
-        $receivables = new \Picqer\Financials\Exact\ReceivablesList($this->connection);
-        $receivables = $receivables->filter("JournalCode eq '$journal'");
+		$receivables = (new \Picqer\Financials\Exact\ReceivablesList($this->connection))->get();
 
         $entryNumbers = array_column($receivables, 'EntryNumber');
         $chunks = array_chunk($entryNumbers, 1000);
