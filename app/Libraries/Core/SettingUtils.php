@@ -3,6 +3,7 @@
 namespace App\Libraries\Core;
 
 use App\Models\Core\Setting\SettingGroup;
+use App\Models\Core\Setting\SettingValue;
 
 class SettingUtils
 {
@@ -17,5 +18,15 @@ class SettingUtils
             ->with('groups', $groups);
 
         return $view->render();
+    }
+
+    public static function get_testmode()
+    {
+        return SettingValue::getValue(config('setting.EMAIL_TESTMODE'));
+    }
+
+    public static function get_testmode_mail()
+    {
+        return SettingValue::getValue(config('setting.EMAIL_TEST_EMAIL'));
     }
 }
