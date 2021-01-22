@@ -71,9 +71,6 @@ class ProductProjectController extends AdminBaseController
             ->addColumn('RELATION', function($item) {
                 return ( $item->relation ? $item->relation->title : '' );
             })
-            ->addColumn('BLOCKED', function($item) {
-                return !$item->editable();
-            })
             ->addColumn('PRICE', function($item) {
                 return $item->getPriceFormattedAttribute();
             })

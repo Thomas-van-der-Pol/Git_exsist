@@ -7,14 +7,23 @@
 <div class="kt-portlet__body kt-portlet__body--fit-inline-datatable">
     {{ Form::hidden('ID', $item ? $item->ID : -1) }}
 
+    @php
+        $readonly = false;
+        if($item) {
+            $readonly = !$item->editable();
+        }
+    @endphp
+
     <div class="row">
         <div class="col-xl-4 col-lg-6">
-            {{ KJField::text('DESCRIPTION_EXT', KJLocalization::translate('Admin - Dossiers', 'Omschrijving extern', 'Omschrijving extern'), $item ? $item->DESCRIPTION_EXT : '') }}
+            {{ KJField::text('DESCRIPTION_EXT', KJLocalization::translate('Admin - Dossiers', 'Omschrijving extern', 'Omschrijving extern'), $item ? $item->DESCRIPTION_EXT : '', true, ['readonly' => $readonly]) }}
 {{--            {{ KJField::number('QUANTITY', KJLocalization::translate('Admin - Dossiers', 'Aantal', 'Aantal'), $item ? $item->QUANTITY : '') }}--}}
 
             @php
                 $relationButtons = [];
-                $relationButtons[] = ['type' => 'button', 'caption' => KJLocalization::translate('Admin - Dossiers', 'Relatie', 'Relatie'), 'class' => 'btn btn-primary btn-sm selectRelation'];
+                if(!$readonly) {
+                    $relationButtons[] = ['type' => 'button', 'caption' => KJLocalization::translate('Admin - Dossiers', 'Relatie', 'Relatie'), 'class' => 'btn btn-primary btn-sm selectRelation'];
+                }
                 if (Auth::guard()->user()->hasPermission(config('permission.CRM'))) {
                     $relationButtons[] = ['type' => 'button', 'caption' => KJLocalization::translate('Algemeen', 'Openen', 'Openen'), 'class' => 'btn btn-dark btn-sm openRelation'];
                 }
@@ -25,13 +34,13 @@
             ]) }}
             {{ Form::hidden('FK_CRM_RELATION', $item ? $item->FK_CRM_RELATION : null) }}
 
-            {{ KJField::number('PRICE', KJLocalization::translate('Admin - Dossiers', 'Stukprijs exclusief', 'Stukprijs exclusief'), $item ? number_format((float)$item->PRICE,2, '.', '') : 0, true, [], ['right' => [['type' => 'text', 'caption' => '&euro;']] ]) }}
-            {{ KJField::text('QUOTATION_NUMBER', KJLocalization::translate('Admin - Facturen', 'Offertenummer', 'Offertenummer'), $item ? $item->QUOTATION_NUMBER : '', true, []) }}
+            {{ KJField::number('PRICE', KJLocalization::translate('Admin - Dossiers', 'Stukprijs exclusief', 'Stukprijs exclusief'), $item ? number_format((float)$item->PRICE,2, '.', '') : 0, true, ['readonly' => $readonly], ['right' => [['type' => 'text', 'caption' => '&euro;']] ]) }}
+            {{ KJField::text('QUOTATION_NUMBER', KJLocalization::translate('Admin - Facturen', 'Offertenummer', 'Offertenummer'), $item ? $item->QUOTATION_NUMBER : '', true, ['readonly' => $readonly]) }}
 
             @if($compensation_can_change)
-                {{ KJField::checkbox('COMPENSATED', KJLocalization::translate('Admin - Dossiers', 'Wordt vergoed', 'Wordt vergoed'), true, ( $item ? $item->COMPENSATED : false ), true, ['data-screen-mode' => 'read,edit', 'data-id' => $item ? $item->project->ID : -1]) }}
+                {{ KJField::checkbox('COMPENSATED', KJLocalization::translate('Admin - Dossiers', 'Wordt vergoed', 'Wordt vergoed'), true, ( $item ? $item->COMPENSATED : false ), true, ['readonly' => $readonly, 'data-screen-mode' => 'read,edit', 'data-id' => $item ? $item->project->ID : -1]) }}
             @else
-                {{ KJField::text('COMPENSATED_READ', KJLocalization::translate('Admin - Dossiers', 'Wordt vergoed', 'Wordt vergoed'), $item ? ($item->COMPENSATED ? KJLocalization::translate('Admin - Dossiers', 'Ja', 'Ja') : KJLocalization::translate('Admin - Dossiers', 'Nee', 'Nee')) : '' , true, [$compensation_readonly, 'data-screen-mode' => 'read, edit']) }}
+                {{ KJField::text('COMPENSATED_READ', KJLocalization::translate('Admin - Dossiers', 'Wordt vergoed', 'Wordt vergoed'), $item ? ($item->COMPENSATED ? KJLocalization::translate('Admin - Dossiers', 'Ja', 'Ja') : KJLocalization::translate('Admin - Dossiers', 'Nee', 'Nee')) : '' , true, [ $compensation_readonly, 'data-screen-mode' => 'read, edit']) }}
             @endif
 
             {{ Form::hidden('PROJECT_START_DATE', $item ? ($item->project ? $item->project->START_DATE : '') : '') }}
@@ -52,7 +61,7 @@
                 'cancelText' => KJLocalization::translate('Algemeen', 'Annuleren', 'Annuleren'), 'cancelStyle' => 'btn-secondary'
             ]
         ) }}
-    @else
+    @elseif(!$readonly)
         {{ KJField::saveCancel(
             'btnSaveQuantity',
             'btnCancelQuantity',

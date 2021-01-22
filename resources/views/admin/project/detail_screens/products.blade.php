@@ -33,7 +33,6 @@
         'editURL' => '/admin/project/product/detailRendered/',
         'saveURL' => '/admin/project/product/save',
         'parentid' => $item->ID,
-        'blockEditColumn' => 'BLOCKED',
         'pagination' => false,
         'pagesize' => 99999,
         'columns' => array(
