@@ -31,7 +31,7 @@ class DebtorResource extends ExactBaseResource
         }
     }
 
-    protected function allInternal(Request $request, bool $doDatatableFilter = false, array &$pagination = [], array &$sort = [])
+    protected function allInternal(Request $request, bool $doDatatableFilter = false, array &$pagination = [], array &$sort = [], $items = null)
     {
         $query = $request->query($this->datatableQueryKey);
 
