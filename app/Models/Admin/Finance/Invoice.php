@@ -85,8 +85,8 @@ class Invoice extends Model
                 $expirationDate = new DateTime();
                 $expirationDate->add(new DateInterval('P' . ((int) isset($this->relation->paymentTerm) ? $this->relation->paymentTerm->AMOUNT_DAYS : 0) . 'D'));
                 $this->EXPIRATION_DATE = $expirationDate;
-                $this->PAYMENT_TERM_CODE = ((int) isset($this->relation->paymentTerm) ? $this->relation->paymentTerm->CODE : 0);
-                $this->FK_FINANCE_PAYMENT_TERM = ((int) isset($this->relation->paymentTerm) ? $this->relation->paymentTerm->ID : 0);
+                $this->PAYMENT_TERM_CODE = ((int) isset($this->relation->paymentTerm) ? $this->relation->paymentTerm->CODE : null);
+                $this->FK_FINANCE_PAYMENT_TERM = ((int) isset($this->relation->paymentTerm) ? $this->relation->paymentTerm->ID : null);
             }
 
             $this->save();
