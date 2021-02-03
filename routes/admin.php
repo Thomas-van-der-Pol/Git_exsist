@@ -123,7 +123,6 @@ foreach($alt_langs as $langCode) {
                     Route::get('/detailRendered/{ID}', 'Admin\Project\Product\ProductProjectController@detailAsJSON');
                     Route::get('/allByProjectProductDatatable/{ID}', 'Admin\Project\Product\ProductProjectController@allByProjectProductDatatable');
                     Route::get('/allByProjectProductTotal/{ID}', 'Admin\Project\Product\ProductProjectController@allByProjectProductTotal');
-                    Route::get('/editable/{ID}', 'Admin\Project\Product\ProductProjectController@itemEditable');
                     Route::post('/save', 'Admin\Project\Product\ProductProjectController@save');
 
                     Route::post('/addProduct', 'Admin\Project\Product\ProductProjectController@addProduct');

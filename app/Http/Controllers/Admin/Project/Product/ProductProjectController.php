@@ -71,23 +71,15 @@ class ProductProjectController extends AdminBaseController
             ->addColumn('RELATION', function($item) {
                 return ( $item->relation ? $item->relation->title : '' );
             })
+            ->addColumn('BLOCKED', function($item) {
+                return !$item->editable();
+            })
             ->addColumn('PRICE', function($item) {
                 return $item->getPriceFormattedAttribute();
             })
             ->addColumn('PRICE_TOTAL', function($item) {
                 return $item->getTotalPriceFormattedAttribute();
             });
-    }
-
-    public function itemEditable($ID)
-    {
-        $item = Product::find($ID);
-
-        return response()->json([
-            'success' => true,
-            'ID' => $ID,
-            'editable' => $item->editable()
-        ]);
     }
 
     public function allByProjectProductDatatable(Request $request, int $ID)
