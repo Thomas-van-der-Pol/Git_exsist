@@ -82,17 +82,6 @@ class ProductProjectController extends AdminBaseController
             });
     }
 
-    public function itemEditable($ID)
-    {
-        $item = Product::find($ID);
-
-        return response()->json([
-            'success' => true,
-            'ID' => $ID,
-            'editable' => $item->editable()
-        ]);
-    }
-
     public function allByProjectProductDatatable(Request $request, int $ID)
     {
 

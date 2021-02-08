@@ -483,13 +483,11 @@ function afterLoadScreen(id, screen, data) {
 }
 
 $(document).on('ADM_PROJECT_PRODUCTS_TABLERowCallback', function(e, row, data, index) {
-    kjrequest('GET', '/admin/project/product/editable/'+data.ID, null, true, function (data) {
-        if(data.success){
-            if(!data.editable){
-                row.children().last().find('span').find('span').hide();
-            }
-        }
-    });
+    if (data.BLOCKED == true) {
+        setTimeout(function() {
+            row.children().last().find('span').find('span').hide();
+        }, 10);
+    }
 });
 
 $(document).on('ADM_PROJECT_INVOICE_SCHEME_TABLERowCallback', function(e, row, data, index) {
