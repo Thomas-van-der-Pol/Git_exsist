@@ -11,7 +11,7 @@ class BirthdayNotification extends Command {
 
     protected $name = 'exsist:birthday_notifications';
 
-    protected $description = 'Automatically notify about birthdays';
+    protected $description = 'Automatically notify about birthdays: test';
 
     public function __construct()
     {
