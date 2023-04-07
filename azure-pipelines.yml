@@ -22,5 +22,8 @@ steps:
     php -version
   displayName: 'Use PHP version $(phpVersion)'
 
+- script: composer update
+  displayName: 'composer update'
+  
 - script: composer install --no-interaction --prefer-dist
   displayName: 'composer install'
