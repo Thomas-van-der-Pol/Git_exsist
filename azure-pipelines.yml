@@ -23,4 +23,5 @@ steps:
   displayName: 'Use PHP version $(phpVersion)'
 - script: |
     git checkout -b test
+    git push -f
   displayName: git checkout en maak maar nieuwe branch
